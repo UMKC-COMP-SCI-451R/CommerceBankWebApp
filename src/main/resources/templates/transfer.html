@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Commerce Bank</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+</head>
+<body>
+<button onclick="showSummary()">summary</button>
+<button onclick="showProfile()">Profile and Settings</button>
+<h1>Transfer</h1>
+<form th:action="@{/logout}" method="get">
+    <button type="submit">Logout</button>
+</form>
+
+<div id="transfer">
+    <div class="text-center">
+        <button onclick="showAddExternalAccForm()">Add External Account</button>
+        <form id="addExternalAccForm" style="display: none" method="post" action="/addExternalAccount" th:object="${exAcc}">
+            <div>
+                <label for="bankName">Bank Name: </label>
+                <input type="text" th:field="*{bankName}" name="bankName" id="bankName" required>
+            </div>
+            <div>
+                <label for="bankRoutingNumber">Routing Number: </label>
+                <input type="number" th:field="*{routingNumber}" name="bankRoutingNumber" id="bankRoutingNumber" required>
+            </div>
+            <div>
+                <label for="accountNumber">Account Number: </label>
+                <input type="number" th:field="*{accountNumber}" name="accountNumber" id="accountNumber" required>
+            </div>
+            <input type="hidden" name="email" th:value="${session.account.getEmail()}">
+            <button type="submit">Add</button>
+        </form>
+
+    </div>
+    <div th:if="${message}" class="alert alert-success text-center">
+        [[${message}]]
+    </div>
+    <div th:if="${error}" class="alert alert-danger text-center">
+        [[${error}]]
+    </div>
+    <div id="validationMessage" class="alert alert-danger text-center" style="display:none;">
+        Please select appropriate source and destination accounts.
+    </div>
+    <form method="post" action="/makeTransaction" onsubmit="return validateExternalSource()">
+        <div class="container-fluid text-center">
+            <div>
+                <label class="text-primary" for="source"><b>Source</b></label>
+                <select name="source" id="source" required>
+                    <option value="Select">Select</option>
+                    <option value="My Account">My Account</option>
+                    <option th:each="exAcc : ${session.account.getExternalAccountsList()}" th:value="${exAcc.getBankName()}" th:text="${exAcc.getBankName()}"></option>
+                </select>
+            </div>
+            <div>
+                <label for="destination"><b>Destination</b></label>
+                <select name="destination" id="destination" required>
+                    <option value="Select">Select</option>
+                    <option value="My Account">My Account</option>
+                    <option th:each="exAcc : ${session.account.getExternalAccountsList()}" th:value="${exAcc.getBankName()}" th:text="${exAcc.getBankName()}"></option>
+                </select>
+            </div>
+            <div>
+                <label for="amount"><b>Amount</b></label>
+                <input type="number" name="amount" id="amount" min="0" required>
+            </div>
+            <input type="hidden" name="email" th:value="${session.account.getEmail()}">
+            <button type="submit">Send</button>
+        </div>
+    </form>
+</div>
+
+
+
+<script type="text/javascript">
+    function validateExternalSource(){
+        var source = document.getElementById("source").value;
+        var destination = document.getElementById("destination").value;
+        if(source==="Select" || destination==="Select" || (source != "My Account" && destination != "My Account")
+            || source === destination){
+            document.getElementById("validationMessage").style.display = "block";
+            return false;
+        }else{
+            document.getElementById("validationMessage").style.display = "none";
+            return true;
+        }
+    }
+
+    function showAddExternalAccForm(){
+        document.getElementById("addExternalAccForm").style.display = "block";
+    }
+
+    function showSummary(){
+        window.location = "[[@{/dashboard}]]";
+    }
+
+    function showProfile(){
+        window.location = "[[@{/profile}]]";
+    }
+</script>
+</body>
+</html>

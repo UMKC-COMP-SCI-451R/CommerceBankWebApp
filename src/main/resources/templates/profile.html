@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Commerce Bank</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+</head>
+<body>
+<button onclick="showSummary()">summary</button><button onclick="showTransfer()">Transfer</button>
+<h1>Profile</h1>
+<form th:action="@{/logout}" method="get">
+  <button type="submit">Logout</button>
+</form>
+
+<div id="profile" style="margin-left: 40% ">
+  <p th:text="${session.account.getFirstName()}+' '+ ${session.account.getLastName()}"></p>
+  <p th:text="'Address: ' + ${session.account.getAddress()}"></p>
+  <p th:text="'Phone number: ' + ${session.account.getPhoneNumber()}"></p>
+  <p th:text="'Card Number: ' + ${session.account.getCardNumber()}"> </p>
+  <a>Reset Password</a>
+
+  <form th:action="@{/saveProfileSettings}" method="post">
+    <div class="container-fluid">
+      <div>
+        <label for="isMultifactorAuth">Multi-factor Authentication</label>
+        <input type="checkbox" name="isMultifactorAuth" id="isMultifactorAuth" th:checked="${session.account.isMultifactorAuth()}" disabled class="checkboxes">
+      </div>
+      <div>
+        <label for="isPaperless">Paperless</label>
+        <input type="checkbox" name="isPaperless" id="isPaperless" th:checked="${session.account.isPaperless()}" disabled class="checkboxes">
+      </div>
+      <div>
+        <label for="isEmailAlert">Email Alert</label>
+        <input type="checkbox" name="isEmailAlert" id="isEmailAlert" th:checked="${session.account.isEmailAlert()}" disabled class="checkboxes">
+      </div>
+      <div>
+        <label for="isTextAlert">Text Alert</label>
+        <input type="checkbox" name="isTextAlert" id="isTextAlert" th:checked="${session.account.isTextAlert()}" disabled class="checkboxes">
+      </div>
+    </div>
+    <input type="hidden" name="email" th:value="${session.account.getEmail()}">
+    <button class="btn btn-primary" type="submit" id="save">Save</button>
+    <button class="btn btn-secondary" type="button" id="edit" onclick="enableCheckBox()">Edit</button>
+  </form>
+</div>
+
+<div th:if="${message}" class="alert alert-success text-center">
+  [[${message}]]
+</div>
+
+<script type="text/javascript">
+  function  enableCheckBox(){
+    checkboxes = document.getElementsByClassName("checkboxes")
+    for(let checkbox of checkboxes){
+      checkbox.disabled = false;
+    }
+  }
+
+  function showTransfer(){
+    window.location = "[[@{/transfer}]]";
+  }
+  function showSummary(){
+    window.location = "[[@{/dashboard}]]";
+  }
+
+
+</script>
+</body>
+</html>

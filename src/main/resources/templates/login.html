@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Commerce Bank</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+</head>
+<body>
+<div th:if="${message}" class="alert alert-success text-center">
+    [[${message}]]
+</div>
+<div th:if="${error}" class="alert alert-danger text-center">
+    [[${error}]]
+</div>
+<form method="post">
+    <div class="container-fluid text-center">
+        <label class="text-primary" for="email"><b>Email</b></label>
+        <input type="email" placeholder="Enter Email" name="email" id="email" th:value="${useremail}" required>
+
+        <label for="password"><b>Password</b></label>
+        <input type="password" placeholder="Enter Password" name="password" id="password" required>
+
+        <button type="submit">Login</button>
+
+        <label for="checkbox">Remember me</label>
+        <input type="checkbox" value=true name="checkBoxRememberUser" id="checkbox" th:checked="${isChecked}">
+        <a th:href="@{/register}">Register</a>
+    </div>
+</form>
+
+</body>
+</html>

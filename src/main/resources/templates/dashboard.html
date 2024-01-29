@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Commerce Bank</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+</head>
+<body>
+    <button onclick="showTransfer()">Transfer</button>
+    <button onclick="showProfile()">Profile and Settings</button>
+    <h1>Summary</h1>
+    <form th:action="@{/logout}" method="get">
+        <button type="submit">Logout</button>
+    </form>
+    <div id="summary">
+        <p th:text="'Hello '+${session.account.getFirstName()}+' '+ ${session.account.getLastName()}+',' "></p>
+        <p th:text="'Account ID: '+${session.account.getAccID()}"></p>
+        <p th:text="'Balance: '+${#numbers.formatCurrency(session.account.getBalance())}"></p>
+
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Transaction ID</th>
+                    <th>Source</th>
+                    <th>Destination</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="trans : ${session.account.getTransactionsList()}">
+                <tr>
+                    <td>[[${trans.getTransactionId()}]]</td>
+                    <td>[[${trans.getSource()}]]</td>
+                    <td>[[${trans.getDestination}]]</td>
+                    <td>[[${trans.getAmount()}]]</td>
+                </tr>
+            </th:block>
+
+            </tbody>
+        </table>
+    </div>
+
+
+<script type="text/javascript">
+
+    function showTransfer(){
+        window.location = "[[@{/transfer}]]";
+    }
+
+    function showProfile(){
+        window.location = "[[@{/profile}]]"
+    }
+</script>
+</body>
+</html>

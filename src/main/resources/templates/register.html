@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+</head>
+<style>
+    #passdiv:hover #tooltiptext{
+        visibility: visible;
+    }
+    #tooltiptext{
+        visibility: hidden;
+    }
+</style>
+<body>
+<form th:action="@{/save}" method="post" th:object="${newAcc}">
+    <div class="container-fluid text-center">
+        <div>
+            <label class="text-primary" for="email"><b>Email</b></label>
+            <input type="email" th:field="*{email}" placeholder="Enter email" name="email" id="email" required>
+        </div>
+        <div>
+            <label class="text-primary" for="firstName"><b>First Name</b></label>
+            <input type="text" th:field="*{firstName}" placeholder="Enter first name" name="firstName" id="firstName" required>
+        </div>
+        <div>
+            <label class="text-primary" for="lastName"><b>Last Name</b></label>
+            <input type="text" th:field="*{lastName}" placeholder="Enter last name" name="lastName" id="lastName" required>
+        </div>
+        <div>
+            <label class="text-primary" for="address"><b>Address</b></label>
+            <input type="text" th:field="*{address}" placeholder="Enter address" name="address" id="address" required>
+        </div>
+        <div>
+            <label class="text-primary" for="phoneNumber"><b>Phone Number</b></label>
+            <input type="text" th:field="*{phoneNumber}" placeholder="Enter phone number" name="phoneNumber" id="phoneNumber" required minlength="10">
+        </div>
+        <div id="passdiv">
+            <label for="password"><b>Password</b></label>                                                                   <!-- min 8, one letter, one number-->
+            <input type="password" th:field="*{password}" placeholder="Enter Password" name="password" id="password" required pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"><br>
+            <span id="tooltiptext">Password must include one letter, one number and have minimum length of 8 characters</span>
+        </div>
+        <button class="btn btn-primary" type="submit">Register</button>
+        <button class="btn btn-secondary" type="button" onclick="cancelRegister()">Cancel</button>
+
+    </div>
+</form>
+
+
+
+<script type="text/javascript">
+    function cancelRegister(){
+        window.location = "[[@{/}]]";
+    }
+</script>
+
+</body>
+</html>
+<!---->
