@@ -13,28 +13,31 @@
 <div th:if="${error}" class="alert alert-danger text-center">
     [[${error}]]
 </div>
-<form method="post">
-    <div class="container-fluid text-center">
-        <label for="email"><b>Email</b></label>
-        <input type="email" placeholder="Enter Email" name="email" id="email" th:value="${useremail}" required>
+<div class="loginform">
+    <form method="post">
+        <div class="container-fluid text-center">
+            <label for="email"><b>Email</b></label>
+            <input type="email" placeholder="Enter Email" name="email" id="email" th:value="${useremail}" required>
+            <br><br>
+            <label for="password"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="password" id="password" required>
+            <br><br>
+            <button type="submit" align="center">Login</button>
+            <br><br>
+            <label for="checkbox">Remember me</label>
+            <input type="checkbox" value=true name="checkBoxRememberUser" id="checkbox" th:checked="${isChecked}">
+            <br><br>
+            <a th:href="@{/register}">Register</a>
+        </div>
+    </form>
 
-        <label for="password"><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" name="password" id="password" required>
-
-        <button type="submit">Login</button>
-
-        <label for="checkbox">Remember me</label>
-        <input type="checkbox" value=true name="checkBoxRememberUser" id="checkbox" th:checked="${isChecked}">
-        <a th:href="@{/register}">Register</a>
-    </div>
-</form>
-
-<form id="forgotPasswordForm" method="post" th:action="@{/resetpassword}">
-    <div class="container-fluid text-center">
-        <input type="hidden" name="emailToReset" id="emailToReset">
-        <a href="#" onclick="submitForgotPasswordForm()">Forgot Password</a>
-    </div>
-</form>
+    <form id="forgotPasswordForm" method="post" th:action="@{/resetpassword}">
+        <div class="container-fluid text-center">
+            <input type="hidden" name="emailToReset" id="emailToReset">
+            <a href="#" onclick="submitForgotPasswordForm()">Forgot Password</a>
+        </div>
+    </form>
+</div>
 
 <script type="text/javascript">
     function requireEmailInput(){
