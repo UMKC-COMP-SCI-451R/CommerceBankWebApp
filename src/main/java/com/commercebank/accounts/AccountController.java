@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 @SessionAttributes("account")
@@ -17,8 +18,8 @@ import java.util.Optional;
 public class AccountController {
     @Autowired private AccountService accountService;
     @Autowired private EmailService emailService;
-    private int code;
-
+    //private int code;
+    private HashMap<String, Integer> codeHM = new HashMap<>();
     @GetMapping("/register")
     public String showRegisterForm(Model model){
         model.addAttribute("newAcc", new Accounts());
@@ -27,6 +28,12 @@ public class AccountController {
 
     @PostMapping("/save")
     public String saveAccount(Accounts account, RedirectAttributes ra){
+        if(accountService.getAccountByEmail(account.getEmail()).isPresent())
+        {
+            ra.addFlashAttribute("error","There is an account associated with " + account.getEmail()+
+                    ". Please try to login instead!");
+            return "redirect:/login";
+        }
         long cardNumber = RandNumGenerator.generateRandom16DigitNumber();
         Optional<Accounts> acc = accountService.getAccountByCardNumber(cardNumber);
         while(acc.isPresent()){
@@ -43,55 +50,123 @@ public class AccountController {
         return "redirect:/login";
     }
 
-    @PostMapping("/login")
-    public String authenticate(String email, String password, RedirectAttributes ra, Boolean checkBoxRememberUser, HttpServletResponse response){ //receive email and password from the login form
-        Optional<Accounts> account = accountService.getAccountByEmail(email);
-        //emailService.sendMultiFacAuthEmail(account.get().getEmail(),4444);
-        if(checkBoxRememberUser!=null){ //add usermail cookie
-            Cookie cookie = new Cookie("useremail",email);
-            cookie.setMaxAge(3600); // Set the expiration time in seconds
-            response.addCookie(cookie);
-        }else{
-            Cookie cookie = new Cookie("useremail",null); // remove useremail cookie
-            cookie.setMaxAge(0); // set to 0 to remove
-            response.addCookie(cookie);
-        }
+//    @PostMapping("/login")
+//    public String authenticate(String email, String password, RedirectAttributes ra, Boolean checkBoxRememberUser, HttpServletResponse response){ //receive email and password from the login form
+//        Optional<Accounts> account = accountService.getAccountByEmail(email);
+//        //emailService.sendMultiFacAuthEmail(account.get().getEmail(),4444);
+//        if(checkBoxRememberUser!=null){ //add usermail cookie
+//            Cookie cookie = new Cookie("useremail",email);
+//            cookie.setMaxAge(3600); // Set the expiration time in seconds
+//            response.addCookie(cookie);
+//        }else{
+//            Cookie cookie = new Cookie("useremail",null); // remove useremail cookie
+//            cookie.setMaxAge(0); // set to 0 to remove
+//            response.addCookie(cookie);
+//        }
+//
+//        if(account.isPresent() && account.get().getPassword().equals(password)){
+//            Accounts acc = account.get();
+//            if(acc.isMultifactorAuth())
+//            {
+//                int code = RandNumGenerator.generateRandom4DigitCode();
+//                codeHM.put(acc.getEmail(),code);
+//                new Thread(() -> {
+//                    try {
+//                        Thread.sleep(5*60 * 1000);  // Sleep for 5 minutes
+//                        codeHM.remove(acc.getEmail());  // remove code (expired)
+//                    } catch (InterruptedException e) {
+//                        System.out.println(e);
+//                    }
+//                }).start();
+//                //code = RandNumGenerator.generateRandom4DigitCode();
+//                emailService.sendMultiFacAuthEmail(acc.getEmail(),code);
+//                ra.addFlashAttribute("email",acc.getEmail());
+//                return "redirect:/multifactorauth";
+//            }
+//            ra.addFlashAttribute("account",account.get()); //RedirectAttributes is something to send to the page at return statement
+//            return "redirect:/dashboard";
+//        }
+//        else{
+//            ra.addFlashAttribute("error","Login failed.");
+//            return "redirect:/login";
+//        }
+//    }
+//
+//    @GetMapping("/multifactorauth")
+//    public String showMultiFactorVerification(){
+//        return "multifactorauth";
+//    }
+//    @PostMapping("/multifactorauth")
+//    public String multifactorVerification(int enteredCode, String email, RedirectAttributes ra){
+//        if(!codeHM.containsKey(email))
+//        {
+//            ra.addFlashAttribute("error","Code expired or invalid.");
+//            return "redirect:/login";
+//        }
+//        if(enteredCode == codeHM.get(email)){
+//            codeHM.remove(email); // remove email and code pair after successful verification
+//            Optional<Accounts> account = accountService.getAccountByEmail(email);
+//            ra.addFlashAttribute("account",account.get()); //RedirectAttributes is something to send to the page at return statement
+//            return "redirect:/dashboard";
+//        }
+//        else {
+//            ra.addFlashAttribute("error","Verification failed.");
+//            return "redirect:/login";
+//        }
+//    }
 
-        if(account.isPresent() && account.get().getPassword().equals(password)){
-            Accounts acc = account.get();
-            if(acc.isMultifactorAuth())
-            {
-                code = RandNumGenerator.generateRandom4DigitCode();
-                emailService.sendMultiFacAuthEmail(acc.getEmail(),code);
-                ra.addFlashAttribute("email",acc.getEmail());
-                return "redirect:/multifactorauth";
-            }
-            ra.addFlashAttribute("account",account.get()); //RedirectAttributes is something to send to the page at return statement
-            return "redirect:/dashboard";
-        }
-        else{
-            ra.addFlashAttribute("error","Login failed.");
+    @GetMapping("/resetpassword")
+    public String showResetPassword(){
+        return "resetpassword";
+    }
+    @PostMapping("/resetpassword")
+    public String showResetPassword(String emailToReset, RedirectAttributes ra){
+        Optional<Accounts> account = accountService.getAccountByEmail(emailToReset);
+        if(!account.isPresent())
+        {
+            ra.addFlashAttribute("error", "There isn't an account associated with "+ emailToReset +". Please consider to register a new account!");
             return "redirect:/login";
         }
+        else{
+            Accounts acc = account.get();
+            int code = RandNumGenerator.generateRandom4DigitCode();
+            codeHM.put(acc.getEmail(),code);
+            new Thread(() -> {
+                try {
+                    Thread.sleep(5*60 * 1000);  // Sleep for 5 minutes
+                    codeHM.remove(acc.getEmail());  // remove code (expired)
+                } catch (InterruptedException e) {
+                    System.out.println(e);
+                }
+            }).start();
+            emailService.sendResetPasswordEmail(acc.getEmail(),code);
+            ra.addFlashAttribute("email",acc.getEmail());
+            return "redirect:/resetpassword";
+        }
+
     }
 
-    @GetMapping("/multifactorauth")
-    public String showMultiFactorVerification(){
-        return "multifactorauth";
-    }
-    @PostMapping("/multifactorauth")
-    public String multifactorVerification(int enteredCode, String email, RedirectAttributes ra){
-        if(enteredCode == code){
-            Optional<Accounts> account = accountService.getAccountByEmail(email);
-            ra.addFlashAttribute("account",account.get()); //RedirectAttributes is something to send to the page at return statement
-            return "redirect:/dashboard";
+    @PostMapping("/newpassword")
+    public String updatePassword(String newPassword, String email, int enteredCode, RedirectAttributes ra)
+    {
+        if(!codeHM.containsKey(email))
+        {
+            ra.addFlashAttribute("error","Code expired or invalid.");
+            return "redirect:/login";
         }
-        else {
+        if(enteredCode == codeHM.get(email)){
+            Optional<Accounts> account = accountService.getAccountByEmail(email);
+            Accounts acc = account.get();
+            acc.setPassword(newPassword);
+            accountService.save(acc);
+            ra.addFlashAttribute("message","Password reset successfully");
+            return "redirect:/login";
+        }
+        else{
             ra.addFlashAttribute("error","Verification failed.");
             return "redirect:/login";
         }
     }
-
 
     @GetMapping("/dashboard")
     public String showDashBoard(){

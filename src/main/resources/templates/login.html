@@ -28,5 +28,30 @@
     </div>
 </form>
 
+<form id="forgotPasswordForm" method="post" th:action="@{/resetpassword}">
+    <div class="container-fluid text-center">
+        <input type="hidden" name="emailToReset" id="emailToReset">
+        <a href="#" onclick="submitForgotPasswordForm()">Forgot Password</a>
+    </div>
+</form>
+
+<script type="text/javascript">
+    function requireEmailInput(){
+        if(document.getElementById("email").value !== ''){
+            document.getElementById("emailToReset").value = document.getElementById("email").value;
+            return true;
+        }
+        else{
+            alert("Please type in an email before clicking forgot password");
+            return false;
+        }
+    }
+
+    function submitForgotPasswordForm(){
+        if(requireEmailInput())
+            document.getElementById("forgotPasswordForm").submit();
+    }
+</script>
+
 </body>
 </html>

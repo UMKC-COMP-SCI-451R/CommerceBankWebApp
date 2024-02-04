@@ -1,4 +1,4 @@
-package com.commercebank.accounts;
+package com.commercebank;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
