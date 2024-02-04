@@ -3,12 +3,13 @@ label {
 }
 
 .loginform {
-    border: 2px solid black;
+    padding: 20px;
     background-color: green;
-    height: 200px;
+    height: 300px;
     position: absolute;
-    top: 35%;
+    top: 50%;
     left: 50%;
     width: 30%;
     transform: translate(-50%, -50%);
+    border-radius: 25px;
 }
