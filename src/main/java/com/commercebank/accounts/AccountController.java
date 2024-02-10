@@ -184,6 +184,11 @@ public class AccountController {
         return "profile";
     }
 
+    @GetMapping("/loans")
+    public String showLoans(){
+        return "loans";
+    }
+
     @PostMapping("/saveProfileSettings")
     public String saveProfileSettings(String email, boolean isPaperless, boolean isMultifactorAuth, boolean isEmailAlert, boolean isTextAlert, RedirectAttributes ra){
         Optional<Accounts> acc = accountService.getAccountByEmail(email);

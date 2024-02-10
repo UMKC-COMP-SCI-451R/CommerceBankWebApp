@@ -1,6 +1,7 @@
-label {
-    color: white;
-}
+/* this file contains global style: style that could be applied to all html files
+    please don't target element tag
+    target class name instead
+*/
 
 .loginform {
     padding: 20px;
@@ -12,4 +13,12 @@ label {
     width: 30%;
     transform: translate(-50%, -50%);
     border-radius: 25px;
+}
+
+.navbar-nav .nav-link {
+    border-radius: 10px;
+}
+
+.navbar-nav .nav-link:hover {
+    background-color: rgb(176, 230, 176);
 }

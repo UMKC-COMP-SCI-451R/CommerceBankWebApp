@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Commerce Bank</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" href="css/loans.css">
+</head>
+<body style="margin: 0;">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">
+        <img id="logo" src="images/CommerceBankLogo.png" alt="Logo" width="165" height="40" class="d-inline-block align-text-top">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/dashboard}">Summary</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/transfer}">Transfer</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="#" style="text-decoration: underline; font-weight: bold;">Loans</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" th:href="@{/profile}">Profile</a>
+            </li>
+        </ul>
+    </div>
+    <form th:action="@{/logout}" method="get">
+        <button class="btn btn-outline-success mx-3 my-0" type="submit">Logout</button>
+    </form>
+</nav>
+
+<div class="container">
+    <div class="card-inline">
+        <h2>Credit Card</h2>
+        <button id="ccbtn" onclick="showccdiv('cccard')" class="btn btn-success">Learn more!</button>
+    </div>
+    <div class="card-inline">
+        <h2>Auto Loan</h2>
+        <button id="albtn" onclick="showccdiv('alcard')" class="btn btn-success">Learn more!</button>
+    </div>
+    <div class="card-inline">
+        <h2>Home Loan</h2>
+        <button id="hlbtn" onclick="showccdiv('hlcard')" class="btn btn-success">Learn more!</button>
+    </div>
+    <div class="card-inline">
+        <h2>Personal Loan</h2>
+        <button id="plbtn" onclick="showccdiv('plcard')" class="btn btn-success">Learn more!</button>
+    </div>
+</div>
+
+<div class="card" id="cccard">
+    <div class="card-body">
+        <span class="card-text text-center" style="font-style: italic; font-weight: bold; color: rgba(0,0,0,0); display:block">*** Your application is received. Our associate will contact you very soon!! *** </span>
+        <img src="images/loans/creditcard.svg" class="card-img-top mx-auto d-block" alt="Credit Card Image">
+        <h5 class="card-title text-center">Credit Card</h5>
+        <ul class="list-unstyled text-center">
+            <li>5% cash back every where</li>
+            <li>0% Intro APR for 5 years</li>
+            <li>Unlimited Cashback Match</li>
+            <li>$500 sign in bonus</li>
+        </ul>
+        <p class="card-text text-center">Credit cards offer convenience and flexibility for payments, both online
+            and
+            in-store. They enable users to build a positive credit history, providing opportunities for future
+            financial
+            endeavors. Additionally, credit cards often come with rewards, perks, and enhanced security features,
+            making
+            them a valuable tool for responsible financial management.</p>
+        <button class="btn btn-success" style="width: 100%;" onclick="apply(this)">Apply
+            now >></button>
+    </div>
+
+</div>
+<div class="card" id="alcard">
+    <div class="card-body">
+        <span class="card-text text-center" style="font-style: italic; font-weight: bold; color: rgba(0,0,0,0); display:block">*** Your application is received. Our associate will contact you very soon!! *** </span>
+        <img src="images/loans/autoloan.svg" class="card-img-top mx-auto d-block" alt="Auto Loan Image">
+        <h5 class="card-title text-center">Auto Loan</h5>
+        <ul class="list-unstyled text-center">
+            <li>Get qualified offers in minutes</li>
+            <li>Loan up to $300k</li>
+            <li>No proof of income needed</li>
+            <li>No minimum credit score</li>
+        </ul>
+        <p class="card-text text-center">Auto loans provide an avenue for acquiring a vehicle without the need for a
+            lump-sum
+            payment, making transportation accessible. They enable individuals to build credit as they make timely
+            payments, fostering financial responsibility. Additionally, auto loans can offer competitive interest
+            rates and flexible repayment terms, enhancing affordability for borrowers.</p>
+        <button class="btn btn-success" style="width: 100%;" onclick="apply(this)">Apply
+            now >></button>
+    </div>
+</div>
+<div class="card" id="hlcard">
+    <div class="card-body">
+        <span class="card-text text-center" style="font-style: italic; font-weight: bold; color: rgba(0,0,0,0); display:block">*** Your application is received. Our associate will contact you very soon!! *** </span>
+        <img src="images/loans/homeloan.svg" class="card-img-top mx-auto d-block" alt="Home Loan Image">
+        <h5 class="card-title text-center">Home Loan</h5>
+        <ul class="list-unstyled text-center">
+            <li>Competitively low rate and no PMI</li>
+            <li>Rate protection</li>
+            <li>Home buying with as little as 1% down</li>
+            <li>Special benefits for veterans</li>
+        </ul>
+        <p class="card-text text-center">Home loans provide a pathway to home ownership by enabling individuals to
+            finance
+            their home purchase. They offer long-term financial stability, potential tax benefits, and an
+            opportunity to
+            build equity. Additionally, home loans often come with competitive interest rates, making home ownership
+            more
+            accessible and affordable.</p>
+        <button class="btn btn-success" style="width: 100%;" onclick="apply(this)">Apply
+            now >></button>
+    </div>
+</div>
+<div class="card" id="plcard">
+    <div class="card-body">
+        <span class="card-text text-center" style="font-style: italic; font-weight: bold; color: rgba(0,0,0,0); display:block">*** Your application is received. Our associate will contact you very soon!! *** </span>
+        <img src="images/loans/personalloan.svg" class="card-img-top mx-auto d-block" alt="Personal Loan Image">
+        <h5 class="card-title text-center">Personal Loan</h5>
+        <ul class="list-unstyled text-center">
+            <li>Borrow up to 100k</li>
+            <li>No minimum credit score</li>
+            <li>Low APR: 3.4%-10%</li>
+            <li>Term: 12-72 months</li>
+        </ul>
+        <p class="card-text text-center">Personal loans offer financial flexibility for various purposes, such as debt consolidation,
+            home improvements, or unexpected expenses. They provide a fixed repayment plan, simplified
+            and potential lower interest rates compared to credit cards.
+            Personal loans empower individuals to achieve their financial goals with ease and convenience.</p>
+        <button class="btn btn-success" style="width: 100%;" onclick="apply(this)">Apply
+            now >></button>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var cccard = document.getElementById("cccard");
+    var alcard = document.getElementById("alcard");
+    var hlcard = document.getElementById("hlcard");
+    var plcard = document.getElementById("plcard");
+    // var creditbutton = cccard.getElementsByTagName("button");
+    // var autobutton = alcard.getElementsByTagName("button");
+    // var homebutton = hlcard.getElementsByTagName("button");
+    // var personalbutton = plcard.getElementsByTagName("button");
+    // var creditMessage = cccard.getElementsByTagName("span");
+    // var autoMessage = alcard.getElementsByTagName("span");
+    // var homeMessage = hlcard.getElementsByTagName("span");
+    // var personalMessage = plcard.getElementsByTagName("span");
+    function showccdiv(divid) {
+        cccard.style.display = 'none';
+        alcard.style.display = 'none';
+        hlcard.style.display = 'none';
+        plcard.style.display = 'none';
+        document.getElementById(divid).style.display = "block";
+
+        //target.querySelector("span").style.textAlign = "center";
+
+    }
+    function apply(button){
+        button.textContent = "Thank you for applying!"
+        var parentDiv = button.parentNode;
+        // Find the first span element within the parent div
+        var messageSpan = parentDiv.querySelector("span");
+        // Set the display of the message span to "block"
+        if (messageSpan) {
+            messageSpan.style.color = "white"
+            messageSpan.style.background = "rgb(46,139,87)"
+        }
+    }
+</script>
+
+</body>
+</html>
