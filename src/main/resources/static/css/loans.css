@@ -2,7 +2,6 @@ button {
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    /* Light gray background for odd rows */
     color: white;
     display: block;
     margin-bottom: 10px;
@@ -34,7 +33,6 @@ img:not(#logo) {
 li:not(.nav-item)::before {
     content: '\2713';
     color: green;
-    /* Change color as needed */
     font-size: 1.2em;
     margin-right: 10px;
 }
@@ -63,9 +61,7 @@ ul:not(.navbar-nav) {
     width: 22%;
     border: solid rgb(216, 207, 207);
     border-radius: 10px;
-    /* Adjust width as needed */
     margin-bottom: 20px;
-    /* Add some space between cards */
 }
 
 .card-inline:hover{
