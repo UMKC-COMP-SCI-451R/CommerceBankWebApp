@@ -54,7 +54,7 @@
   <div class="row">
     <div class="col">
       <div class="card w-100">
-        <h5 th:text="${session.account.getFirstName()}+' '+ ${session.account.getLastName()}" style="text-align: center;"></h5>
+        <h5 th:text="${session.account.getFirstName()}+' '+ ${session.account.getLastName()}" style="text-align: center; margin-top: 10px"></h5>
         <div class="card-body">
           <div class="row mb-3 align-items-center">
             <div class="col-2 ml-4">
@@ -112,8 +112,13 @@
           </div>
         </div>
       </div>
-      <img class="rounded mt-2 mb-2" src="images/profile/profile-ad1.jpg" width="100%" height="330px">
-      <iframe width="100%" height="300" src="https://www.youtube.com/embed/vu9VEOXSCMQ?showinfo=0" allowfullscreen></iframe>
+      <div class="shadow mb-3 mt-3 bg-white rounded-4">
+        <img class="rounded-4" src="images/profile/profile-ad1.jpg" width="100%" height="330px">
+      </div>
+      <div class="shadow mb-3 mt-3 bg-white rounded-4">
+        <iframe class="rounded-4" width="100%" height="300" src="https://www.youtube.com/embed/vu9VEOXSCMQ?showinfo=0" allowfullscreen></iframe>
+      </div>
+
     </div>
 
     <div class="col-md-6 mt-5">
@@ -132,7 +137,7 @@
             </div>
           </div>
           <div class="row justify-content-center">
-            <p> Along with the password, you will also receive one-time code when logining to enhance security.
+            <p> Along with the password, you will also receive a one-time code when logging in to enhance security.
             </p>
           </div>
         </div>
@@ -195,8 +200,8 @@
         </div>
       </div>
       <div style="display: flex; justify-content: center; gap: 10px;">
-        <button class="btn btn-success" type="submit" id="save">Save</button>
-        <button class="btn btn-secondary" type="button" id="edit" onclick="enableCheckBox()">Edit</button>
+        <button class="btn btn-secondary" type="submit" id="save">Save</button>
+        <button class="btn btn-success" type="button" id="edit" onclick="enableCheckBox()">Edit</button>
       </div>
         <input type="hidden" name="email" th:value="${session.account.getEmail()}">
       </form>
@@ -215,13 +220,18 @@
     }
   }
 
-  function showTransfer(){
-    window.location = "[[@{/transfer}]]";
-  }
-  function showSummary(){
-    window.location = "[[@{/dashboard}]]";
+  function toggleSaveEditButtonClass(){
+    var saveButton = document.getElementById('save');
+    var editButton = document.getElementById('edit');
+
+    saveButton.classList.toggle('btn-success');
+    saveButton.classList.toggle('btn-secondary');
+
+    editButton.classList.toggle('btn-success');
+    editButton.classList.toggle('btn-secondary');
   }
 
+  document.getElementById('edit').addEventListener('click', toggleSaveEditButtonClass);
 
 </script>
 </body>
