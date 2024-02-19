@@ -55,6 +55,7 @@
     </div>
 </div>
 
+
 <div class="card" id="cccard">
     <div class="card-body">
         <span class="card-text text-center" style="font-style: italic; font-weight: bold; color: rgba(0,0,0,0); display:block">*** Your application is received. Our associate will contact you very soon!! *** </span>
@@ -141,17 +142,17 @@
 </div>
 
 <script type="text/javascript">
-    var cccard = document.getElementById("cccard");
-    var alcard = document.getElementById("alcard");
-    var hlcard = document.getElementById("hlcard");
-    var plcard = document.getElementById("plcard");
+    showccdiv('cccard')  // show credit card at the beginning
     function showccdiv(divid) {
-        cccard.style.display = 'none';
-        alcard.style.display = 'none';
-        hlcard.style.display = 'none';
-        plcard.style.display = 'none';
-        document.getElementById(divid).style.display = "block";
-
+        var cards = document.querySelectorAll('.card');
+        cards.forEach(function(card) {
+            console.log(card);
+            card.classList.remove('show');
+        });
+        // Show selected card
+        var selectedCard = document.getElementById(divid);
+        console.log(divid)
+        selectedCard.classList.add('show');
     }
     function apply(button){
         button.textContent = "Thank you for applying!"

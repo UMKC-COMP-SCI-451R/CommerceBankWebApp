@@ -8,16 +8,20 @@ button {
 }
 
 .card {
+    position: absolute;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    transition: 0.3s;
+    transition: opacity 0.5s ease, transform 0.5s ease; /* Transition opacity and transform */
+    opacity: 0; /* Initially hide cards */
+    transform: translateY(100%); /* Move cards to the right initially */
     margin-left: 20%;
     margin-right: 20%;
     margin-bottom: 20px;
     margin-top: 20px;
 }
 
-.card:not(#cccard){
-    display: none;
+.card.show {
+    opacity: 1; /* Show cards */
+    transform: translateY(0); /* Move cards to the left */
 }
 
 .card:hover {
