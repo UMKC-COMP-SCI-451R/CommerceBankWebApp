@@ -12,7 +12,7 @@ button {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     transition: opacity 0.5s ease, transform 0.5s ease; /* Transition opacity and transform */
     opacity: 0; /* Initially hide cards */
-    transform: translateY(100%); /* Move cards to the right initially */
+    transform: translateX(30%); /* Move cards to the right initially */
     margin-left: 20%;
     margin-right: 20%;
     margin-bottom: 20px;
@@ -21,7 +21,22 @@ button {
 
 .card.show {
     opacity: 1; /* Show cards */
-    transform: translateY(0); /* Move cards to the left */
+    transform: translateX(0); /* Move cards to the left */
+}
+
+.card.right {
+    transform: translateX(30%);
+}
+
+/* New CSS class to make the card disappear on the left side */
+.card.left {
+    opacity: 0;
+    transform: translateX(-30%);
+}
+
+.card.hide{
+    opacity: 0; /* Show cards */
+    transform: translateX(-30%); /* Move cards to the left */
 }
 
 .card:hover {
@@ -70,4 +85,16 @@ ul:not(.navbar-nav) {
 
 .card-inline:hover{
     border-color: green;
+}
+
+
+.modal-backdrop.show {
+    background-color: rgba(129, 165, 129, 0.5); /* Adjust the background color and opacity */
+}
+.modal-backdrop {
+    transition: opacity 0s ease; /* Add transition for opacity */
+}
+.modal-dialog {
+    margin: auto;
+    top: 20%;
 }
