@@ -76,8 +76,8 @@
                     <td th:text="${trans.date}"></td>
                 </tr>
             </th:block>
-            <th:block th:unless="${session.filteredTransactions != null and not #lists.isEmpty(session.filteredTransactions)}" th:each="trans : ${session.account.transactionsList}">
-                <tr>
+            <th:block th:unless="${session.filteredTransactions != null and not #lists.isEmpty(session.filteredTransactions)}">
+                <tr th:each="trans, transStatus : ${session.account.transactionsList}" th:if="${transStatus.index >= transStatus.size-5}">
                     <td th:text="${trans.transactionId}"></td>
                     <td th:text="${trans.source}"></td>
                     <td th:text="${trans.destination}"></td>
