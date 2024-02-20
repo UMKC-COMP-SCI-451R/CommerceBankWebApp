@@ -35,10 +35,24 @@
         <button class="btn btn-outline-success mx-3 my-0" type="submit">Logout</button>
     </form>
 </nav>
+<div th:if="${message}" class="alert alert-warning text-center" id="messageDiv">
+    [[${message}]]
+</div>
     <div id="summary">
         <p th:text="'Hello '+${session.account.getFirstName()}+' '+ ${session.account.getLastName()}+',' "></p>
         <p th:text="'Account ID: '+${session.account.getAccID()}"></p>
         <p th:text="'Balance: '+${#numbers.formatCurrency(session.account.getBalance())}"></p>
+
+        <form action="/filterTransactions" method="post">
+            <label for="fromDate">From Date:</label>
+            <input type="date" id="fromDate" name="fromDate" th:value="${fromDate}">
+
+            <label for="toDate">To Date:</label>
+            <input type="date" id="toDate" name="toDate" th:value="${toDate}">
+            <input type="hidden" name="email" th:value="${session.account.getEmail()}">
+            <button type="submit" id="filterApplyBtn">Apply</button>
+            <button type="button" onclick="clearFilter()">Clear Filter</button>
+        </form>
 
         <table class="table table-bordered">
             <thead class="thead-dark">
@@ -47,32 +61,46 @@
                     <th>Source</th>
                     <th>Destination</th>
                     <th>Amount</th>
+                    <th>Date</th>
                 </tr>
             </thead>
             <tbody>
-            <th:block th:each="trans : ${session.account.getTransactionsList()}">
+
+            <tbody>
+            <th:block th:if="${session.filteredTransactions != null and not #lists.isEmpty(session.filteredTransactions)}" th:each="trans : ${session.filteredTransactions}">
                 <tr>
-                    <td>[[${trans.getTransactionId()}]]</td>
-                    <td>[[${trans.getSource()}]]</td>
-                    <td>[[${trans.getDestination}]]</td>
-                    <td>[[${trans.getAmount()}]]</td>
+                    <td th:text="${trans.transactionId}"></td>
+                    <td th:text="${trans.source}"></td>
+                    <td th:text="${trans.destination}"></td>
+                    <td th:text="${trans.amount}"></td>
+                    <td th:text="${trans.date}"></td>
                 </tr>
             </th:block>
+            <th:block th:unless="${session.filteredTransactions != null and not #lists.isEmpty(session.filteredTransactions)}" th:each="trans : ${session.account.transactionsList}">
+                <tr>
+                    <td th:text="${trans.transactionId}"></td>
+                    <td th:text="${trans.source}"></td>
+                    <td th:text="${trans.destination}"></td>
+                    <td th:text="${trans.amount}"></td>
+                    <td th:text="${trans.date}"></td>
+                </tr>
+            </th:block>
+            </tbody>
 
             </tbody>
         </table>
     </div>
+<script>
+    function clearFilter(){
+        // Assuming you have a date input with id "fromDate"
+        document.getElementById("fromDate").value = "";
 
+        // Similarly, for a date input with id "toDate"
+        document.getElementById("toDate").value = "";
 
-<script type="text/javascript">
-
-    function showTransfer(){
-        window.location = "[[@{/transfer}]]";
-    }
-
-    function showProfile(){
-        window.location = "[[@{/profile}]]"
+        document.getElementById("filterApplyBtn").click();
     }
 </script>
+
 </body>
 </html>

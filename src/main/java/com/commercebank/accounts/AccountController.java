@@ -10,10 +10,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.HashMap;
-import java.util.Optional;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
-@SessionAttributes("account")
+@SessionAttributes({"account", "filteredTransactions"})
 @Controller
 public class AccountController {
     @Autowired private AccountService accountService;
@@ -171,6 +172,38 @@ public class AccountController {
     @GetMapping("/dashboard")
     public String showDashBoard(){
         return "dashboard";
+    }
+
+    @PostMapping("/filterTransactions")
+    public String filterTransactions(String email, String fromDate, String toDate, RedirectAttributes ra) {
+        if(!fromDate.isBlank() && !toDate.isBlank()){
+            try{
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date startDate = dateFormat.parse(fromDate);
+                Date endDate = dateFormat.parse(toDate);
+                List<Transactions> filteredTransactionList = accountService.getTransactionListByDateRange(startDate,endDate,email);
+                System.out.println(filteredTransactionList.toString());
+                // more code
+                if(filteredTransactionList.isEmpty()){
+                    ra.addFlashAttribute("message","There is no transaction in this date range");
+                    ra.addFlashAttribute("filteredTransactions",filteredTransactionList);
+                }
+                else{
+                    ra.addFlashAttribute("filteredTransactions",filteredTransactionList);
+                    ra.addFlashAttribute("toDate",toDate);
+                    ra.addFlashAttribute("fromDate",fromDate);
+                }
+                return "redirect:/dashboard";
+            }catch(ParseException e) {
+                System.out.println("from date is " + fromDate);
+                System.out.println("to date is " + toDate);
+            }
+        }
+        else{
+            System.out.println("dates are blanks");
+            ra.addFlashAttribute("filteredTransactions",new ArrayList<Transactions>());
+        }
+        return "redirect:/dashboard";
     }
 
     @GetMapping("/transfer")
