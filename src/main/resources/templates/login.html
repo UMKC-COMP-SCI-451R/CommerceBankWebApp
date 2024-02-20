@@ -12,10 +12,10 @@
     </style>
 </head>
 <body>
-<div th:if="${message}" class="alert alert-success text-center">
+<div th:if="${message}" class="alert alert-success text-center" id="messageDiv">
     [[${message}]]
 </div>
-<div th:if="${error}" class="alert alert-danger text-center">
+<div th:if="${error}" class="alert alert-danger text-center" id="errorDiv">
     [[${error}]]
 </div>
 <div class="loginform">
@@ -60,6 +60,14 @@
         if(requireEmailInput())
             document.getElementById("forgotPasswordForm").submit();
     }
+
+    //set time out for message div
+    setTimeout(function() {
+        document.getElementById('messageDiv').style.display = 'none';
+    }, 5000); // 5000 milliseconds = 5 seconds
+    setTimeout(function() {
+        document.getElementById('errorDiv').style.display = 'none';
+    }, 5000);
 </script>
 
 </body>

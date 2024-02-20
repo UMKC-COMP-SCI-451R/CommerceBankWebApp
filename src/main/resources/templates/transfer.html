@@ -57,14 +57,11 @@
         </form>
 
     </div>
-    <div th:if="${message}" class="alert alert-success text-center">
+    <div th:if="${message}" class="alert alert-success text-center" id="messageDiv">
         [[${message}]]
     </div>
-    <div th:if="${error}" class="alert alert-danger text-center">
+    <div th:if="${error}" class="alert alert-danger text-center" id="errorDiv">
         [[${error}]]
-    </div>
-    <div id="validationMessage" class="alert alert-danger text-center" style="display:none;">
-        Please select appropriate source and destination accounts.
     </div>
     <form method="post" action="/makeTransaction" onsubmit="return validateExternalSource()">
         <div class="container-fluid text-center">
@@ -102,7 +99,7 @@
         var destination = document.getElementById("destination").value;
         if(source==="Select" || destination==="Select" || (source != "My Account" && destination != "My Account")
             || source === destination){
-            document.getElementById("validationMessage").style.display = "block";
+            alert("Please select appropriate Destination and Source accounts and try again.")
             return false;
         }else{
             document.getElementById("validationMessage").style.display = "none";
@@ -116,14 +113,13 @@
         else
             document.getElementById("addExternalAccForm").style.display = "none";
     }
-
-    function showSummary(){
-        window.location = "[[@{/dashboard}]]";
-    }
-
-    function showProfile(){
-        window.location = "[[@{/profile}]]";
-    }
+    //set time out for message div
+    setTimeout(function() {
+        document.getElementById('messageDiv').style.display = 'none';
+    }, 5000); // 5000 milliseconds = 5 seconds
+    setTimeout(function() {
+        document.getElementById('errorDiv').style.display = 'none';
+    }, 5000);
 </script>
 </body>
 </html>
