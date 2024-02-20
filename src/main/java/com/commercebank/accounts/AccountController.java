@@ -185,7 +185,7 @@ public class AccountController {
                 System.out.println(filteredTransactionList.toString());
                 // more code
                 if(filteredTransactionList.isEmpty()){
-                    ra.addFlashAttribute("message","There is no transaction in this date range");
+                    ra.addFlashAttribute("message","There is no transaction from "+fromDate+" to "+ toDate);
                     ra.addFlashAttribute("filteredTransactions",filteredTransactionList);
                 }
                 else{
