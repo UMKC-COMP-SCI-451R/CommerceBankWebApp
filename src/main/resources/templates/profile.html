@@ -157,7 +157,7 @@
               </button>
             </div>
           </div>
-          <form th:action="@{/saveNewPassword}" method="post">
+          <form th:action="@{/saveNewPassword}" method="post" onsubmit="checkPasswordMatch()">
             <div class="row align-items-start collapse" id="newPasswordDiv">
               <div class="col-5">
                 <div class="form-floating mb-3">
@@ -315,7 +315,7 @@
   function checkPasswordMatch(){
     var password = document.getElementById('newPasswordInput').value;
     var confirmPassword = document.getElementById('confirmPasswordInput').value;
-    console.log(`password is ${password} confirm password is ${confirmPassword}`)
+
     if(password !== confirmPassword)
     {
       alert("Passwords do not match. Please try again!")

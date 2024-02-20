@@ -6,52 +6,116 @@
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
 </head>
 <style>
-    #passdiv:hover #tooltiptext{
-        visibility: visible;
+    .card {
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
-    #tooltiptext{
-        visibility: hidden;
-    }
+
 </style>
 <body>
-<form th:action="@{/save}" method="post" th:object="${newAcc}">
-    <div class="container-fluid text-center">
-        <div>
-            <label class="text-primary" for="email"><b>Email</b></label>
-            <input type="email" th:field="*{email}" placeholder="Enter email" name="email" id="email" required>
-        </div>
-        <div>
-            <label class="text-primary" for="firstName"><b>First Name</b></label>
-            <input type="text" th:field="*{firstName}" placeholder="Enter first name" name="firstName" id="firstName" required>
-        </div>
-        <div>
-            <label class="text-primary" for="lastName"><b>Last Name</b></label>
-            <input type="text" th:field="*{lastName}" placeholder="Enter last name" name="lastName" id="lastName" required>
-        </div>
-        <div>
-            <label class="text-primary" for="address"><b>Address</b></label>
-            <input type="text" th:field="*{address}" placeholder="Enter address" name="address" id="address" required>
-        </div>
-        <div>
-            <label class="text-primary" for="phoneNumber"><b>Phone Number</b></label>
-            <input type="text" th:field="*{phoneNumber}" placeholder="Enter phone number" name="phoneNumber" id="phoneNumber" required minlength="10">
-        </div>
-        <div id="passdiv">
-            <label for="password"><b>Password</b></label>                                                                   <!-- min 8, one letter, one number-->
-            <input type="password" th:field="*{password}" placeholder="Enter Password" name="password" id="password" required pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"><br>
-            <span id="tooltiptext">Password must include one letter, one number and have minimum length of 8 characters</span>
-        </div>
-        <button class="btn btn-primary" type="submit">Register</button>
-        <button class="btn btn-secondary" type="button" onclick="cancelRegister()">Cancel</button>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">
+        <img src="images/CommerceBankLogo.png" alt="Logo" width="165" height="40" class="d-inline-block align-text-top">
+    </a>
+    <div class="collapse navbar-collapse" id="navbarNav"></div>
+    <button class="btn btn-outline-success mx-3 my-0" type="button">Help</button>
+</nav>
+<div class="card w-25 m-auto mt-3">
+    <h5 class="card-header bg-success text-white text-center">Register</h5>
+    <div class="card-body">
+        <form th:action="@{/save}" method="post" th:object="${newAcc}" onsubmit="checkPasswordMatch()">
+            <div class="container-fluid text-center">
+                <div class="form-floating mb-3">
+                    <input type="email" class="form-control" th:field="*{email}" placeholder="Enter email" name="email" id="email" required>
+                    <label for="email">Email:</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" th:field="*{firstName}" placeholder="Enter first name" name="firstName" id="firstName" required>
+                    <label for="firstName">First name:</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" th:field="*{lastName}" placeholder="Enter last name" name="lastName" id="lastName" required>
+                    <label for="lastName">Last name:</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" th:field="*{address}" placeholder="Enter address" name="address" id="address" required>
+                    <label for="address">Address:</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" th:field="*{phoneNumber}" placeholder="Enter phone number" name="phoneNumber" id="phoneNumber" required minlength="10">
+                    <label for="phoneNumber">Phone number:</label>
+                </div>
+                <div class="form-floating mb-3" data-toggle="tooltip" data-placement="right" title="Password must include one letter, one number and have minimum length of 8 characters">
+                    <input type="password" class="form-control" th:field="*{password}" placeholder="Enter Password" name="password" id="password" required pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$">
+                    <label for="password">Password:</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" class="form-control" placeholder="Confirm Password" name="confirmPassword" id="confirmPassword" required pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$">
+                    <label for="confirmPassword">Confirm password:</label>
+                </div>
+                <button class="btn btn-success" type="submit">Register</button>
+                <button class="btn btn-secondary" type="button" onclick="cancelRegister()">Cancel</button>
 
+            </div>
+        </form>
     </div>
-</form>
+</div>
+
+<!--<form th:action="@{/save}" method="post" th:object="${newAcc}">-->
+<!--    <div class="container-fluid text-center">-->
+<!--        <div>-->
+<!--            <label class="text-primary" for="email"><b>Email</b></label>-->
+<!--            <input type="email" th:field="*{email}" placeholder="Enter email" name="email" id="email" required>-->
+<!--        </div>-->
+<!--        <div>-->
+<!--            <label class="text-primary" for="firstName"><b>First Name</b></label>-->
+<!--            <input type="text" th:field="*{firstName}" placeholder="Enter first name" name="firstName" id="firstName" required>-->
+<!--        </div>-->
+<!--        <div>-->
+<!--            <label class="text-primary" for="lastName"><b>Last Name</b></label>-->
+<!--            <input type="text" th:field="*{lastName}" placeholder="Enter last name" name="lastName" id="lastName" required>-->
+<!--        </div>-->
+<!--        <div>-->
+<!--            <label class="text-primary" for="address"><b>Address</b></label>-->
+<!--            <input type="text" th:field="*{address}" placeholder="Enter address" name="address" id="address" required>-->
+<!--        </div>-->
+<!--        <div>-->
+<!--            <label class="text-primary" for="phoneNumber"><b>Phone Number</b></label>-->
+<!--            <input type="text" th:field="*{phoneNumber}" placeholder="Enter phone number" name="phoneNumber" id="phoneNumber" required minlength="10">-->
+<!--        </div>-->
+<!--        <div id="passdiv">-->
+<!--            <label for="password"><b>Password</b></label>                                                                   &lt;!&ndash; min 8, one letter, one number&ndash;&gt;-->
+<!--            <input type="password" th:field="*{password}" placeholder="Enter Password" name="password" id="password" required pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"><br>-->
+<!--            <span id="tooltiptext">Password must include one letter, one number and have minimum length of 8 characters</span>-->
+<!--        </div>-->
+<!--        <button class="btn btn-primary" type="submit">Register</button>-->
+<!--        <button class="btn btn-secondary" type="button" onclick="cancelRegister()">Cancel</button>-->
+
+<!--    </div>-->
+<!--</form>-->
 
 
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script type="text/javascript">
     function cancelRegister(){
         window.location = "[[@{/}]]";
+    }
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+    function checkPasswordMatch(){
+        var password = document.getElementById('password').value;
+        var confirmPassword = document.getElementById('confirmPassword').value;
+
+        if(password !== confirmPassword)
+        {
+            alert("Passwords do not match. Please try again!")
+            return false;
+        }
+        else return true;
     }
 </script>
 
