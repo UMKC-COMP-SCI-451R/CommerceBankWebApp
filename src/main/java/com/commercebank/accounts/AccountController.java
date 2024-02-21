@@ -2,6 +2,8 @@ package com.commercebank.accounts;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,11 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-@SessionAttributes({"account", "filteredTransactions"})
+@SessionAttributes({"account", "filteredTransactions","currentPage"})
 @Controller
 public class AccountController {
     @Autowired private AccountService accountService;
@@ -111,7 +114,8 @@ public class AccountController {
     }
 
     @PostMapping("/filterTransactions")
-    public String filterTransactions(String email, String fromDate, String toDate, RedirectAttributes ra) {
+    public String filterTransactions(String email, String fromDate, String toDate, RedirectAttributes ra, HttpSession session) {
+
         if(!fromDate.isBlank() && !toDate.isBlank()){
             try{
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -122,12 +126,18 @@ public class AccountController {
                 // more code
                 if(filteredTransactionList.isEmpty()){
                     ra.addFlashAttribute("message","There is no transaction from "+fromDate+" to "+ toDate);
+                    session.setAttribute("filteredTransactions",filteredTransactionList);
                     ra.addFlashAttribute("filteredTransactions",filteredTransactionList);
+                    session.setAttribute("currentPage",0);
+                    ra.addFlashAttribute("currentPage",0);
                 }
                 else{
+                    session.setAttribute("filteredTransactions",filteredTransactionList);
                     ra.addFlashAttribute("filteredTransactions",filteredTransactionList);
                     ra.addFlashAttribute("toDate",toDate);
                     ra.addFlashAttribute("fromDate",fromDate);
+                    session.setAttribute("currentPage",1);
+                    ra.addFlashAttribute("currentPage",1);
                 }
                 return "redirect:/dashboard";
             }catch(ParseException e) {
@@ -137,8 +147,35 @@ public class AccountController {
         }
         else{
             System.out.println("dates are blanks");
+            session.setAttribute("filteredTransactions",new ArrayList<Transactions>());
             ra.addFlashAttribute("filteredTransactions",new ArrayList<Transactions>());
+            session.setAttribute("currentPage",0);
+            ra.addFlashAttribute("currentPage",0);
         }
+        return "redirect:/dashboard";
+    }
+
+    @PostMapping("/next")
+    public String nextPage(HttpSession session, RedirectAttributes ra){
+        System.out.println(session.getAttribute("currentPage"));
+        Integer currentPage = (Integer) session.getAttribute("currentPage");
+        if (currentPage != null) {
+            session.setAttribute("currentPage", currentPage + 1);
+            ra.addFlashAttribute("currentPage",currentPage + 1);
+        }
+        System.out.println(session.getAttribute("currentPage"));
+        return "redirect:/dashboard";
+        //return "dashboard";
+    }
+
+    @PostMapping("/previous")
+    public String prevPage(HttpSession session, RedirectAttributes ra){
+        Integer currentPage = (Integer) session.getAttribute("currentPage");
+        if (currentPage != null) {
+            session.setAttribute("currentPage", currentPage - 1);
+            ra.addFlashAttribute("currentPage",currentPage - 1);
+        }
+        System.out.println(session.getAttribute("currentPage"));
         return "redirect:/dashboard";
     }
 
@@ -159,7 +196,7 @@ public class AccountController {
     }
 
     @PostMapping("/saveProfileSettings")
-    public String saveProfileSettings(String email, boolean isPaperless, boolean isMultifactorAuth, boolean isEmailAlert, boolean isTextAlert, RedirectAttributes ra){
+    public String saveProfileSettings(String email, boolean isPaperless, boolean isMultifactorAuth, boolean isEmailAlert, boolean isTextAlert, RedirectAttributes ra,HttpSession session){
         Optional<Accounts> acc = accountService.getAccountByEmail(email);
         Accounts account;
         if(acc.isPresent()){
@@ -171,7 +208,8 @@ public class AccountController {
             //System.out.println(account);
             accountService.save(account);
             ra.addFlashAttribute("message","All settings are saved!");
-            ra.addFlashAttribute("account",account); //this will update attribute "account" in the current session
+            session.setAttribute("account",account);
+            //ra.addFlashAttribute("account",account);
         }else {
             ra.addFlashAttribute("error","Something go wrong.");
 
@@ -199,7 +237,7 @@ public class AccountController {
                 account.setBalance(account.getBalance() - (source.equals("My Account")? amount : -amount));
                 accountService.save(account); //update account object after adding transaction
                 ra.addFlashAttribute("message","Transfer is made successfully!"); //RedirectAttributes is something to send to the page at return statement
-                ra.addFlashAttribute("account",account); //this will update attribute "account" in the current session
+                ra.addFlashAttribute("account",account);
                 return "redirect:/transfer";
             }
             else{
@@ -224,7 +262,7 @@ public class AccountController {
             //System.out.println(account);
             accountService.save(account);
             ra.addFlashAttribute("message","External account added.");
-            ra.addFlashAttribute("account",account); //this will update attribute "account" in the current session
+            ra.addFlashAttribute("account",account);
         }else {
             ra.addFlashAttribute("error","Something go wrong.");
 

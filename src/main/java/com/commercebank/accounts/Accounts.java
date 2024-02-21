@@ -51,6 +51,7 @@ public class Accounts {
     @Column()
     private boolean textAlert = false;
 
+
     public List<Transactions> getTransactionsList() {
         return transactionsList;
     }
@@ -164,6 +165,8 @@ public class Accounts {
         this.textAlert = textAlert;
     }
 
+
+
     @Override
     public String toString() {
         StringBuilder content = new StringBuilder("Accounts{" +
@@ -173,6 +176,10 @@ public class Accounts {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", balance=" + balance +
+                ", isPaperless= " + paperless +
+                ", isMulti= "+multifactorAuth+
+                ", istext= "+ textAlert+
+                ", isEmailAlert= " + emailAlert+
                 '}');
         for(Transactions trans : this.transactionsList){
             content.append("\n").append(trans.toString());

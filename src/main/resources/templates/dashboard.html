@@ -68,17 +68,50 @@
             <tbody>
 
             <tbody>
-            <th:block th:if="${session.filteredTransactions != null and not #lists.isEmpty(session.filteredTransactions)}" th:each="trans : ${session.filteredTransactions}">
-                <tr>
-                    <td th:text="${trans.transactionId}"></td>
-                    <td th:text="${trans.source}"></td>
-                    <td th:text="${trans.destination}"></td>
-                    <td th:text="${trans.amount}"></td>
-                    <td th:text="${trans.date}"></td>
-                </tr>
+            <!--            <th:block th:if="${session.filteredTransactions != null and not #lists.isEmpty(session.filteredTransactions)}" th:each="trans : ${session.filteredTransactions}">-->
+            <!--                <tr>-->
+            <!--                    <td th:text="${trans.transactionId}"></td>-->
+            <!--                    <td th:text="${trans.source}"></td>-->
+            <!--                    <td th:text="${trans.destination}"></td>-->
+            <!--                    <td th:text="${trans.amount}"></td>-->
+            <!--                    <td th:text="${trans.date}"></td>-->
+            <!--                </tr>-->
+            <!--            </th:block>-->
+
+
+            <th:block th:if="${session.filteredTransactions != null and not #lists.isEmpty(session.filteredTransactions)}">
+                <!-- Calculate the total number of pages -->
+                <th:block th:with="totalPages=${T(java.lang.Math).ceil(session.filteredTransactions.size / 5.0)}">
+                    <!-- Display the transactions for the current page -->
+                    <th:block
+                            th:each="trans : ${session.filteredTransactions.subList(5 * (session.currentPage - 1), (5 * session.currentPage > session.filteredTransactions.size) ? session.filteredTransactions.size : 5 * session.currentPage)}">
+                        <tr>
+                            <td th:text="${trans.transactionId}"></td>
+                            <td th:text="${trans.source}"></td>
+                            <td th:text="${trans.destination}"></td>
+                            <td th:text="${trans.amount}"></td>
+                            <td th:text="${trans.date}"></td>
+                        </tr>
+                    </th:block>
+
+                    <!-- Add the "Next" and "Previous" buttons -->
+                    <th:block th:if="${session.currentPage > 1}">
+                        <form th:action="@{/previous}" method="post">
+                            <button type="submit">Previous</button>
+                        </form>
+                    </th:block>
+                    <th:block th:if="${session.currentPage < totalPages}">
+                        <form th:action="@{/next}" method="post">
+                            <button type="submit">Next</button>
+                        </form>
+                    </th:block>
+                </th:block>
             </th:block>
-            <th:block th:unless="${session.filteredTransactions != null and not #lists.isEmpty(session.filteredTransactions)}">
-                <tr th:each="trans, transStatus : ${session.account.transactionsList}" th:if="${transStatus.index >= transStatus.size-5}">
+
+            <th:block
+                    th:unless="${session.filteredTransactions != null and not #lists.isEmpty(session.filteredTransactions)}">
+                <tr th:each="trans, transStatus : ${session.account.transactionsList}"
+                    th:if="${transStatus.index >= transStatus.size-5}">
                     <td th:text="${trans.transactionId}"></td>
                     <td th:text="${trans.source}"></td>
                     <td th:text="${trans.destination}"></td>
@@ -92,6 +125,7 @@
         </table>
     </div>
 <script>
+
 
     function setToDateMin(){
         var toDateInput = document.getElementById("toDate");
@@ -113,6 +147,8 @@
     setTimeout(function() {
         document.getElementById('messageDiv').style.display = 'none';
     }, 5000); // 5000 milliseconds = 5 seconds
+
+
 </script>
 
 </body>
