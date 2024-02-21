@@ -2,6 +2,7 @@ package com.commercebank;
 
 import com.commercebank.accounts.AccountService;
 import com.commercebank.accounts.Accounts;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +18,8 @@ public class ProfileController {
     private AccountService accountService;
 
     @PostMapping("/saveNewAddress")
-    public String saveNewAddress(String email, String newAddress, RedirectAttributes ra){
+    public String saveNewAddress(String newAddress, RedirectAttributes ra, HttpSession session){
+        String email = ((Accounts)session.getAttribute("account")).getEmail();
         Optional<Accounts> acc = accountService.getAccountByEmail(email);
         Accounts account;
         if(acc.isPresent()){
@@ -35,7 +37,8 @@ public class ProfileController {
     }
 
     @PostMapping("/saveNewPhoneNumber")
-    public String saveNewPhoneNumber(String email, String newPhoneNumber, RedirectAttributes ra){
+    public String saveNewPhoneNumber(String newPhoneNumber, RedirectAttributes ra, HttpSession session){
+        String email = ((Accounts)session.getAttribute("account")).getEmail();
         Optional<Accounts> acc = accountService.getAccountByEmail(email);
         Accounts account;
         if(acc.isPresent()){
@@ -53,7 +56,8 @@ public class ProfileController {
     }
 
     @PostMapping("/saveNewPassword")
-    public String saveNewPassword(String email, String newPassword, RedirectAttributes ra){
+    public String saveNewPassword(String newPassword, RedirectAttributes ra, HttpSession session){
+        String email = ((Accounts)session.getAttribute("account")).getEmail();
         Optional<Accounts> acc = accountService.getAccountByEmail(email);
         Accounts account;
         if(acc.isPresent()){

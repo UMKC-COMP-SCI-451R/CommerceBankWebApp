@@ -50,7 +50,6 @@
             <label for="toDate">To Date:</label>
             <input type="date" id="toDate" name="toDate" th:value="${toDate}">
 
-            <input type="hidden" name="email" th:value="${session.account.getEmail()}">
             <button type="submit" id="filterApplyBtn">Apply</button>
             <button type="button" onclick="clearFilter()">Clear Filter</button>
         </form>

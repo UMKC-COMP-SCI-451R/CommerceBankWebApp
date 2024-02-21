@@ -75,6 +75,7 @@ public class AccountController {
                 try {
                     Thread.sleep(5*60 * 1000);  // Sleep for 5 minutes
                     codeHM.remove(acc.getEmail());  // remove code (expired)
+                    System.out.println("code expired");
                 } catch (InterruptedException e) {
                     System.out.println(e);
                 }
@@ -114,44 +115,39 @@ public class AccountController {
     }
 
     @PostMapping("/filterTransactions")
-    public String filterTransactions(String email, String fromDate, String toDate, RedirectAttributes ra, HttpSession session) {
-
+    public String filterTransactions( String fromDate, String toDate, RedirectAttributes ra, HttpSession session) {
+        Accounts sessionAccount = (Accounts) session.getAttribute("account");
         if(!fromDate.isBlank() && !toDate.isBlank()){
             try{
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 Date startDate = dateFormat.parse(fromDate);
                 Date endDate = dateFormat.parse(toDate);
-                List<Transactions> filteredTransactionList = accountService.getTransactionListByDateRange(startDate,endDate,email);
+                List<Transactions> filteredTransactionList = accountService.getTransactionListByDateRange(startDate,endDate,sessionAccount.getEmail());
                 System.out.println(filteredTransactionList.toString());
                 // more code
-                if(filteredTransactionList.isEmpty()){
-                    ra.addFlashAttribute("message","There is no transaction from "+fromDate+" to "+ toDate);
-                    session.setAttribute("filteredTransactions",filteredTransactionList);
-                    ra.addFlashAttribute("filteredTransactions",filteredTransactionList);
-                    session.setAttribute("currentPage",0);
-                    ra.addFlashAttribute("currentPage",0);
-                }
-                else{
+                if(!filteredTransactionList.isEmpty()){
                     session.setAttribute("filteredTransactions",filteredTransactionList);
                     ra.addFlashAttribute("filteredTransactions",filteredTransactionList);
                     ra.addFlashAttribute("toDate",toDate);
                     ra.addFlashAttribute("fromDate",fromDate);
                     session.setAttribute("currentPage",1);
                     ra.addFlashAttribute("currentPage",1);
+                    return "redirect:/dashboard";
+                }else{
+                    ra.addFlashAttribute("message","There is no transaction from "+fromDate+" to "+ toDate);
                 }
-                return "redirect:/dashboard";
             }catch(ParseException e) {
                 System.out.println("from date is " + fromDate);
                 System.out.println("to date is " + toDate);
             }
         }
-        else{
-            System.out.println("dates are blanks");
-            session.setAttribute("filteredTransactions",new ArrayList<Transactions>());
-            ra.addFlashAttribute("filteredTransactions",new ArrayList<Transactions>());
-            session.setAttribute("currentPage",0);
-            ra.addFlashAttribute("currentPage",0);
-        }
+
+        System.out.println("date are blanks or list is empty");
+        session.setAttribute("filteredTransactions",new ArrayList<Transactions>());
+        ra.addFlashAttribute("filteredTransactions",new ArrayList<Transactions>());
+        session.setAttribute("currentPage",0);
+        ra.addFlashAttribute("currentPage",0);
+
         return "redirect:/dashboard";
     }
 
@@ -196,7 +192,8 @@ public class AccountController {
     }
 
     @PostMapping("/saveProfileSettings")
-    public String saveProfileSettings(String email, boolean isPaperless, boolean isMultifactorAuth, boolean isEmailAlert, boolean isTextAlert, RedirectAttributes ra,HttpSession session){
+    public String saveProfileSettings( boolean isPaperless, boolean isMultifactorAuth, boolean isEmailAlert, boolean isTextAlert, RedirectAttributes ra,HttpSession session){
+        String email = ((Accounts)session.getAttribute("account")).getEmail();
         Optional<Accounts> acc = accountService.getAccountByEmail(email);
         Accounts account;
         if(acc.isPresent()){
@@ -209,7 +206,7 @@ public class AccountController {
             accountService.save(account);
             ra.addFlashAttribute("message","All settings are saved!");
             session.setAttribute("account",account);
-            //ra.addFlashAttribute("account",account);
+            ra.addFlashAttribute("account",account);
         }else {
             ra.addFlashAttribute("error","Something go wrong.");
 
@@ -219,8 +216,8 @@ public class AccountController {
 
 
     @PostMapping("/makeTransaction")
-    public String processTransaction(String email, String source, String destination, double amount, RedirectAttributes ra){
-
+    public String processTransaction(String source, String destination, double amount, RedirectAttributes ra, HttpSession session){
+        String email = ((Accounts)session.getAttribute("account")).getEmail();
         Optional<Accounts> acc = accountService.getAccountByEmail(email);
         Accounts account;
         if(acc.isPresent()){
@@ -242,7 +239,6 @@ public class AccountController {
             }
             else{
                 ra.addFlashAttribute("error","Insufficient fund!"); //RedirectAttributes is something to send to the page at return statement
-                //ra.addFlashAttribute("account",account);
                 return "redirect:/transfer";
             }
         }else {
@@ -252,7 +248,8 @@ public class AccountController {
     }
 
     @PostMapping("/addExternalAccount")
-    public String addExternalAccount(String email, ExternalAccounts exAcc, RedirectAttributes ra){
+    public String addExternalAccount( ExternalAccounts exAcc, RedirectAttributes ra, HttpSession session){
+        String email = ((Accounts)session.getAttribute("account")).getEmail();
         Optional<Accounts> acc = accountService.getAccountByEmail(email);
         Accounts account;
         if(acc.isPresent()){
