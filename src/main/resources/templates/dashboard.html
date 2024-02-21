@@ -82,6 +82,7 @@
                 <!-- Calculate the total number of pages -->
                 <th:block th:with="totalPages=${T(java.lang.Math).ceil(session.filteredTransactions.size / 5.0)}">
                     <!-- Display the transactions for the current page -->
+
                     <th:block
                             th:each="trans : ${session.filteredTransactions.subList(5 * (session.currentPage - 1), (5 * session.currentPage > session.filteredTransactions.size) ? session.filteredTransactions.size : 5 * session.currentPage)}">
                         <tr>
@@ -93,19 +94,23 @@
                         </tr>
                     </th:block>
 
-                    <!-- Add the "Next" and "Previous" buttons -->
-                    <th:block th:if="${session.currentPage > 1}">
-                        <form th:action="@{/previous}" method="post">
-                            <button type="submit">Previous</button>
-                        </form>
-                    </th:block>
-                    <th:block th:if="${session.currentPage < totalPages}">
-                        <form th:action="@{/next}" method="post">
-                            <button type="submit">Next</button>
-                        </form>
-                    </th:block>
+                                        <!-- Add the "Next" and "Previous" buttons -->
+                    <div style="margin-left: 70%">
+                        <th:block th:if="${session.currentPage > 1}">
+                            <form th:action="@{/previous}" method="post" style="display: inline-block">
+                                <button type="submit">Previous</button>
+                            </form>
+                        </th:block>
+                        <th:block th:if="${session.currentPage < totalPages}" >
+                            <form th:action="@{/next}" method="post" style="display: inline-block">
+                                <button type="submit">Next</button>
+                            </form>
+                        </th:block>
+                    </div>
+
                 </th:block>
             </th:block>
+
 
             <th:block
                     th:unless="${session.filteredTransactions != null and not #lists.isEmpty(session.filteredTransactions)}">
