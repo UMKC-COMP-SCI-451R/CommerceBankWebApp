@@ -2,29 +2,39 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Register</title>
+    <title>Multi-factor Authentication</title>
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
 </head>
 <style>
-    #passdiv:hover #tooltiptext{
-        visibility: visible;
-    }
-    #tooltiptext{
-        visibility: hidden;
+    .card {
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 </style>
 <body>
-<form th:action="@{/multifactorauth}" method="post">
-    <div class="container-fluid text-center">
-        <div>
-            <label class="text-primary" for="enteredCode"><b>One-time code: </b></label>
-            <input type="number" name="enteredCode" id="enteredCode" required>
-        </div>
-        <input type="hidden" name="email" th:value="${email}">
-        <button class="btn btn-primary" type="submit">Verify</button>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">
+        <img src="images/CommerceBankLogo.png" alt="Logo" width="165" height="40" class="d-inline-block align-text-top">
+    </a>
+    <div class="collapse navbar-collapse" id="navbarNav"></div>
+    <button class="btn btn-outline-success mx-3 my-0" type="button">Help</button>
+</nav>
+<div class="card w-25 m-auto mt-5">
+    <h5 class="card-header bg-success text-white text-center">Multi-factor Authentication</h5>
+    <div class="card-body">
+        <form th:action="@{/multifactorauth}" method="post">
+            <div class="container-fluid text-center">
+                <div class="form-floating mb-3">
+                    <input type="number" class="form-control" name="enteredCode" id="enteredCode" required>
+                    <label for="enteredCode">One-time code:</label>
+                </div>
+                <input type="hidden" name="email" th:value="${email}">
+                <button class="btn btn-success" type="submit">Verify</button>
+            </div>
+        </form>
     </div>
-</form>
-
+</div>
+<p class="text-center mt-3">***An email has been sent to you with a one-time code***</p>
 <script type="text/javascript">
 
 </script>

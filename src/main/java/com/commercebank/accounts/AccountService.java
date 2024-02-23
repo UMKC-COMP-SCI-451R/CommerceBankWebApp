@@ -3,12 +3,15 @@ package com.commercebank.accounts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class AccountService {
     @Autowired AccountCRUD accountCRUD;
     @Autowired ExternalAccountsCRUD externalAccountsCRUD;
+    @Autowired TransactionsCRUD transactionsCRUD;
     public Optional<Accounts> getAccountByEmail(String email){
         return accountCRUD.findByEmail(email);
     }
@@ -27,7 +30,9 @@ public class AccountService {
         externalAccountsCRUD.save(exAcc);
     }
 
-//    public boolean authenticate(Accounts account){
-//
-//    }
+    public List<Transactions> getTransactionListByDateRange(Date startDate, Date endDate, String email){
+        return transactionsCRUD.findTransactionsBetweenDatesForAccountEmail(startDate,endDate,email);
+    }
+
+
 }

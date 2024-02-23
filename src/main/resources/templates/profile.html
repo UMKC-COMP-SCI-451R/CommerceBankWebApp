@@ -5,16 +5,23 @@
   <title>Commerce Bank</title>
   <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
   <link rel="stylesheet" type="text/css" href="/css/commercestyle.css">
+  <style>
+    .card {
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+  .checkboxes{
+    width: 40px;
+    height: 40px;
+    accent-color: darkgreen;
+  }
+  </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="#">
     <img src="images/CommerceBankLogo.png" alt="Logo" width="165" height="40" class="d-inline-block align-text-top">
   </a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
       <li class="nav-item">
@@ -36,41 +43,240 @@
   </form>
 </nav>
 
-<div id="profile" style="margin-left: 40% ">
-  <p th:text="${session.account.getFirstName()}+' '+ ${session.account.getLastName()}"></p>
-  <p th:text="'Address: ' + ${session.account.getAddress()}"></p>
-  <p th:text="'Phone number: ' + ${session.account.getPhoneNumber()}"></p>
-  <p th:text="'Card Number: ' + ${session.account.getCardNumber()}"> </p>
-  <a>Reset Password</a>
-
-  <form th:action="@{/saveProfileSettings}" method="post">
-    <div class="container-fluid">
-      <div>
-        <label for="isMultifactorAuth">Multi-factor Authentication</label>
-        <input type="checkbox" name="isMultifactorAuth" id="isMultifactorAuth" th:checked="${session.account.isMultifactorAuth()}" disabled class="checkboxes">
-      </div>
-      <div>
-        <label for="isPaperless">Paperless</label>
-        <input type="checkbox" name="isPaperless" id="isPaperless" th:checked="${session.account.isPaperless()}" disabled class="checkboxes">
-      </div>
-      <div>
-        <label for="isEmailAlert">Email Alert</label>
-        <input type="checkbox" name="isEmailAlert" id="isEmailAlert" th:checked="${session.account.isEmailAlert()}" disabled class="checkboxes">
-      </div>
-      <div>
-        <label for="isTextAlert">Text Alert</label>
-        <input type="checkbox" name="isTextAlert" id="isTextAlert" th:checked="${session.account.isTextAlert()}" disabled class="checkboxes">
-      </div>
-    </div>
-    <input type="hidden" name="email" th:value="${session.account.getEmail()}">
-    <button class="btn btn-primary" type="submit" id="save">Save</button>
-    <button class="btn btn-secondary" type="button" id="edit" onclick="enableCheckBox()">Edit</button>
-  </form>
-</div>
-
-<div th:if="${message}" class="alert alert-success text-center">
+<!--new element start here-->
+<div th:if="${message}" class="alert alert-success text-center" id="messageDiv">
   [[${message}]]
 </div>
+<div class="container" style="margin-left: 7%; margin-top: 3%">
+  <div class="row">
+    <div class="col">
+      <div class="card w-100">
+        <h5 th:text="${session.account.getFirstName()}+' '+ ${session.account.getLastName()}" style="text-align: center; margin-top: 10px"></h5>
+        <div class="card-body" style="margin-left: 12%">
+
+   <!--        Address row       -->
+
+          <div class="row mb-3 align-items-start">
+            <div class="col-2">
+              <img src="images/profile/address-icon.png" class="img-fluid" alt="Icon 1" width="30px" height="30px">
+            </div>
+            <div class="col-3">
+              <span>Address: </span>
+            </div>
+            <div class="col-7" id="addressDiv">
+              <span th:text="${session.account.getAddress()}"></span>
+              <button class="btn" type="button" data-toggle="collapse" data-target="#newAddressDiv" aria-expanded="false" aria-controls="newAddressDiv">
+                <img src="images/profile/edit-icon.png" width="20px" height="20px" alt="Button 1">
+              </button>
+            </div>
+          </div>
+          <form th:action="@{/saveNewAddress}" method="post">
+            <div class="row align-items-center collapse" id="newAddressDiv">
+              <div class="col-1"></div>
+              <div class="col-6">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="newAddressInput" name="newAddress"
+                         placeholder="name@example.com" required>
+                  <label for="newAddressInput">New address:</label>
+                </div>
+              </div>
+              <div class="col-4">
+                <button class="btn btn-success" type="submit">Save</button>
+                <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#newAddressDiv"
+                        aria-expanded="false" aria-controls="newAddressDiv">Cancel
+                </button>
+              </div>
+            </div>
+          </form>
+
+<!--      Phone number row    -->
+
+          <div class="row mb-3  align-items-start">
+            <div class="col-2">
+              <img src="images/profile/phone-icon.png" class="img-fluid" alt="Icon 1" width="30px" height="30px">
+            </div>
+            <div class="col-3 ">
+              <span>Phone Number: </span>
+            </div>
+            <div class="col-7" id="phoneNumberDiv">
+              <span th:text="${session.account.getPhoneNumber()}"></span>
+              <button class="btn" type="button" data-toggle="collapse" data-target="#newPhoneNumberDiv"
+                      aria-expanded="false" aria-controls="newPhoneNumberDiv">
+                <img src="images/profile/edit-icon.png" width="20px" height="20px" alt="Button 1">
+              </button>
+            </div>
+          </div>
+          <form th:action="@{/saveNewPhoneNumber}" method="post">
+            <div class="row align-items-center collapse" id="newPhoneNumberDiv">
+              <div class="col-1"></div>
+              <div class="col-6">
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="newPhoneNumberInput" name="newPhoneNumber"
+                         placeholder="8161112222" required>
+                  <label for="newPhoneNumberInput">New phone number:</label>
+                </div>
+              </div>
+              <div class="col-4">
+                <button class="btn btn-success" type="submit">Save</button>
+                <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#newPhoneNumberDiv"
+                        aria-expanded="false" aria-controls="newPhoneNumberDiv">Cancel
+                </button>
+              </div>
+            </div>
+          </form>
+
+<!--      Card number row    -->
+
+          <div class="row mb-3  align-items-start">
+            <div class="col-2">
+              <img src="images/profile/card-icon.png" class="img-fluid" alt="Icon 1" width="30px" height="30px">
+            </div>
+            <div class="col-3 ">
+              <span>Card Number: </span>
+            </div>
+            <div class="col-6 ">
+              <span th:text="${session.account.getCardNumber()}"></span>
+            </div>
+          </div>
+
+<!--      Password row    -->
+
+          <div class="row mb-3  align-items-start">
+            <div class="col-2">
+              <img src="images/profile/reset-password-icon.png" class="img-fluid" alt="Icon 1" width="30px" height="30px">
+            </div>
+            <div class="col-3 ">
+              <span>Reset Password: </span>
+            </div>
+            <div class="col-6 " id="passwordDiv">
+              <span>*******************</span>
+              <button class="btn" type="button" data-toggle="collapse" data-target="#newPasswordDiv" aria-expanded="false" aria-controls="newPasswordDiv">
+                <img src="images/profile/edit-icon.png" width="20px" height="20px" alt="Button 1">
+              </button>
+            </div>
+          </div>
+          <form th:action="@{/saveNewPassword}" method="post" onsubmit="checkPasswordMatch()">
+            <div class="row align-items-start collapse" id="newPasswordDiv">
+              <div class="col-5">
+                <div class="form-floating mb-3">
+                  <input type="password" class="form-control" id="newPasswordInput" name="newPassword"
+                         placeholder="password" required>
+                  <label for="newPasswordInput">New password:</label>
+                </div>
+              </div>
+              <div class="col-5">
+                <div class="form-floating mb-3">
+                  <input type="password" class="form-control" id="confirmPasswordInput" placeholder="password" required>
+                  <label for="confirmPasswordInput">Confirm password:</label>
+                </div>
+                <button class="btn btn-success" type="submit">Save</button>
+                <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#newPasswordDiv"
+                        aria-expanded="false" aria-controls="newPasswordDiv">Cancel
+                </button>
+              </div>
+            </div>
+          </form>
+
+        </div>
+      </div>
+      <div class="shadow mb-3 mt-3 bg-white rounded-4">
+        <img class="rounded-4" src="images/profile/profile-ad1.jpg" width="100%" height="330px">
+      </div>
+      <div class="shadow mb-3 mt-3 bg-white rounded-4">
+        <iframe class="rounded-4" width="100%" height="300" src="https://www.youtube.com/embed/vu9VEOXSCMQ?showinfo=0" allowfullscreen></iframe>
+      </div>
+
+    </div>
+
+    <div class="col-md-6 mt-5">
+      <form th:action="@{/saveProfileSettings}" method="post">
+        <div style="display: flex; justify-content: right; gap: 10px; margin-bottom: 10px; margin-right: 10%">
+          <button class="btn btn-secondary" type="submit" id="save">Save</button>
+          <button class="btn btn-success" type="button" id="edit" onclick="enableCheckBox()">Edit</button>
+        </div>
+      <div class="card mb-3">
+        <div class="card-body">
+          <div class="row mb-3  align-items-center">
+            <div class="col-2  ml-4">
+              <img src="images/profile/multi-auth-icon.jpg" class="img-fluid" alt="Icon 1" width="80px" height="80px">
+            </div>
+            <div class="col md-auto ">
+              <label for="isMultifactorAuth">Multi-factor Authentication</label>
+            </div>
+            <div class="col-3 ">
+              <input type="checkbox" name="isMultifactorAuth" id="isMultifactorAuth" th:checked="${session.account.isMultifactorAuth()}" disabled class="checkboxes">
+            </div>
+          </div>
+          <div class="row justify-content-center">
+            <p> Along with the password, you will also receive a one-time code when logging in to enhance security.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="card mb-3">
+        <div class="card-body">
+          <div class="row mb-3  align-items-center">
+            <div class="col-2  ml-4">
+              <img src="images/profile/paperless-icon.jpg" class="img-fluid" alt="Icon 1" width="80px" height="80px">
+            </div>
+            <div class="col md-auto ">
+              <label for="isPaperless">Paperless</label>
+            </div>
+            <div class="col-3 ">
+              <input type="checkbox" name="isPaperless" id="isPaperless" th:checked="${session.account.isPaperless()}" disabled class="checkboxes">
+            </div>
+          </div>
+          <div class="row justify-content-center">
+            <p> Save the environment by utilizing electronic mails. No more wasted papers. No more mails lost.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="card mb-3">
+        <div class="card-body">
+          <div class="row mb-3  align-items-center">
+            <div class="col-2  ml-4">
+              <img src="images/profile/message-alert-icon.jpg" class="img-fluid" alt="Icon 1" width="80px" height="80px">
+            </div>
+            <div class="col md-auto ">
+              <label for="isTextAlert">Text Alert</label>
+            </div>
+            <div class="col-3 ">
+              <input type="checkbox" name="isTextAlert" id="isTextAlert" th:checked="${session.account.isTextAlert()}" disabled class="checkboxes">
+            </div>
+          </div>
+          <div class="row justify-content-center">
+            <p> Stay on top of your account's activities through text messages. Message and data rates may apply.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="card mb-3">
+        <div class="card-body">
+          <div class="row mb-3  align-items-center">
+            <div class="col-2  ml-4">
+              <img src="images/profile/email-alert-icon.jpg" class="img-fluid" alt="Icon 1" width="80px" height="80px">
+            </div>
+            <div class="col md-auto ">
+              <label for="isEmailAlert">Email Alert</label>
+            </div>
+            <div class="col-3 ">
+              <input type="checkbox" name="isEmailAlert" id="isEmailAlert" th:checked="${session.account.isEmailAlert()}" disabled class="checkboxes">
+            </div>
+          </div>
+          <div class="row justify-content-center">
+            <p> Stay on top of your account's activities through email messages. No cost to you.
+            </p>
+          </div>
+        </div>
+      </div>
+      </form>
+    </div>
+  </div>
+
+</div>
+<!--new element end here-->
+
 
 <script type="text/javascript">
   function  enableCheckBox(){
@@ -80,14 +286,47 @@
     }
   }
 
-  function showTransfer(){
-    window.location = "[[@{/transfer}]]";
-  }
-  function showSummary(){
-    window.location = "[[@{/dashboard}]]";
+  function toggleSaveEditButtonClass(){
+    var saveButton = document.getElementById('save');
+    var editButton = document.getElementById('edit');
+
+    saveButton.classList.toggle('btn-success');
+    saveButton.classList.toggle('btn-secondary');
+
+    editButton.classList.toggle('btn-success');
+    editButton.classList.toggle('btn-secondary');
   }
 
+  document.getElementById('edit').addEventListener('click', toggleSaveEditButtonClass);
+  function showNewInputForm(divId,newDivId){
+    document.getElementById(divId).style.display = "none";
+    document.getElementById(newDivId).style.display = "block";
+  }
+
+  function cancelNewInputForm(divId,newDivId){
+    document.getElementById(divId).style.display = "block";
+    document.getElementById(newDivId).style.display = "none";
+  }
+
+  function checkPasswordMatch(){
+    var password = document.getElementById('newPasswordInput').value;
+    var confirmPassword = document.getElementById('confirmPasswordInput').value;
+
+    if(password !== confirmPassword)
+    {
+      alert("Passwords do not match. Please try again!")
+      return false;
+    }
+    else return true;
+  }
+  //set time out for message div
+  setTimeout(function() {
+    document.getElementById('messageDiv').style.display = 'none';
+  }, 5000); // 5000 milliseconds = 5 seconds
 
 </script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

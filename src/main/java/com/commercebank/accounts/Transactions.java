@@ -2,6 +2,8 @@ package com.commercebank.accounts;
 
 import jakarta.persistence.*;
 
+import java.util.Date;
+
 @Entity
 @Table(name="Transactions")
 public class Transactions {
@@ -24,6 +26,19 @@ public class Transactions {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(nullable = false)
     private Accounts account;
+
+    @Column(name = "transaction_date")
+    @Temporal(TemporalType.DATE) // Specifies that this is a date without time
+    private Date date;
+
+    @PrePersist
+    protected void onCreate() {
+        date = new Date(); // Set the current date when persisting new entity
+    }
+
+    public Date getDate() {
+        return date;
+    }
 
     public Integer getTransactionId() {
         return transactionId;
@@ -81,6 +96,7 @@ public class Transactions {
                 ", destination='" + destination + '\'' +
                 ", amount=" + amount +
                 ", account=" + account.getAccID() +
+                ", date= " + date+
                 '}';
     }
 }

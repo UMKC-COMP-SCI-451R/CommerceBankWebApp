@@ -13,11 +13,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.Optional;
-
+@SessionAttributes({"accounts"})
 @Controller
 public class LoginController {
     @Autowired private AccountService accountService;
@@ -52,7 +53,7 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String authenticate(String email, String password, RedirectAttributes ra, Boolean checkBoxRememberUser, HttpServletResponse response){ //receive email and password from the login form
+    public String authenticate(String email, String password, RedirectAttributes ra, Boolean checkBoxRememberUser, HttpServletResponse response, HttpSession session){ //receive email and password from the login form
         Optional<Accounts> account = accountService.getAccountByEmail(email);
         //emailService.sendMultiFacAuthEmail(account.get().getEmail(),4444);
         if(checkBoxRememberUser!=null){ //add usermail cookie
@@ -84,6 +85,7 @@ public class LoginController {
                 ra.addFlashAttribute("email",acc.getEmail());
                 return "redirect:/multifactorauth";
             }
+            session.setAttribute("account", account.get());
             ra.addFlashAttribute("account",account.get()); //RedirectAttributes is something to send to the page at return statement
             return "redirect:/dashboard";
         }
@@ -98,7 +100,7 @@ public class LoginController {
         return "multifactorauth";
     }
     @PostMapping("/multifactorauth")
-    public String multifactorVerification(int enteredCode, String email, RedirectAttributes ra){
+    public String multifactorVerification(int enteredCode, String email, RedirectAttributes ra, HttpSession session){
         if(!codeHM.containsKey(email))
         {
             ra.addFlashAttribute("error","Code expired or invalid.");
@@ -107,6 +109,7 @@ public class LoginController {
         if(enteredCode == codeHM.get(email)){
             codeHM.remove(email); // remove email and code pair after successful verification
             Optional<Accounts> account = accountService.getAccountByEmail(email);
+            session.setAttribute("account", account.get());
             ra.addFlashAttribute("account",account.get()); //RedirectAttributes is something to send to the page at return statement
             return "redirect:/dashboard";
         }

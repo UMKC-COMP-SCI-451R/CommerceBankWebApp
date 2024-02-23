@@ -7,3 +7,4 @@ Current features:
 - dashboard/summary
 - transfer
 - profile and settings
+- loans

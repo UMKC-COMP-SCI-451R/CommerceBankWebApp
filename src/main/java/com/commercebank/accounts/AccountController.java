@@ -2,6 +2,8 @@ package com.commercebank.accounts;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,10 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.HashMap;
-import java.util.Optional;
 
-@SessionAttributes("account")
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+@SessionAttributes({"account", "filteredTransactions","currentPage"})
 @Controller
 public class AccountController {
     @Autowired private AccountService accountService;
@@ -50,70 +54,6 @@ public class AccountController {
         return "redirect:/login";
     }
 
-//    @PostMapping("/login")
-//    public String authenticate(String email, String password, RedirectAttributes ra, Boolean checkBoxRememberUser, HttpServletResponse response){ //receive email and password from the login form
-//        Optional<Accounts> account = accountService.getAccountByEmail(email);
-//        //emailService.sendMultiFacAuthEmail(account.get().getEmail(),4444);
-//        if(checkBoxRememberUser!=null){ //add usermail cookie
-//            Cookie cookie = new Cookie("useremail",email);
-//            cookie.setMaxAge(3600); // Set the expiration time in seconds
-//            response.addCookie(cookie);
-//        }else{
-//            Cookie cookie = new Cookie("useremail",null); // remove useremail cookie
-//            cookie.setMaxAge(0); // set to 0 to remove
-//            response.addCookie(cookie);
-//        }
-//
-//        if(account.isPresent() && account.get().getPassword().equals(password)){
-//            Accounts acc = account.get();
-//            if(acc.isMultifactorAuth())
-//            {
-//                int code = RandNumGenerator.generateRandom4DigitCode();
-//                codeHM.put(acc.getEmail(),code);
-//                new Thread(() -> {
-//                    try {
-//                        Thread.sleep(5*60 * 1000);  // Sleep for 5 minutes
-//                        codeHM.remove(acc.getEmail());  // remove code (expired)
-//                    } catch (InterruptedException e) {
-//                        System.out.println(e);
-//                    }
-//                }).start();
-//                //code = RandNumGenerator.generateRandom4DigitCode();
-//                emailService.sendMultiFacAuthEmail(acc.getEmail(),code);
-//                ra.addFlashAttribute("email",acc.getEmail());
-//                return "redirect:/multifactorauth";
-//            }
-//            ra.addFlashAttribute("account",account.get()); //RedirectAttributes is something to send to the page at return statement
-//            return "redirect:/dashboard";
-//        }
-//        else{
-//            ra.addFlashAttribute("error","Login failed.");
-//            return "redirect:/login";
-//        }
-//    }
-//
-//    @GetMapping("/multifactorauth")
-//    public String showMultiFactorVerification(){
-//        return "multifactorauth";
-//    }
-//    @PostMapping("/multifactorauth")
-//    public String multifactorVerification(int enteredCode, String email, RedirectAttributes ra){
-//        if(!codeHM.containsKey(email))
-//        {
-//            ra.addFlashAttribute("error","Code expired or invalid.");
-//            return "redirect:/login";
-//        }
-//        if(enteredCode == codeHM.get(email)){
-//            codeHM.remove(email); // remove email and code pair after successful verification
-//            Optional<Accounts> account = accountService.getAccountByEmail(email);
-//            ra.addFlashAttribute("account",account.get()); //RedirectAttributes is something to send to the page at return statement
-//            return "redirect:/dashboard";
-//        }
-//        else {
-//            ra.addFlashAttribute("error","Verification failed.");
-//            return "redirect:/login";
-//        }
-//    }
 
     @GetMapping("/resetpassword")
     public String showResetPassword(){
@@ -135,6 +75,7 @@ public class AccountController {
                 try {
                     Thread.sleep(5*60 * 1000);  // Sleep for 5 minutes
                     codeHM.remove(acc.getEmail());  // remove code (expired)
+                    System.out.println("code expired");
                 } catch (InterruptedException e) {
                     System.out.println(e);
                 }
@@ -173,6 +114,67 @@ public class AccountController {
         return "dashboard";
     }
 
+    @PostMapping("/filterTransactions")
+    public String filterTransactions( String fromDate, String toDate, RedirectAttributes ra, HttpSession session) {
+        Accounts sessionAccount = (Accounts) session.getAttribute("account");
+        if(!fromDate.isBlank() && !toDate.isBlank()){
+            try{
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date startDate = dateFormat.parse(fromDate);
+                Date endDate = dateFormat.parse(toDate);
+                List<Transactions> filteredTransactionList = accountService.getTransactionListByDateRange(startDate,endDate,sessionAccount.getEmail());
+                System.out.println(filteredTransactionList.toString());
+                // more code
+                if(!filteredTransactionList.isEmpty()){
+                    session.setAttribute("filteredTransactions",filteredTransactionList);
+                    ra.addFlashAttribute("filteredTransactions",filteredTransactionList);
+                    ra.addFlashAttribute("toDate",toDate);
+                    ra.addFlashAttribute("fromDate",fromDate);
+                    session.setAttribute("currentPage",1);
+                    ra.addFlashAttribute("currentPage",1);
+                    return "redirect:/dashboard";
+                }else{
+                    ra.addFlashAttribute("message","There is no transaction from "+fromDate+" to "+ toDate);
+                }
+            }catch(ParseException e) {
+                System.out.println("from date is " + fromDate);
+                System.out.println("to date is " + toDate);
+            }
+        }
+
+        System.out.println("date are blanks or list is empty");
+        session.setAttribute("filteredTransactions",new ArrayList<Transactions>());
+        ra.addFlashAttribute("filteredTransactions",new ArrayList<Transactions>());
+        session.setAttribute("currentPage",0);
+        ra.addFlashAttribute("currentPage",0);
+
+        return "redirect:/dashboard";
+    }
+
+    @PostMapping("/next")
+    public String nextPage(HttpSession session, RedirectAttributes ra){
+        System.out.println(session.getAttribute("currentPage"));
+        Integer currentPage = (Integer) session.getAttribute("currentPage");
+        if (currentPage != null) {
+            session.setAttribute("currentPage", currentPage + 1);
+            ra.addFlashAttribute("currentPage",currentPage + 1);
+        }
+        System.out.println(session.getAttribute("currentPage"));
+        return "redirect:/dashboard";
+        //return "dashboard";
+    }
+
+    @PostMapping("/previous")
+    public String prevPage(HttpSession session, RedirectAttributes ra){
+        Integer currentPage = (Integer) session.getAttribute("currentPage");
+        if (currentPage != null) {
+            session.setAttribute("currentPage", currentPage - 1);
+            ra.addFlashAttribute("currentPage",currentPage - 1);
+        }
+        System.out.println(session.getAttribute("currentPage"));
+        return "redirect:/dashboard";
+    }
+
     @GetMapping("/transfer")
     public String showTransfer(Model model){
         model.addAttribute("exAcc",new ExternalAccounts());
@@ -190,7 +192,8 @@ public class AccountController {
     }
 
     @PostMapping("/saveProfileSettings")
-    public String saveProfileSettings(String email, boolean isPaperless, boolean isMultifactorAuth, boolean isEmailAlert, boolean isTextAlert, RedirectAttributes ra){
+    public String saveProfileSettings( boolean isPaperless, boolean isMultifactorAuth, boolean isEmailAlert, boolean isTextAlert, RedirectAttributes ra,HttpSession session){
+        String email = ((Accounts)session.getAttribute("account")).getEmail();
         Optional<Accounts> acc = accountService.getAccountByEmail(email);
         Accounts account;
         if(acc.isPresent()){
@@ -202,7 +205,8 @@ public class AccountController {
             //System.out.println(account);
             accountService.save(account);
             ra.addFlashAttribute("message","All settings are saved!");
-            ra.addFlashAttribute("account",account); //this will update attribute "account" in the current session
+            session.setAttribute("account",account);
+            ra.addFlashAttribute("account",account);
         }else {
             ra.addFlashAttribute("error","Something go wrong.");
 
@@ -212,8 +216,8 @@ public class AccountController {
 
 
     @PostMapping("/makeTransaction")
-    public String processTransaction(String email, String source, String destination, double amount, RedirectAttributes ra){
-
+    public String processTransaction(String source, String destination, double amount, RedirectAttributes ra, HttpSession session){
+        String email = ((Accounts)session.getAttribute("account")).getEmail();
         Optional<Accounts> acc = accountService.getAccountByEmail(email);
         Accounts account;
         if(acc.isPresent()){
@@ -230,12 +234,11 @@ public class AccountController {
                 account.setBalance(account.getBalance() - (source.equals("My Account")? amount : -amount));
                 accountService.save(account); //update account object after adding transaction
                 ra.addFlashAttribute("message","Transfer is made successfully!"); //RedirectAttributes is something to send to the page at return statement
-                ra.addFlashAttribute("account",account); //this will update attribute "account" in the current session
+                ra.addFlashAttribute("account",account);
                 return "redirect:/transfer";
             }
             else{
                 ra.addFlashAttribute("error","Insufficient fund!"); //RedirectAttributes is something to send to the page at return statement
-                //ra.addFlashAttribute("account",account);
                 return "redirect:/transfer";
             }
         }else {
@@ -245,7 +248,8 @@ public class AccountController {
     }
 
     @PostMapping("/addExternalAccount")
-    public String addExternalAccount(String email, ExternalAccounts exAcc, RedirectAttributes ra){
+    public String addExternalAccount( ExternalAccounts exAcc, RedirectAttributes ra, HttpSession session){
+        String email = ((Accounts)session.getAttribute("account")).getEmail();
         Optional<Accounts> acc = accountService.getAccountByEmail(email);
         Accounts account;
         if(acc.isPresent()){
@@ -255,7 +259,7 @@ public class AccountController {
             //System.out.println(account);
             accountService.save(account);
             ra.addFlashAttribute("message","External account added.");
-            ra.addFlashAttribute("account",account); //this will update attribute "account" in the current session
+            ra.addFlashAttribute("account",account);
         }else {
             ra.addFlashAttribute("error","Something go wrong.");
 
