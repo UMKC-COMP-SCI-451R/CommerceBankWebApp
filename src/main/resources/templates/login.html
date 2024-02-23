@@ -53,14 +53,14 @@
             <label for="checkbox">Remember me</label>
             <input type="checkbox" value=true name="checkBoxRememberUser" id="checkbox" th:checked="${isChecked}">
             <br><br>
-            <a th:href="@{/register}">Register</a>
+            <a href="#">Register</a>
         </div>
     </form>
 
-    <form id="forgotPasswordForm" method="post" th:action="@{/resetpassword}">
+    <form>
         <div class="container-fluid text-center">
             <input type="hidden" name="emailToReset" id="emailToReset">
-            <a href="#" onclick="submitForgotPasswordForm()">Forgot Password</a>
+            <a href="#">Forgot Password</a>
         </div>
     </form>
 </div>
