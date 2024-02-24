@@ -18,9 +18,20 @@ public class ExternalAccounts {
     @Column(nullable = false,length = 45)
     private String bankName;
 
+    @Column()
+    private boolean isActive = false;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(nullable = false)
     private Accounts account;
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
 
     public Integer getExternalAccId() {
         return ExternalAccId;

@@ -4,7 +4,7 @@
     transition: opacity 0.5s ease, transform 0.5s ease; /* Transition opacity and transform */
     opacity: 0; /* Initially hide cards */
     transform: translateX(100%); /* Move cards to the right initially */
-    margin-left: 40%;
+    margin-left: 37%;
     margin-bottom: 20px;
     margin-top: 20px;
 }

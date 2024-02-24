@@ -255,6 +255,28 @@ public class AccountController {
         if(acc.isPresent()){
             account = acc.get();
             exAcc.setAccount(account);
+            exAcc.setActive(false);
+            account.getExternalAccountsList().add(exAcc);
+            //System.out.println(account);
+            accountService.save(account);
+            ra.addFlashAttribute("message","External account added.");
+            ra.addFlashAttribute("account",account);
+        }else {
+            ra.addFlashAttribute("error","Something go wrong.");
+
+        }
+        return "redirect:/transfer";
+    }
+
+    @PostMapping("/verifyExternalAccount")
+    public String verifyExternalAccount( ExternalAccounts exAcc, RedirectAttributes ra, HttpSession session){
+        String email = ((Accounts)session.getAttribute("account")).getEmail();
+        Optional<Accounts> acc = accountService.getAccountByEmail(email);
+        Accounts account;
+        if(acc.isPresent()){
+            account = acc.get();
+            exAcc.setAccount(account);
+            exAcc.setActive(false);
             account.getExternalAccountsList().add(exAcc);
             //System.out.println(account);
             accountService.save(account);
