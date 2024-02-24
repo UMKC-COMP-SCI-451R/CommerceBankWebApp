@@ -11,9 +11,9 @@ public class ExternalAccounts {
     @SequenceGenerator(name="ex_accid_gen", initialValue = 4564)
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "ex_accid_gen")
     private Integer ExternalAccId;
-    @Column(nullable = false,length = 9)
+    @Column(nullable = false)
     private Integer routingNumber;
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false)
     private Integer accountNumber;
     @Column(nullable = false,length = 45)
     private String bankName;
