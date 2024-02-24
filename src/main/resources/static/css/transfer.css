@@ -1,20 +1,10 @@
-button {
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    color: white;
-    display: block;
-    margin-bottom: 10px;
-}
-
 .card {
     position: absolute;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     transition: opacity 0.5s ease, transform 0.5s ease; /* Transition opacity and transform */
     opacity: 0; /* Initially hide cards */
     transform: translateX(100%); /* Move cards to the right initially */
-    margin-left: 20%;
-    margin-right: 20%;
+    margin-left: 40%;
     margin-bottom: 20px;
     margin-top: 20px;
 }
@@ -42,51 +32,6 @@ button {
 .card:hover {
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
-
-
-img:not(#logo) {
-    width: 200px;
-    height: 200px;
-}
-
-li:not(.nav-item)::before {
-    content: '\2713';
-    color: green;
-    font-size: 1.2em;
-    margin-right: 10px;
-}
-
-ul:not(.navbar-nav) {
-    list-style-type: none;
-    padding: 0;
-}
-
-.navbar-nav .nav-link {
-    border-radius: 10px;
-}
-
-.navbar-nav .nav-link:hover {
-    background-color: rgb(176, 230, 176);
-}
-
-.container {
-    display: flex;
-    justify-content: space-around;
-}
-
-.card-inline {
-    display: inline-block;
-    text-align: center;
-    width: 22%;
-    border: solid rgb(216, 207, 207);
-    border-radius: 10px;
-    margin-bottom: 20px;
-}
-
-.card-inline:hover{
-    border-color: green;
-}
-
 
 .modal-backdrop.show {
     background-color: rgba(129, 165, 129, 0.5); /* Adjust the background color and opacity */

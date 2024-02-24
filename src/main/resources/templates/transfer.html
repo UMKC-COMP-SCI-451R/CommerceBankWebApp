@@ -5,6 +5,7 @@
     <title>Commerce Bank</title>
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
     <link rel="stylesheet" type="text/css" href="/css/commercestyle.css">
+    <link rel="stylesheet" type="text/css" href="/css/transfer.css">
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -36,10 +37,58 @@
     </form>
 </nav>
 
-<div id="transfer">
-    <div class="text-center">
-        <button onclick="showAddExternalAccForm()">Add External Account</button>
-        <form id="addExternalAccForm" style="display: none" method="post" action="/addExternalAccount" th:object="${exAcc}">
+<ul class="nav nav-tabs justify-content-center">
+    <li class="nav-item">
+        <a class="nav-link active" href="#" onclick="activeTab(event,'transferCard')">Make Transfer</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#" onclick="activeTab(event,'addExternalAccountCard')">Add External Account</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#" onclick="activeTab(event)">Verify External Account</a>
+    </li>
+</ul>
+
+<div th:if="${message}" class="alert alert-success text-center" id="messageDiv">
+    [[${message}]]
+</div>
+<div th:if="${error}" class="alert alert-danger text-center" id="errorDiv">
+    [[${error}]]
+</div>
+
+<div class="card" id="transferCard">
+    <div class="card-body">
+        <form method="post" action="/makeTransaction" id="transferForm">
+            <div class="container-fluid text-center">
+                <div>
+                    <label class="text-primary" for="source"><b>Source</b></label>
+                    <select name="source" id="source" required>
+                        <option value="Select">Select</option>
+                        <option value="My Account">My Account (Commerce Bank)</option>
+                        <option th:each="exAcc : ${session.account.getExternalAccountsList()}" th:value="${exAcc.getBankName()}" th:text="${exAcc.getAccountNumber()}+' (' +${exAcc.getBankName()}+')'"></option>
+                    </select>
+                </div>
+                <div>
+                    <label for="destination"><b>Destination</b></label>
+                    <select name="destination" id="destination" required>
+                        <option value="Select">Select</option>
+                        <option value="My Account">My Account (Commerce Bank)</option>
+                        <option th:each="exAcc : ${session.account.getExternalAccountsList()}" th:value="${exAcc.getBankName()}" th:text="${exAcc.getAccountNumber()}+' (' +${exAcc.getBankName()}+')'"></option>
+                    </select>
+                </div>
+                <div>
+                    <label for="amount"><b>Amount</b></label>
+                    <input type="number" name="amount" id="amount" min="0" required>
+                </div>
+            </div>
+        </form>
+        <button  class="btn-success" onclick="showConfirmModal()">Send</button>
+    </div>
+</div>
+
+<div class="card" id="addExternalAccountCard">
+    <div class="card-body">
+        <form id="addExternalAccForm" method="post" action="/addExternalAccount" th:object="${exAcc}">
             <div>
                 <label for="bankName">Bank Name: </label>
                 <input type="text" th:field="*{bankName}" name="bankName" id="bankName" required>
@@ -54,40 +103,56 @@
             </div>
             <button type="submit">Add</button>
         </form>
-
     </div>
-    <div th:if="${message}" class="alert alert-success text-center" id="messageDiv">
-        [[${message}]]
-    </div>
-    <div th:if="${error}" class="alert alert-danger text-center" id="errorDiv">
-        [[${error}]]
-    </div>
-    <form method="post" action="/makeTransaction" id="transferForm">
-        <div class="container-fluid text-center">
-            <div>
-                <label class="text-primary" for="source"><b>Source</b></label>
-                <select name="source" id="source" required>
-                    <option value="Select">Select</option>
-                    <option value="My Account">My Account (Commerce Bank)</option>
-                    <option th:each="exAcc : ${session.account.getExternalAccountsList()}" th:value="${exAcc.getBankName()}" th:text="${exAcc.getAccountNumber()}+' (' +${exAcc.getBankName()}+')'"></option>
-                </select>
-            </div>
-            <div>
-                <label for="destination"><b>Destination</b></label>
-                <select name="destination" id="destination" required>
-                    <option value="Select">Select</option>
-                    <option value="My Account">My Account (Commerce Bank)</option>
-                    <option th:each="exAcc : ${session.account.getExternalAccountsList()}" th:value="${exAcc.getBankName()}" th:text="${exAcc.getAccountNumber()}+' (' +${exAcc.getBankName()}+')'"></option>
-                </select>
-            </div>
-            <div>
-                <label for="amount"><b>Amount</b></label>
-                <input type="number" name="amount" id="amount" min="0" required>
-            </div>
-        </div>
-    </form>
-    <button  class="btn-success" onclick="showConfirmModal()">Send</button>
 </div>
+
+<!--<div id="transfer">-->
+<!--    <div class="text-center">-->
+<!--        <button onclick="showAddExternalAccForm()">Add External Account</button>-->
+<!--        <form id="addExternalAccForm" style="display: none" method="post" action="/addExternalAccount" th:object="${exAcc}">-->
+<!--            <div>-->
+<!--                <label for="bankName">Bank Name: </label>-->
+<!--                <input type="text" th:field="*{bankName}" name="bankName" id="bankName" required>-->
+<!--            </div>-->
+<!--            <div>-->
+<!--                <label for="bankRoutingNumber">Routing Number: </label>-->
+<!--                <input type="number" th:field="*{routingNumber}" name="bankRoutingNumber" id="bankRoutingNumber" required>-->
+<!--            </div>-->
+<!--            <div>-->
+<!--                <label for="accountNumber">Account Number: </label>-->
+<!--                <input type="number" th:field="*{accountNumber}" name="accountNumber" id="accountNumber" required>-->
+<!--            </div>-->
+<!--            <button type="submit">Add</button>-->
+<!--        </form>-->
+
+<!--    </div>-->
+
+<!--    <form method="post" action="/makeTransaction" id="transferForm">-->
+<!--        <div class="container-fluid text-center">-->
+<!--            <div>-->
+<!--                <label class="text-primary" for="source"><b>Source</b></label>-->
+<!--                <select name="source" id="source" required>-->
+<!--                    <option value="Select">Select</option>-->
+<!--                    <option value="My Account">My Account (Commerce Bank)</option>-->
+<!--                    <option th:each="exAcc : ${session.account.getExternalAccountsList()}" th:value="${exAcc.getBankName()}" th:text="${exAcc.getAccountNumber()}+' (' +${exAcc.getBankName()}+')'"></option>-->
+<!--                </select>-->
+<!--            </div>-->
+<!--            <div>-->
+<!--                <label for="destination"><b>Destination</b></label>-->
+<!--                <select name="destination" id="destination" required>-->
+<!--                    <option value="Select">Select</option>-->
+<!--                    <option value="My Account">My Account (Commerce Bank)</option>-->
+<!--                    <option th:each="exAcc : ${session.account.getExternalAccountsList()}" th:value="${exAcc.getBankName()}" th:text="${exAcc.getAccountNumber()}+' (' +${exAcc.getBankName()}+')'"></option>-->
+<!--                </select>-->
+<!--            </div>-->
+<!--            <div>-->
+<!--                <label for="amount"><b>Amount</b></label>-->
+<!--                <input type="number" name="amount" id="amount" min="0" required>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </form>-->
+<!--    <button  class="btn-success" onclick="showConfirmModal()">Send</button>-->
+<!--</div>-->
 
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -117,6 +182,44 @@
     document.getElementById('modalConfirmButton').addEventListener('click',function(){
         document.getElementById('transferForm').submit();
     })
+
+    function activeTab(event,divid) {
+        // Prevent the default behavior of the link
+        event.preventDefault();
+
+        // Get the clicked tab element
+        var tabElement = event.target;
+
+        // Remove the "active" class from all tab elements
+        var tabElements = document.querySelectorAll('.nav-tabs .nav-link');
+        tabElements.forEach(function(element) {
+            element.classList.remove('active');
+        });
+
+        showcard(divid);
+        // Add the "active" class to the clicked tab element
+        tabElement.classList.add('active');
+    }
+
+    showcard('transferCard')  // show credit card at the beginning
+    var currentCardId = 'transferCard' //initially
+    function showcard(divid) {
+        if(divid !== currentCardId){
+            var cards = document.querySelectorAll('.card');
+            cards.forEach(function(card) {
+                if(card.id===currentCardId){
+                    card.classList.add('left');   //move the current card to the left to hide. class list = ['left','show','card']
+                    card.classList.remove('show'); // remove show state so that we add this class later make it show. class list = ['left','card']
+                }
+                else if(card.classList.contains('left')){
+                    card.classList.remove('left'); // if the card is not the current one then return it to the original position on the right. class list =['card']
+                }
+            });
+            var selectedCard = document.getElementById(divid);
+            selectedCard.classList.add('show'); //show the card. class list =['show','card']
+            currentCardId = divid; //update current card
+        }
+    }
 
     function showConfirmModal() {
         // Set the values in the modal
@@ -159,6 +262,7 @@
     setTimeout(function() {
         document.getElementById('messageDiv').style.display = 'none';
     }, 5000); // 5000 milliseconds = 5 seconds
+
     setTimeout(function() {
         document.getElementById('errorDiv').style.display = 'none';
     }, 5000);
