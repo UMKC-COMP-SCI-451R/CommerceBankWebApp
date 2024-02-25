@@ -154,6 +154,10 @@
         </form>
     </div>
 </div>
+<div style="position: fixed; bottom: 0; left:18%">
+    <img src="images/transfer/transfer-image.jpg" alt="saving account advert" style="height: 220px; width: auto" >
+</div>
+
 
 <!-- Modal -->
 <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -264,7 +268,12 @@
     }
 
     function showSendDepositsModal(){
-        $('#externalAccountModal').modal('show');
+        var addExternalAccForm = document.getElementById("addExternalAccForm")
+        if(addExternalAccForm.checkValidity())
+            $('#externalAccountModal').modal('show');
+        else{
+            addExternalAccForm.reportValidity();
+        }
     }
 
     function submitExternalForm(){
@@ -273,14 +282,18 @@
 
 
     function validateTransferForm(){
+        var transferForm = document.getElementById("transferForm");
         var source = document.getElementById("source").value;
         var destination = document.getElementById("destination").value;
         if(source==="Select" || destination==="Select" || (source !== "My Account" && destination !== "My Account")
             || source === destination){
             alert("Please select appropriate Destination and Source accounts and try again.")
             return false;
+        }else if (!transferForm.checkValidity()){
+            transferForm.reportValidity();
+            return false;
         }else{
-            return true;
+           return true;
         }
     }
 
