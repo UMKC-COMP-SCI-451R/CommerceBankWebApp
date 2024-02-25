@@ -34,5 +34,8 @@ public class AccountService {
         return transactionsCRUD.findTransactionsBetweenDatesForAccountEmail(startDate,endDate,email);
     }
 
+    public Optional<ExternalAccounts> getExternalAccountById(Integer id){
+        return externalAccountsCRUD.findById(id);
+    }
 
 }

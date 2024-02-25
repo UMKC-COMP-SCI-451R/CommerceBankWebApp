@@ -12,9 +12,9 @@ public class ExternalAccounts {
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "ex_accid_gen")
     private Integer ExternalAccId;
     @Column(nullable = false)
-    private Integer routingNumber;
+    private Long routingNumber;
     @Column(nullable = false)
-    private Integer accountNumber;
+    private Long accountNumber;
     @Column(nullable = false,length = 45)
     private String bankName;
 
@@ -41,19 +41,19 @@ public class ExternalAccounts {
         ExternalAccId = externalAccId;
     }
 
-    public Integer getRoutingNumber() {
+    public Long getRoutingNumber() {
         return routingNumber;
     }
 
-    public void setRoutingNumber(Integer routingNumber) {
+    public void setRoutingNumber(Long routingNumber) {
         this.routingNumber = routingNumber;
     }
 
-    public Integer getAccountNumber() {
+    public Long getAccountNumber() {
         return accountNumber;
     }
 
-    public void setAccountNumber(Integer accountNumber) {
+    public void setAccountNumber(Long accountNumber) {
         this.accountNumber = accountNumber;
     }
 
