@@ -1,0 +1,25 @@
+.transaction-card {
+    background-color: #fff; /* White background */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Slight shadow for depth */
+    /*padding: 20px; !* Space inside the card *!*/
+    margin: 20px auto; /* Centered margin with space outside the card */
+    width: 80%; /* Adjust as needed */
+    max-width: 600px; /* Adjust as needed */
+    display: flex;
+    flex-direction: column;
+}
+
+.transaction {
+    display: flex;
+    /*justify-content: space-between;*/
+    align-items: center;
+    margin-bottom: 20px; /* Space between transactions */
+}
+
+.transaction hr {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+    width: 100%;
+}
