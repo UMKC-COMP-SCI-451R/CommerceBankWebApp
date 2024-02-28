@@ -234,6 +234,7 @@ public class AccountController {
                 account.setBalance(account.getBalance() - (source.equals("My Account")? amount : -amount));
                 accountService.save(account); //update account object after adding transaction
                 ra.addFlashAttribute("message","Transfer is made successfully!"); //RedirectAttributes is something to send to the page at return statement
+                session.setAttribute("account",account);
                 ra.addFlashAttribute("account",account);
                 return "redirect:/transfer";
             }
@@ -255,14 +256,35 @@ public class AccountController {
         if(acc.isPresent()){
             account = acc.get();
             exAcc.setAccount(account);
+            exAcc.setActive(false);
             account.getExternalAccountsList().add(exAcc);
             //System.out.println(account);
             accountService.save(account);
-            ra.addFlashAttribute("message","External account added.");
+            ra.addFlashAttribute("message","External account added and is waiting for verification.");
+            session.setAttribute("account",account);
             ra.addFlashAttribute("account",account);
         }else {
             ra.addFlashAttribute("error","Something go wrong.");
 
+        }
+        return "redirect:/transfer";
+    }
+
+    @PostMapping("/verifyExternalAccount")
+    public String verifyExternalAccount(String pendingAccount, RedirectAttributes ra, HttpSession session){
+        String email = ((Accounts)session.getAttribute("account")).getEmail();
+        Optional<ExternalAccounts> acc = accountService.getExternalAccountById(Integer.parseInt(pendingAccount));
+        ExternalAccounts exAcc;
+        if(acc.isPresent()){
+            exAcc = acc.get();
+            exAcc.setActive(true);
+            accountService.saveExternal(exAcc);
+            Optional<Accounts> updatedAccount = accountService.getAccountByEmail(email);
+            session.setAttribute("account",updatedAccount.get());
+            ra.addFlashAttribute("account",updatedAccount.get());
+            ra.addFlashAttribute("message","External account is successfully verified.");
+        }else {
+            ra.addFlashAttribute("error","Something go wrong.");
         }
         return "redirect:/transfer";
     }

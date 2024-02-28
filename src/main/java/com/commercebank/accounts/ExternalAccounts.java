@@ -11,16 +11,27 @@ public class ExternalAccounts {
     @SequenceGenerator(name="ex_accid_gen", initialValue = 4564)
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "ex_accid_gen")
     private Integer ExternalAccId;
-    @Column(nullable = false,length = 9)
-    private Integer routingNumber;
-    @Column(nullable = false, length = 20)
-    private Integer accountNumber;
+    @Column(nullable = false)
+    private Long routingNumber;
+    @Column(nullable = false)
+    private Long accountNumber;
     @Column(nullable = false,length = 45)
     private String bankName;
+
+    @Column()
+    private boolean isActive = false;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(nullable = false)
     private Accounts account;
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
 
     public Integer getExternalAccId() {
         return ExternalAccId;
@@ -30,19 +41,19 @@ public class ExternalAccounts {
         ExternalAccId = externalAccId;
     }
 
-    public Integer getRoutingNumber() {
+    public Long getRoutingNumber() {
         return routingNumber;
     }
 
-    public void setRoutingNumber(Integer routingNumber) {
+    public void setRoutingNumber(Long routingNumber) {
         this.routingNumber = routingNumber;
     }
 
-    public Integer getAccountNumber() {
+    public Long getAccountNumber() {
         return accountNumber;
     }
 
-    public void setAccountNumber(Integer accountNumber) {
+    public void setAccountNumber(Long accountNumber) {
         this.accountNumber = accountNumber;
     }
 

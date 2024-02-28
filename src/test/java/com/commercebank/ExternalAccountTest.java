@@ -28,9 +28,9 @@ public class ExternalAccountTest {
         if(acc.isPresent())
         {
             ExternalAccounts externalAccount = new ExternalAccounts();
-            externalAccount.setAccountNumber(424452121);
+            externalAccount.setAccountNumber(424452121L);
             externalAccount.setBankName("Holy");
-            externalAccount.setRoutingNumber(75672285);
+            externalAccount.setRoutingNumber(75672285L);
             externalAccount.setAccount(acc.get());
             externalAccountsCRUD.save(externalAccount);
             System.out.println(acc.get());
