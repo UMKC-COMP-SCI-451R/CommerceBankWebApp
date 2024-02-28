@@ -39,27 +39,64 @@
 <div th:if="${message}" class="alert alert-warning text-center" id="messageDiv">
     [[${message}]]
 </div>
+<!--<div class="container">-->
+<!--    <div style="text-align: center; vertical-align: center">-->
+<!--        <div class="card w-25" style="display:inline-block; height: auto" id="accountInfoCard">-->
+<!--            <p th:text="'Hello '+${session.account.getFirstName()}+' '+ ${session.account.getLastName()}+',' "></p>-->
+<!--            <p th:text="'Account ID: '+${session.account.getAccID()}"></p>-->
+<!--            <p>Routing number: 101000019</p>-->
+<!--            <p>Account type: <em>mySpending Card</em></p>-->
+<!--        </div>-->
+<!--        <div class="card w-25" style="display:inline-block;height: auto" id="balanceCard">-->
+<!--            <p>Balance:</p>-->
+<!--            <p th:text="${#numbers.formatCurrency(session.account.getBalance())}" style="font-weight: bold; font-style: italic; font-size: 50px "></p>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
 <div class="container">
-    <div style="text-align: center;">
-        <div class="card w-25 h-200" style="display:inline-block;">
-            <p th:text="'Hello '+${session.account.getFirstName()}+' '+ ${session.account.getLastName()}+',' "></p>
-            <p th:text="'Account ID: '+${session.account.getAccID()}"></p>
-            <p>Routing number: 101000019</p>
-            <p>Account type: <em>mySpending Card</em></p>
+    <div class="row justify-content-center">
+        <div class="col-md-3"> <!-- Adjust the column size as needed -->
+            <div class="card" id="accountInfoCard" >
+                <div class="card-title bg-success text-white" style="font-weight: bold; text-align: center">
+                    <h5>Account Information</h5>
+                </div>
+                <div class="card-body" style="margin-left: 7%">
+                    <p th:text="'Customer: '+${session.account.getFirstName()}+' '+ ${session.account.getLastName()}+',' "></p>
+                    <p th:text="'Account ID: '+${session.account.getAccID()}"></p>
+                    <p>Routing number: 101000019</p>
+                    <p>Account type: <em>mySpending Card</em></p>
+                </div>
+            </div>
         </div>
-        <div class="card w-25 h-200" style="display:inline-block;">
-            <p>Balance:</p>
-            <p th:text="${#numbers.formatCurrency(session.account.getBalance())}" style="font-weight: bold; font-style: italic; font-size: 50px "></p>
+        <div class="col-md-3"> <!-- Adjust the column size as needed -->
+            <div class="card" id="balanceCard" style="text-align: center;">
+                <div class="card-title bg-success text-white" style="font-weight: bold;">
+                    <h5>Current Balance</h5>
+                </div>
+                <div class="card-body" style="display: flex; flex-direction: column; justify-content: center;">
+                    <p th:text="${#numbers.formatCurrency(session.account.getBalance())}" style="font-weight: bold; font-style: italic; font-size: 50px "></p>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
+<!--<div class="container">-->
+<!--    <div class="card-inline" id="accountInfoCard">-->
+<!--        <p th:text="'Hello '+${session.account.getFirstName()}+' '+ ${session.account.getLastName()}+',' "></p>-->
+<!--    </div>-->
+<!--    <div class="card-inline" id="balanceCard">-->
+<!--        <p th:text="'Hello '+${session.account.getFirstName()}+' '+ ${session.account.getLastName()}+',' ">-->
+<!--    </div>-->
+<!--</div>-->
+
 <div class="text-center">
     <form action="/filterTransactions" method="post">
-        <label for="fromDate">From Date:</label>
+        <label for="fromDate">From:</label>
         <input type="date" id="fromDate" name="fromDate" th:value="${fromDate}" onchange="setToDateMin()">
 
-        <label for="toDate">To Date:</label>
+        <label for="toDate">To:</label>
         <input type="date" id="toDate" name="toDate" th:value="${toDate}">
 
         <button class="btn btn-success " type="submit" id="filterApplyBtn">Apply</button>
@@ -191,6 +228,14 @@
             element.style.color = 'grey';
         }
     })
+
+
+    window.addEventListener('load', function() {
+        var accountInfoCard = document.getElementById('accountInfoCard');
+        var balanceCard = document.getElementById('balanceCard');
+        var firstCardHeight = accountInfoCard.offsetHeight;
+        balanceCard.style.height = firstCardHeight + 'px';
+    });
 
     function setToDateMin() {
         var toDateInput = document.getElementById("toDate");
