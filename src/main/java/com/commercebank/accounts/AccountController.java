@@ -17,7 +17,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-@SessionAttributes({"account", "filteredTransactions","currentPage"})
+@SessionAttributes({"account", "filteredTransactions","currentPage","dateRange"})
 @Controller
 public class AccountController {
     @Autowired private AccountService accountService;
@@ -124,12 +124,15 @@ public class AccountController {
                 Date endDate = dateFormat.parse(toDate);
                 List<Transactions> filteredTransactionList = accountService.getTransactionListByDateRange(startDate,endDate,sessionAccount.getEmail());
                 System.out.println(filteredTransactionList.toString());
-                // more code
+
                 if(!filteredTransactionList.isEmpty()){
+                    String dateRange = fromDate + " to " + toDate;
                     session.setAttribute("filteredTransactions",filteredTransactionList);
+                    session.setAttribute("dateRange",dateRange);
                     ra.addFlashAttribute("filteredTransactions",filteredTransactionList);
-                    ra.addFlashAttribute("toDate",toDate);
-                    ra.addFlashAttribute("fromDate",fromDate);
+                    ra.addFlashAttribute("dateRange",dateRange);
+//                    ra.addFlashAttribute("toDate",toDate);
+//                    ra.addFlashAttribute("fromDate",fromDate);
                     session.setAttribute("currentPage",1);
                     ra.addFlashAttribute("currentPage",1);
                     return "redirect:/dashboard";
@@ -143,6 +146,8 @@ public class AccountController {
         }
 
         System.out.println("date are blanks or list is empty");
+        session.setAttribute("dateRange","");
+        ra.addFlashAttribute("dateRange","");
         session.setAttribute("filteredTransactions",new ArrayList<Transactions>());
         ra.addFlashAttribute("filteredTransactions",new ArrayList<Transactions>());
         session.setAttribute("currentPage",0);
@@ -158,6 +163,7 @@ public class AccountController {
         if (currentPage != null) {
             session.setAttribute("currentPage", currentPage + 1);
             ra.addFlashAttribute("currentPage",currentPage + 1);
+            ra.addFlashAttribute("dateRange", session.getAttribute("dateRange"));
         }
         System.out.println(session.getAttribute("currentPage"));
         return "redirect:/dashboard";
@@ -170,6 +176,7 @@ public class AccountController {
         if (currentPage != null) {
             session.setAttribute("currentPage", currentPage - 1);
             ra.addFlashAttribute("currentPage",currentPage - 1);
+            ra.addFlashAttribute("dateRange", session.getAttribute("dateRange"));
         }
         System.out.println(session.getAttribute("currentPage"));
         return "redirect:/dashboard";

@@ -82,22 +82,15 @@
     </div>
 </div>
 
-<!--<div class="container">-->
-<!--    <div class="card-inline" id="accountInfoCard">-->
-<!--        <p th:text="'Hello '+${session.account.getFirstName()}+' '+ ${session.account.getLastName()}+',' "></p>-->
-<!--    </div>-->
-<!--    <div class="card-inline" id="balanceCard">-->
-<!--        <p th:text="'Hello '+${session.account.getFirstName()}+' '+ ${session.account.getLastName()}+',' ">-->
-<!--    </div>-->
-<!--</div>-->
+<!--${#numbers.formatCurrency()-->
 
 <div class="text-center">
     <form action="/filterTransactions" method="post">
         <label for="fromDate">From:</label>
-        <input type="date" id="fromDate" name="fromDate" th:value="${fromDate}" onchange="setToDateMin()">
+        <input type="date" id="fromDate" name="fromDate" onchange="setToDateMin()">
 
         <label for="toDate">To:</label>
-        <input type="date" id="toDate" name="toDate" th:value="${toDate}">
+        <input type="date" id="toDate" name="toDate">
 
         <button class="btn btn-success " type="submit" id="filterApplyBtn">Apply</button>
         <button class="btn btn-secondary" type="button" onclick="clearFilter()">Clear Filter</button>
@@ -109,28 +102,16 @@
     <th:block
             th:if="${session.filteredTransactions != null and not #lists.isEmpty(session.filteredTransactions)}">
         <div class="card-title">
-            <h3 class="card-header bg-success text-white">Filtered transactions:</h3>
+            <h3 class="card-header bg-success text-white" th:text="'Filtered transactions: '+${session.dateRange}"></h3>
         </div>
         <div class="card-body">
 
             <!-- Calculate the total number of pages -->
-            <th:block th:with="totalPages=${T(java.lang.Math).ceil(session.filteredTransactions.size / 5.0)}">
-                <!-- Add the "Next" and "Previous" buttons -->
-                <div style="margin-left: 70%; margin-bottom: 20px">
-                    <th:block th:if="${session.currentPage > 1}">
-                        <form th:action="@{/previous}" method="post" style="display: inline-block">
-                            <button class="btn btn-success " type="submit">Previous</button>
-                        </form>
-                    </th:block>
-                    <th:block th:if="${session.currentPage < totalPages}">
-                        <form th:action="@{/next}" method="post" style="display: inline-block">
-                            <button class="btn btn-success " type="submit">Next</button>
-                        </form>
-                    </th:block>
-                </div>
+            <th:block th:with="totalPages=${T(java.lang.Math).ceil(session.filteredTransactions.size / 10.0)}">
+
                 <!-- Display the transactions for the current page -->
                 <th:block
-                        th:each="trans : ${session.filteredTransactions.subList(5 * (session.currentPage - 1), (5 * session.currentPage > session.filteredTransactions.size) ? session.filteredTransactions.size : 5 * session.currentPage)}">
+                        th:each="trans : ${session.filteredTransactions.subList(10 * (session.currentPage - 1), (10 * session.currentPage > session.filteredTransactions.size) ? session.filteredTransactions.size : 10 * session.currentPage)}">
                     <div class="container mb-3 transaction">
                         <div class="row">
                             <div class="col-2" style="margin-left: 5%;">
@@ -146,7 +127,7 @@
                                 <span th:text="${trans.destination}"></span>
                             </div>
                             <div class="col-2 text-center transaction-amount">
-                                $<span th:text="${trans.amount}"></span>
+                                <span th:text="${#numbers.formatCurrency(trans.amount)}"></span>
                             </div>
                             <div class="col-2">
                                 <span><em>Date:</em></span> <span th:text="${trans.date}"></span>
@@ -155,6 +136,20 @@
                     </div>
                     <hr>
                 </th:block>
+
+                <!-- Add the "Next" and "Previous" buttons -->
+                <div style="margin-left: 70%; margin-bottom: 20px">
+                    <th:block th:if="${session.currentPage > 1}">
+                        <form th:action="@{/previous}" method="post" style="display: inline-block">
+                            <button class="btn btn-success " type="submit">Previous</button>
+                        </form>
+                    </th:block>
+                    <th:block th:if="${session.currentPage < totalPages}">
+                        <form th:action="@{/next}" method="post" style="display: inline-block">
+                            <button class="btn btn-success " type="submit">Next</button>
+                        </form>
+                    </th:block>
+                </div>
 
             </th:block>
         </div>
@@ -183,7 +178,7 @@
                             <span th:text="${trans.destination}"></span>
                         </div>
                         <div class="col-2 text-center transaction-amount">
-                            $<span th:text="${trans.amount}"></span>
+                            <span th:text="${#numbers.formatCurrency(trans.amount)}"></span>
                         </div>
                         <div class="col-2">
                             <span><em>Date:</em></span> <span th:text="${trans.date}"></span>
@@ -259,6 +254,26 @@
         document.getElementById('messageDiv').style.display = 'none';
     }, 5000); // 5000 milliseconds = 5 seconds
 
+
+    //save window scroll position so that when the page is reloaded due to postmapping, the last position could be restored
+    function saveScrollPosition() {
+        sessionStorage.setItem('scrollPosition', window.scrollY);
+    }
+
+    // Function to restore scroll position from sessionStorage
+    function restoreScrollPosition() {
+        var scrollPosition = sessionStorage.getItem('scrollPosition');
+        if (scrollPosition) {
+            window.scrollTo(0, scrollPosition);
+            sessionStorage.removeItem('scrollPosition');
+        }
+    }
+
+    // Event listener to save scroll position before page reloads
+    window.addEventListener('beforeunload', saveScrollPosition);
+
+    // Event listener to restore scroll position after page reloads
+    window.addEventListener('load', restoreScrollPosition);
 
 </script>
 
