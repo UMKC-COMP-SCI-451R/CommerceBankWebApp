@@ -10,8 +10,9 @@ button {
 .card {
     position: absolute;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    transition: opacity 0.5s ease, transform 0.5s ease; /* Transition opacity and transform */
-    opacity: 0; /* Initially hide cards */
+    transition: transform 0.5s ease, visibility 0.5s ease, opacity 0.5s ease; /* Transition opacity and transform */
+    visibility: hidden; /* Initially hide cards */
+    opacity: 0;
     transform: translateX(100%); /* Move cards to the right initially */
     margin-left: 20%;
     margin-right: 20%;
@@ -20,23 +21,17 @@ button {
 }
 
 .card.show {
-    opacity: 1; /* Show cards */
+    visibility: visible;
+    opacity: 1;
     transform: translateX(0); /* Move cards to the left */
 }
 
-.card.right {
-    transform: translateX(100%);
-}
 
 /* New CSS class to make the card disappear on the left side */
 .card.left {
+    visibility: hidden;
     opacity: 0;
     transform: translateX(-100%);
-}
-
-.card.hide{
-    opacity: 0; /* Show cards */
-    transform: translateX(-100%); /* Move cards to the left */
 }
 
 .card:hover {
