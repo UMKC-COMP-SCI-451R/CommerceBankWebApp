@@ -39,11 +39,22 @@
 <div th:if="${message}" class="alert alert-warning text-center" id="messageDiv">
     [[${message}]]
 </div>
-<div id="summary">
-    <p th:text="'Hello '+${session.account.getFirstName()}+' '+ ${session.account.getLastName()}+',' "></p>
-    <p th:text="'Account ID: '+${session.account.getAccID()}"></p>
-    <p th:text="'Balance: '+${#numbers.formatCurrency(session.account.getBalance())}"></p>
+<div class="container">
+    <div style="text-align: center;">
+        <div class="card w-25 h-200" style="display:inline-block;">
+            <p th:text="'Hello '+${session.account.getFirstName()}+' '+ ${session.account.getLastName()}+',' "></p>
+            <p th:text="'Account ID: '+${session.account.getAccID()}"></p>
+            <p>Routing number: 101000019</p>
+            <p>Account type: <em>mySpending Card</em></p>
+        </div>
+        <div class="card w-25 h-200" style="display:inline-block;">
+            <p>Balance:</p>
+            <p th:text="${#numbers.formatCurrency(session.account.getBalance())}" style="font-weight: bold; font-style: italic; font-size: 50px "></p>
+        </div>
+    </div>
+</div>
 
+<div class="text-center">
     <form action="/filterTransactions" method="post">
         <label for="fromDate">From Date:</label>
         <input type="date" id="fromDate" name="fromDate" th:value="${fromDate}" onchange="setToDateMin()">
@@ -51,111 +62,155 @@
         <label for="toDate">To Date:</label>
         <input type="date" id="toDate" name="toDate" th:value="${toDate}">
 
-        <button type="submit" id="filterApplyBtn">Apply</button>
-        <button type="button" onclick="clearFilter()">Clear Filter</button>
+        <button class="btn btn-success " type="submit" id="filterApplyBtn">Apply</button>
+        <button class="btn btn-secondary" type="button" onclick="clearFilter()">Clear Filter</button>
     </form>
+</div>
 
-    <div class="transaction-card card">
+
+<div class="transaction-card card">
+    <th:block
+            th:if="${session.filteredTransactions != null and not #lists.isEmpty(session.filteredTransactions)}">
         <div class="card-title">
-            <h3 class="card-header bg-success text-white">Recent transactions:</h3>
+            <h3 class="card-header bg-success text-white">Filtered transactions:</h3>
         </div>
         <div class="card-body">
-            <th:block
-                    th:if="${session.filteredTransactions != null and not #lists.isEmpty(session.filteredTransactions)}">
-                <!-- Calculate the total number of pages -->
-                <th:block th:with="totalPages=${T(java.lang.Math).ceil(session.filteredTransactions.size / 5.0)}">
-                    <!-- Add the "Next" and "Previous" buttons -->
-                    <div style="margin-left: 70%">
-                        <th:block th:if="${session.currentPage > 1}">
-                            <form th:action="@{/previous}" method="post" style="display: inline-block">
-                                <button type="submit">Previous</button>
-                            </form>
-                        </th:block>
-                        <th:block th:if="${session.currentPage < totalPages}">
-                            <form th:action="@{/next}" method="post" style="display: inline-block">
-                                <button type="submit">Next</button>
-                            </form>
-                        </th:block>
-                    </div>
-                    <!-- Display the transactions for the current page -->
-                    <th:block
-                            th:each="trans : ${session.filteredTransactions.subList(5 * (session.currentPage - 1), (5 * session.currentPage > session.filteredTransactions.size) ? session.filteredTransactions.size : 5 * session.currentPage)}">
-                        <div class="transaction mb-3">
-                            <div class="row">
-                                <div class="col-6" style="margin-left: 8%">
-                                    <div class="row">
-                                        <div class="col-12"><em>ID:</em> <span th:text="${trans.transactionId}"></span>
-                                        </div>
-                                        <div class="col-12"><strong>Source:</strong> <span th:text="${trans.source}"></span>
-                                        </div>
-                                        <div class="col-12"><strong>Destination:</strong> <span
-                                                th:text="${trans.destination}"></span></div>
-                                    </div>
-                                </div>
-                                <div class="col-4 text-md-end">
-                                    <div class="row">
-                                        <div><em>Date:</em> <span th:text="${trans.date}"></span></div>
-                                        <div><strong>Amount:</strong> $<span th:text="${trans.amount}"></span></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <hr>
+
+            <!-- Calculate the total number of pages -->
+            <th:block th:with="totalPages=${T(java.lang.Math).ceil(session.filteredTransactions.size / 5.0)}">
+                <!-- Add the "Next" and "Previous" buttons -->
+                <div style="margin-left: 70%; margin-bottom: 20px">
+                    <th:block th:if="${session.currentPage > 1}">
+                        <form th:action="@{/previous}" method="post" style="display: inline-block">
+                            <button class="btn btn-success " type="submit">Previous</button>
+                        </form>
                     </th:block>
-
-                </th:block>
-            </th:block>
-
-            <th:block
-                    th:unless="${session.filteredTransactions != null and not #lists.isEmpty(session.filteredTransactions)}">
-                <th:block th:each="trans, transStatus : ${session.account.transactionsList}"
-                          th:if="${transStatus.index >= transStatus.size-5}">
-                    <div class="transaction mb-3">
+                    <th:block th:if="${session.currentPage < totalPages}">
+                        <form th:action="@{/next}" method="post" style="display: inline-block">
+                            <button class="btn btn-success " type="submit">Next</button>
+                        </form>
+                    </th:block>
+                </div>
+                <!-- Display the transactions for the current page -->
+                <th:block
+                        th:each="trans : ${session.filteredTransactions.subList(5 * (session.currentPage - 1), (5 * session.currentPage > session.filteredTransactions.size) ? session.filteredTransactions.size : 5 * session.currentPage)}">
+                    <div class="container mb-3 transaction">
                         <div class="row">
-                            <div class="col-6" style="margin-left: 8%"> <!-- Added ml-2 class here -->
-                                <div class="row">
-                                    <div class="col-12"><em>ID:</em> <span th:text="${trans.transactionId}"></span></div>
-                                    <div class="col-12"><strong>Source:</strong> <span th:text="${trans.source}"></span></div>
-                                    <div class="col-12"><strong>Destination:</strong> <span th:text="${trans.destination}"></span></div>
-                                </div>
+                            <div class="col-2" style="margin-left: 5%;">
+                                <div><em>ID:</em> <span th:text="${trans.transactionId}"></span></div>
                             </div>
-                            <div class="col-4 text-md-end">
-                                <div class="row">
-                                    <div><em>Date:</em> <span th:text="${trans.date}"></span></div>
-                                    <div><strong>Amount:</strong> $<span th:text="${trans.amount}"></span></div>
-                                </div>
+                            <div class="col-2 text-md-end transaction-source">
+                                <span th:text="${trans.source}"></span>
+                            </div>
+                            <div class="col-1 text-center">
+                                <span><em>To</em></span>
+                            </div>
+                            <div class="col-2 transaction-destination">
+                                <span th:text="${trans.destination}"></span>
+                            </div>
+                            <div class="col-2 text-center transaction-amount">
+                                $<span th:text="${trans.amount}"></span>
+                            </div>
+                            <div class="col-2">
+                                <span><em>Date:</em></span> <span th:text="${trans.date}"></span>
                             </div>
                         </div>
                     </div>
                     <hr>
                 </th:block>
+
             </th:block>
         </div>
-    </div>
+    </th:block>
 
-
+    <th:block
+            th:unless="${session.filteredTransactions != null and not #lists.isEmpty(session.filteredTransactions)}">
+        <div class="card-title">
+            <h3 class="card-header bg-success text-white">Recent transactions:</h3>
+        </div>
+        <div class="card-body">
+            <th:block th:each="trans, transStatus : ${session.account.transactionsList}"
+                      th:if="${transStatus.index >= transStatus.size-5}">
+                <div class="container mb-3 transaction">
+                    <div class="row">
+                        <div class="col-2" style="margin-left: 5%">
+                            <div><em>ID:</em> <span th:text="${trans.transactionId}"></span></div>
+                        </div>
+                        <div class="col-2 text-md-end transaction-source">
+                            <span th:text="${trans.source}"></span>
+                        </div>
+                        <div class="col-1 text-center">
+                            <span><em>To</em></span>
+                        </div>
+                        <div class="col-2 transaction-destination">
+                            <span th:text="${trans.destination}"></span>
+                        </div>
+                        <div class="col-2 text-center transaction-amount">
+                            $<span th:text="${trans.amount}"></span>
+                        </div>
+                        <div class="col-2">
+                            <span><em>Date:</em></span> <span th:text="${trans.date}"></span>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            </th:block>
+        </div>
+    </th:block>
 </div>
+
+
 <script>
+    // Get all elements with the class 'transaction-source'
+    var transactionSources = document.querySelectorAll('.transaction-source');
+    var transactionDestinations = document.querySelectorAll('.transaction-destination');
 
+    // Iterate through each element
+    transactionSources.forEach(function (element) {
+        var transaction = element.parentNode;
+        var amountElement = transaction.querySelector('.transaction-amount');
+        if (element.querySelector('span').textContent === 'My Account') {
+            // Modify the style of the element
+            element.style.color = 'blue';
+            amountElement.style.color = 'red'
+            amountElement.textContent = '- ' + amountElement.textContent
+        } else {
+            // Reset the style if the condition is not met
+            element.style.color = 'grey';
+            amountElement.textContent = '+ ' + amountElement.textContent
+            amountElement.style.color = 'green'
+        }
+    });
 
-    function setToDateMin(){
+    transactionDestinations.forEach(function (element) {
+        if (element.querySelector('span').textContent === 'My Account') {
+            // Modify the style of the element
+            element.style.color = 'blue';
+        } else {
+            // Reset the style if the condition is not met
+            element.style.color = 'grey';
+        }
+    })
+
+    function setToDateMin() {
         var toDateInput = document.getElementById("toDate");
         var fromDateInput = document.getElementById("fromDate");
         toDateInput.min = fromDateInput.value;
-        if(toDateInput.value < fromDateInput.value)
-            toDateInput.value ='';
+        if (toDateInput.value < fromDateInput.value)
+            toDateInput.value = '';
     }
-    function clearFilter(){
+
+    function clearFilter() {
         // Assuming you have a date input with id "fromDate"
         document.getElementById("fromDate").value = "";
 
         // Similarly, for a date input with id "toDate"
         document.getElementById("toDate").value = "";
-
         document.getElementById("filterApplyBtn").click();
     }
+
     //set time out for message div
-    setTimeout(function() {
+    setTimeout(function () {
         document.getElementById('messageDiv').style.display = 'none';
     }, 5000); // 5000 milliseconds = 5 seconds
 

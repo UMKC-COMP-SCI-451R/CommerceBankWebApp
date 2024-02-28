@@ -4,17 +4,37 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Slight shadow for depth */
     /*padding: 20px; !* Space inside the card *!*/
     margin: 20px auto; /* Centered margin with space outside the card */
-    width: 80%; /* Adjust as needed */
-    max-width: 600px; /* Adjust as needed */
+    width: 100%; /* Adjust as needed */
+    max-width: 1000px; /* Adjust as needed */
     display: flex;
     flex-direction: column;
 }
 
-.transaction {
-    display: flex;
-    /*justify-content: space-between;*/
-    align-items: center;
-    margin-bottom: 20px; /* Space between transactions */
+.card{
+    background-color: #fff; /* White background */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Slight shadow for depth */
+    /*padding: 20px; !* Space inside the card *!*/
+    margin: 20px auto; /* Centered margin with space outside the card */
+}
+
+/*.transaction {*/
+/*    display: flex;*/
+/*    justify-content: space-between;*/
+/*    align-items: center;*/
+/*    margin-bottom: 20px; !* Space between transactions *!*/
+/*}*/
+
+.transaction-source{
+    font-weight: bold;
+}
+
+.transaction-destination{
+    font-weight: bold;
+}
+
+.transaction-amount{
+    font-weight: bold;
 }
 
 .transaction hr {
