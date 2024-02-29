@@ -36,42 +36,29 @@
         <button class="btn btn-outline-success mx-3 my-0" type="submit">Logout</button>
     </form>
 </nav>
-<div th:if="${message}" class="alert alert-warning text-center" id="messageDiv">
+<div th:if="${message}" class="bg-warning text-center message" id="messageDiv">
     [[${message}]]
 </div>
-<!--<div class="container">-->
-<!--    <div style="text-align: center; vertical-align: center">-->
-<!--        <div class="card w-25" style="display:inline-block; height: auto" id="accountInfoCard">-->
-<!--            <p th:text="'Hello '+${session.account.getFirstName()}+' '+ ${session.account.getLastName()}+',' "></p>-->
-<!--            <p th:text="'Account ID: '+${session.account.getAccID()}"></p>-->
-<!--            <p>Routing number: 101000019</p>-->
-<!--            <p>Account type: <em>mySpending Card</em></p>-->
-<!--        </div>-->
-<!--        <div class="card w-25" style="display:inline-block;height: auto" id="balanceCard">-->
-<!--            <p>Balance:</p>-->
-<!--            <p th:text="${#numbers.formatCurrency(session.account.getBalance())}" style="font-weight: bold; font-style: italic; font-size: 50px "></p>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
+
 
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-3"> <!-- Adjust the column size as needed -->
             <div class="card" id="accountInfoCard" >
-                <div class="card-title bg-success text-white" style="font-weight: bold; text-align: center">
+                <div class="card-header bg-success text-white" style="font-weight: bold; text-align: center">
                     <h5>Account Information</h5>
                 </div>
                 <div class="card-body" style="margin-left: 7%">
                     <p th:text="'Customer: '+${session.account.getFirstName()}+' '+ ${session.account.getLastName()}+',' "></p>
                     <p th:text="'Account ID: '+${session.account.getAccID()}"></p>
                     <p>Routing number: 101000019</p>
-                    <p>Account type: <em>mySpending Card</em></p>
+<!--                    <p>Account type: <em>mySpending Card</em></p>-->
                 </div>
             </div>
         </div>
         <div class="col-md-3"> <!-- Adjust the column size as needed -->
             <div class="card" id="balanceCard" style="text-align: center;">
-                <div class="card-title bg-success text-white" style="font-weight: bold;">
+                <div class="card-header bg-success text-white" style="font-weight: bold;">
                     <h5>Current Balance</h5>
                 </div>
                 <div class="card-body" style="display: flex; flex-direction: column; justify-content: center;">
@@ -102,16 +89,16 @@
     <th:block
             th:if="${session.filteredTransactions != null and not #lists.isEmpty(session.filteredTransactions)}">
         <div class="card-title">
-            <h3 class="card-header bg-success text-white" th:text="'Filtered transactions: '+${session.dateRange}"></h3>
+            <h5 class="card-header bg-success text-white" th:text="'Filtered transactions: '+${session.dateRange}"></h5>
         </div>
         <div class="card-body">
 
             <!-- Calculate the total number of pages -->
-            <th:block th:with="totalPages=${T(java.lang.Math).ceil(session.filteredTransactions.size / 10.0)}">
+            <th:block th:with="totalPages=${T(java.lang.Math).ceil(session.filteredTransactions.size / 5.0)}">
 
                 <!-- Display the transactions for the current page -->
                 <th:block
-                        th:each="trans : ${session.filteredTransactions.subList(10 * (session.currentPage - 1), (10 * session.currentPage > session.filteredTransactions.size) ? session.filteredTransactions.size : 10 * session.currentPage)}">
+                        th:each="trans : ${session.filteredTransactions.subList(5 * (session.currentPage - 1), (5 * session.currentPage > session.filteredTransactions.size) ? session.filteredTransactions.size : 5 * session.currentPage)}">
                     <div class="container mb-3 transaction">
                         <div class="row">
                             <div class="col-2" style="margin-left: 5%;">
@@ -158,7 +145,7 @@
     <th:block
             th:unless="${session.filteredTransactions != null and not #lists.isEmpty(session.filteredTransactions)}">
         <div class="card-title">
-            <h3 class="card-header bg-success text-white">Recent transactions:</h3>
+            <h5 class="card-header bg-success text-white">Recent transactions:</h5>
         </div>
         <div class="card-body">
             <th:block th:each="trans, transStatus : ${session.account.transactionsList}"
@@ -264,7 +251,10 @@
     function restoreScrollPosition() {
         var scrollPosition = sessionStorage.getItem('scrollPosition');
         if (scrollPosition) {
-            window.scrollTo(0, scrollPosition);
+            window.scrollTo({
+                top: scrollPosition,
+                behavior: 'instant'
+            });
             sessionStorage.removeItem('scrollPosition');
         }
     }
