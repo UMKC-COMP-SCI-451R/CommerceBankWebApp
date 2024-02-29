@@ -1,0 +1,73 @@
+.transaction-card {
+    background-color: #fff; /* White background */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Slight shadow for depth */
+    /*padding: 20px; !* Space inside the card *!*/
+    margin: 20px auto; /* Centered margin with space outside the card */
+    width: 110%; /* Adjust as needed */
+    max-width: 1000px; /* Adjust as needed */
+    display: flex;
+    flex-direction: column;
+}
+
+.card{
+    background-color: #fff; /* White background */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Slight shadow for depth */
+    /*padding: 20px; !* Space inside the card *!*/
+    margin: 20px auto; /* Centered margin with space outside the card */
+}
+
+/*.transaction {*/
+/*    display: flex;*/
+/*    justify-content: space-between;*/
+/*    align-items: center;*/
+/*    margin-bottom: 20px; !* Space between transactions *!*/
+/*}*/
+
+.card-inline {
+    display: inline-block;
+    text-align: center;
+    width: 25%;
+    height: auto;
+    border: solid rgb(216, 207, 207);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    background-color: #fff; /* White background */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Slight shadow for depth */
+}
+
+.transaction-source{
+    font-weight: bold;
+}
+
+.transaction-destination{
+    font-weight: bold;
+}
+
+.transaction-amount{
+    font-weight: bold;
+}
+
+.transaction hr {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+    width: 100%;
+}
+
+.message{
+    position: absolute;
+    top: 10%;
+    left: 0;
+    width: 100vw; /* Set width to 100% of viewport width */
+    font-size: larger;
+    font-weight: bolder;
+    z-index: 9999;
+    color: black;
+}
+
+.dashboard{
+    opacity: 0; /* Initially set opacity to 0 */
+    transition: opacity 0.3s ease /* Add transition effect for opacity */
+}

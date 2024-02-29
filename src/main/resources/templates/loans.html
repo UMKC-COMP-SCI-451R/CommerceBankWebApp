@@ -31,143 +31,145 @@
         <button class="btn btn-outline-success mx-3 my-0" type="submit">Logout</button>
     </form>
 </nav>
-
-<div class="container">
-    <div class="card-inline">
-        <h2>Credit Card</h2>
-        <button id="ccbtn" onclick="showccdiv('cccard')" class="btn btn-success">Learn more!</button>
-    </div>
-    <div class="card-inline">
-        <h2>Auto Loan</h2>
-        <button id="albtn" onclick="showccdiv('alcard')" class="btn btn-success">Learn more!</button>
-    </div>
-    <div class="card-inline">
-        <h2>Home Loan</h2>
-        <button id="hlbtn" onclick="showccdiv('hlcard')" class="btn btn-success">Learn more!</button>
-    </div>
-    <div class="card-inline">
-        <h2>Personal Loan</h2>
-        <button id="plbtn" onclick="showccdiv('plcard')" class="btn btn-success">Learn more!</button>
-    </div>
-</div>
-
-
-<div class="card" id="cccard">
-    <div class="card-body">
-        <span class="card-text text-center" style="font-style: italic; font-weight: bold; color: rgba(0,0,0,0); display:block">*** Your application is received. Our associate will contact you very soon!! *** </span>
-        <img src="images/loans/creditcard.svg" class="card-img-top mx-auto d-block" alt="Credit Card Image">
-        <h5 class="card-title text-center">Credit Card</h5>
-        <ul class="list-unstyled text-center">
-            <li>5% cash back every where</li>
-            <li>0% Intro APR for 5 years</li>
-            <li>Unlimited Cashback Match</li>
-            <li>$500 sign in bonus</li>
-        </ul>
-        <p class="card-text text-center">Credit cards offer convenience and flexibility for payments, both online
-            and
-            in-store. They enable users to build a positive credit history, providing opportunities for future
-            financial
-            endeavors. Additionally, credit cards often come with rewards, perks, and enhanced security features,
-            making
-            them a valuable tool for responsible financial management.</p>
-        <button class="btn btn-success" style="width: 100%;" data-toggle="modal" data-target="#myModal">Apply
-            now >></button>
+<div class="loanPage" id="loanPage">
+    <div class="container">
+        <div class="card-inline">
+            <h2>Credit Card</h2>
+            <button id="ccbtn" onclick="showccdiv('cccard')" class="btn btn-success">Learn more!</button>
+        </div>
+        <div class="card-inline">
+            <h2>Auto Loan</h2>
+            <button id="albtn" onclick="showccdiv('alcard')" class="btn btn-success">Learn more!</button>
+        </div>
+        <div class="card-inline">
+            <h2>Home Loan</h2>
+            <button id="hlbtn" onclick="showccdiv('hlcard')" class="btn btn-success">Learn more!</button>
+        </div>
+        <div class="card-inline">
+            <h2>Personal Loan</h2>
+            <button id="plbtn" onclick="showccdiv('plcard')" class="btn btn-success">Learn more!</button>
+        </div>
     </div>
 
-</div>
-<div class="card" id="alcard">
-    <div class="card-body">
-        <span class="card-text text-center" style="font-style: italic; font-weight: bold; color: rgba(0,0,0,0); display:block">*** Your application is received. Our associate will contact you very soon!! *** </span>
-        <img src="images/loans/autoloan.svg" class="card-img-top mx-auto d-block" alt="Auto Loan Image">
-        <h5 class="card-title text-center">Auto Loan</h5>
-        <ul class="list-unstyled text-center">
-            <li>Get qualified offers in minutes</li>
-            <li>Loan up to $300k</li>
-            <li>No proof of income needed</li>
-            <li>No minimum credit score</li>
-        </ul>
-        <p class="card-text text-center">Auto loans provide an avenue for acquiring a vehicle without the need for a
-            lump-sum
-            payment, making transportation accessible. They enable individuals to build credit as they make timely
-            payments, fostering financial responsibility. Additionally, auto loans can offer competitive interest
-            rates and flexible repayment terms, enhancing affordability for borrowers.</p>
-        <button class="btn btn-success" style="width: 100%;" data-toggle="modal" data-target="#myModal">Apply
-            now >></button>
-    </div>
-</div>
-<div class="card" id="hlcard">
-    <div class="card-body">
-        <span class="card-text text-center" style="font-style: italic; font-weight: bold; color: rgba(0,0,0,0); display:block">*** Your application is received. Our associate will contact you very soon!! *** </span>
-        <img src="images/loans/homeloan.svg" class="card-img-top mx-auto d-block" alt="Home Loan Image">
-        <h5 class="card-title text-center">Home Loan</h5>
-        <ul class="list-unstyled text-center">
-            <li>Competitively low rate and no PMI</li>
-            <li>Rate protection</li>
-            <li>Home buying with as little as 1% down</li>
-            <li>Special benefits for veterans</li>
-        </ul>
-        <p class="card-text text-center">Home loans provide a pathway to home ownership by enabling individuals to
-            finance
-            their home purchase. They offer long-term financial stability, potential tax benefits, and an
-            opportunity to
-            build equity. Additionally, home loans often come with competitive interest rates, making home ownership
-            more
-            accessible and affordable.</p>
-        <button class="btn btn-success" style="width: 100%;" data-toggle="modal" data-target="#myModal">Apply
-            now >></button>
-    </div>
-</div>
-<div class="card" id="plcard">
-    <div class="card-body">
-        <span class="card-text text-center" style="font-style: italic; font-weight: bold; color: rgba(0,0,0,0); display:block">*** Your application is received. Our associate will contact you very soon!! *** </span>
-        <img src="images/loans/personalloan.svg" class="card-img-top mx-auto d-block" alt="Personal Loan Image">
-        <h5 class="card-title text-center">Personal Loan</h5>
-        <ul class="list-unstyled text-center">
-            <li>Borrow up to 100k</li>
-            <li>No minimum credit score</li>
-            <li>Low APR: 3.4%-10%</li>
-            <li>Term: 12-72 months</li>
-        </ul>
-        <p class="card-text text-center">Personal loans offer financial flexibility for various purposes, such as debt consolidation,
-            home improvements, or unexpected expenses. They provide a fixed repayment plan, simplified
-            and potential lower interest rates compared to credit cards.
-            Personal loans empower individuals to achieve their financial goals with ease and convenience.</p>
-        <button class="btn btn-success" style="width: 100%;" data-toggle="modal" data-target="#myModal">Apply
-            now >></button>
-    </div>
-</div>
 
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Quick Apply</h5>
-            </div>
-            <div class="modal-body">
-                <!-- Selector for ratings -->
-                <div class="form-group">
-                    <label for="creditSelector">How do you rate your credit score?</label>
-                    <select class="form-select" id="creditSelector">
-                        <option>Select</option>
-                        <option>Excellent</option>
-                        <option>Good</option>
-                        <option>Average</option>
-                    </select>
+    <div class="card" id="cccard">
+        <div class="card-body">
+            <span class="card-text text-center" style="font-style: italic; font-weight: bold; color: rgba(0,0,0,0); display:block">*** Your application is received. Our associate will contact you very soon!! *** </span>
+            <img src="images/loans/creditcard.svg" class="card-img-top mx-auto d-block" alt="Credit Card Image">
+            <h5 class="card-title text-center">Credit Card</h5>
+            <ul class="list-unstyled text-center">
+                <li>5% cash back every where</li>
+                <li>0% Intro APR for 5 years</li>
+                <li>Unlimited Cashback Match</li>
+                <li>$500 sign in bonus</li>
+            </ul>
+            <p class="card-text text-center">Credit cards offer convenience and flexibility for payments, both online
+                and
+                in-store. They enable users to build a positive credit history, providing opportunities for future
+                financial
+                endeavors. Additionally, credit cards often come with rewards, perks, and enhanced security features,
+                making
+                them a valuable tool for responsible financial management.</p>
+            <button class="btn btn-success" style="width: 100%;" data-toggle="modal" data-target="#myModal">Apply
+                now >></button>
+        </div>
+
+    </div>
+    <div class="card" id="alcard">
+        <div class="card-body">
+            <span class="card-text text-center" style="font-style: italic; font-weight: bold; color: rgba(0,0,0,0); display:block">*** Your application is received. Our associate will contact you very soon!! *** </span>
+            <img src="images/loans/autoloan.svg" class="card-img-top mx-auto d-block" alt="Auto Loan Image">
+            <h5 class="card-title text-center">Auto Loan</h5>
+            <ul class="list-unstyled text-center">
+                <li>Get qualified offers in minutes</li>
+                <li>Loan up to $300k</li>
+                <li>No proof of income needed</li>
+                <li>No minimum credit score</li>
+            </ul>
+            <p class="card-text text-center">Auto loans provide an avenue for acquiring a vehicle without the need for a
+                lump-sum
+                payment, making transportation accessible. They enable individuals to build credit as they make timely
+                payments, fostering financial responsibility. Additionally, auto loans can offer competitive interest
+                rates and flexible repayment terms, enhancing affordability for borrowers.</p>
+            <button class="btn btn-success" style="width: 100%;" data-toggle="modal" data-target="#myModal">Apply
+                now >></button>
+        </div>
+    </div>
+    <div class="card" id="hlcard">
+        <div class="card-body">
+            <span class="card-text text-center" style="font-style: italic; font-weight: bold; color: rgba(0,0,0,0); display:block">*** Your application is received. Our associate will contact you very soon!! *** </span>
+            <img src="images/loans/homeloan.svg" class="card-img-top mx-auto d-block" alt="Home Loan Image">
+            <h5 class="card-title text-center">Home Loan</h5>
+            <ul class="list-unstyled text-center">
+                <li>Competitively low rate and no PMI</li>
+                <li>Rate protection</li>
+                <li>Home buying with as little as 1% down</li>
+                <li>Special benefits for veterans</li>
+            </ul>
+            <p class="card-text text-center">Home loans provide a pathway to home ownership by enabling individuals to
+                finance
+                their home purchase. They offer long-term financial stability, potential tax benefits, and an
+                opportunity to
+                build equity. Additionally, home loans often come with competitive interest rates, making home ownership
+                more
+                accessible and affordable.</p>
+            <button class="btn btn-success" style="width: 100%;" data-toggle="modal" data-target="#myModal">Apply
+                now >></button>
+        </div>
+    </div>
+    <div class="card" id="plcard">
+        <div class="card-body">
+            <span class="card-text text-center" style="font-style: italic; font-weight: bold; color: rgba(0,0,0,0); display:block">*** Your application is received. Our associate will contact you very soon!! *** </span>
+            <img src="images/loans/personalloan.svg" class="card-img-top mx-auto d-block" alt="Personal Loan Image">
+            <h5 class="card-title text-center">Personal Loan</h5>
+            <ul class="list-unstyled text-center">
+                <li>Borrow up to 100k</li>
+                <li>No minimum credit score</li>
+                <li>Low APR: 3.4%-10%</li>
+                <li>Term: 12-72 months</li>
+            </ul>
+            <p class="card-text text-center">Personal loans offer financial flexibility for various purposes, such as debt consolidation,
+                home improvements, or unexpected expenses. They provide a fixed repayment plan, simplified
+                and potential lower interest rates compared to credit cards.
+                Personal loans empower individuals to achieve their financial goals with ease and convenience.</p>
+            <button class="btn btn-success" style="width: 100%;" data-toggle="modal" data-target="#myModal">Apply
+                now >></button>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Quick Apply</h5>
                 </div>
-                <!-- Input field for number -->
-                <div class="form-group">
-                    <label for="loanAmount">How much do you plan to borrow? </label>
-                    <input type="number" class="form-control" id="loanAmount" placeholder="Ex: 100000">
+                <div class="modal-body">
+                    <!-- Selector for ratings -->
+                    <div class="form-group">
+                        <label for="creditSelector">How do you rate your credit score?</label>
+                        <select class="form-select" id="creditSelector">
+                            <option>Select</option>
+                            <option>Excellent</option>
+                            <option>Good</option>
+                            <option>Average</option>
+                        </select>
+                    </div>
+                    <!-- Input field for number -->
+                    <div class="form-group">
+                        <label for="loanAmount">How much do you plan to borrow? </label>
+                        <input type="number" class="form-control" id="loanAmount" placeholder="Ex: 100000">
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success" id="modalApplyButton" data-dismiss="modal">Apply</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" id="modalApplyButton" data-dismiss="modal">Apply</button>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
 
 <!-- Bootstrap JS -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -220,6 +222,10 @@
             $('#loanAmount').val('');
             // Add your custom logic here
         });
+    });
+
+    window.addEventListener('load', function() {
+        document.getElementById('loanPage').style.opacity = 1
     });
 
 

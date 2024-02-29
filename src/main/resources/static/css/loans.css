@@ -93,3 +93,8 @@ ul:not(.navbar-nav) {
     margin: auto;
     top: 20%;
 }
+
+.loanPage{
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
