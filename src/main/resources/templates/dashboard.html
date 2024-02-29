@@ -103,17 +103,28 @@
                                 <hr>
                             </th:block>
 
-                            <!-- Add the "Next" and "Previous" buttons -->
-                            <div style="margin-left: 70%;">
-                                <th:block th:if="${session.currentPage > 1}">
-                                    <form th:action="@{/previous}" method="post" style="display: inline-block">
-                                        <button class="btn btn-success " type="submit">Previous</button>
-                                    </form>
-                                </th:block>
-                                <th:block th:if="${session.currentPage < totalPages}">
-                                    <form th:action="@{/next}" method="post" style="display: inline-block">
-                                        <button class="btn btn-success " type="submit">Next</button>
-                                    </form>
+<!--                            &lt;!&ndash; Add the "Next" and "Previous" buttons &ndash;&gt;-->
+<!--                            <div style="margin-left: 70%;">-->
+<!--                                <th:block th:if="${session.currentPage > 1}">-->
+<!--                                    <form th:action="@{/previous}" method="post" style="display: inline-block">-->
+<!--                                        <button class="btn btn-success " type="submit">Previous</button>-->
+<!--                                    </form>-->
+<!--                                </th:block>-->
+<!--                                <th:block th:if="${session.currentPage < totalPages}">-->
+<!--                                    <form th:action="@{/next}" method="post" style="display: inline-block">-->
+<!--                                        <button class="btn btn-success " type="submit">Next</button>-->
+<!--                                    </form>-->
+<!--                                </th:block>-->
+<!--                            </div>-->
+
+                            <div style="text-align: right; margin-right: 7%">
+                                <th:block th:if="${totalPages > 1}">
+                                    <div th:each="pageNumber : ${#numbers.sequence(1, totalPages)}" style="display: inline-block">
+                                        <form th:action="@{/setCurrentPage}" method="post">
+                                            <input type="hidden" name="pageNumber" th:value="${pageNumber}" />
+                                            <button class="btn btn-success" type="submit" th:text="${pageNumber}"></button>
+                                        </form>
+                                    </div>
                                 </th:block>
                             </div>
 

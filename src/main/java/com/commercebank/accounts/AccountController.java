@@ -126,7 +126,7 @@ public class AccountController {
                 System.out.println(filteredTransactionList.toString());
 
                 if(!filteredTransactionList.isEmpty()){
-                    String dateRange = fromDate + " to " + toDate;
+                    String dateRange = "from " + fromDate + " to " + toDate;
                     session.setAttribute("filteredTransactions",filteredTransactionList);
                     session.setAttribute("dateRange",dateRange);
                     ra.addFlashAttribute("filteredTransactions",filteredTransactionList);
@@ -156,6 +156,17 @@ public class AccountController {
         return "redirect:/dashboard";
     }
 
+    @PostMapping("/setCurrentPage")
+    public String setCurrentPage(HttpSession session, RedirectAttributes ra, String pageNumber){
+        System.out.println(session.getAttribute("currentPage"));
+        Integer newPage = Integer.parseInt(pageNumber);
+        session.setAttribute("currentPage", newPage);
+        ra.addFlashAttribute("currentPage",newPage);
+        ra.addFlashAttribute("dateRange", session.getAttribute("dateRange"));
+        System.out.println(session.getAttribute("currentPage"));
+        return "redirect:/dashboard";
+    }
+
     @PostMapping("/next")
     public String nextPage(HttpSession session, RedirectAttributes ra){
         System.out.println(session.getAttribute("currentPage"));
@@ -169,6 +180,7 @@ public class AccountController {
         return "redirect:/dashboard";
         //return "dashboard";
     }
+
 
     @PostMapping("/previous")
     public String prevPage(HttpSession session, RedirectAttributes ra){
