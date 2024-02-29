@@ -23,7 +23,7 @@
 <div class="card w-25 m-auto mt-3">
     <h5 class="card-header bg-success text-white text-center">Register</h5>
     <div class="card-body">
-        <form th:action="@{/save}" method="post" th:object="${newAcc}" onsubmit="checkPasswordMatch()">
+        <form th:action="@{/save}" method="post" th:object="${newAcc}" onsubmit="return checkPasswordMatch()">
             <div class="container-fluid text-center">
                 <div class="form-floating mb-3">
                     <input type="email" class="form-control" th:field="*{email}" placeholder="Enter email" name="email" id="email" required>
