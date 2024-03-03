@@ -388,28 +388,28 @@
     }, 5000); // 5000 milliseconds = 5 seconds
 
 
-    // //save window scroll position so that when the page is reloaded due to postmapping, the last position could be restored
-    // function saveScrollPosition() {
-    //     sessionStorage.setItem('scrollPosition', window.scrollY);
-    // }
-    //
-    // // Function to restore scroll position from sessionStorage
-    // function restoreScrollPosition() {
-    //     var scrollPosition = sessionStorage.getItem('scrollPosition');
-    //     if (scrollPosition) {
-    //         window.scrollTo({
-    //             top: scrollPosition,
-    //             behavior: 'instant'
-    //         });
-    //         sessionStorage.removeItem('scrollPosition');
-    //     }
-    // }
-    //
-    // // Event listener to save scroll position before page reloads
-    // window.addEventListener('beforeunload', saveScrollPosition);
-    //
-    // // Event listener to restore scroll position after page reloads
-    // window.addEventListener('load', restoreScrollPosition);
+    //save window scroll position so that when the page is reloaded due to postmapping, the last position could be restored
+    function saveScrollPosition() {
+        sessionStorage.setItem('scrollPosition', window.scrollY);
+    }
+
+    // Function to restore scroll position from sessionStorage
+    function restoreScrollPosition() {
+        var scrollPosition = sessionStorage.getItem('scrollPosition');
+        if (scrollPosition) {
+            window.scrollTo({
+                top: scrollPosition,
+                behavior: 'instant'
+            });
+            sessionStorage.removeItem('scrollPosition');
+        }
+    }
+
+    // Event listener to save scroll position before page reloads
+    window.addEventListener('beforeunload', saveScrollPosition);
+
+    // Event listener to restore scroll position after page reloads
+    window.addEventListener('load', restoreScrollPosition);
 
 </script>
 
