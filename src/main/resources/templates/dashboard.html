@@ -181,6 +181,17 @@
             </div>
         </div>
     </div>
+    <button class="btn btn-success" id="QAButton" onclick="toogleQAdiv()">Q/A</button>
+    <div id="QAdiv">
+        <form id="promptForm">
+            <input type="text" id="promptInput" name="prompt" />
+            <button type="submit">Generate Text</button>
+        </form>
+        <div id="output">
+            <div id="loadingSymbol" style="display: none;">Loading...</div>
+            <div id="generatedText"></div>
+        </div>
+    </div>
 </div>
 
 
@@ -410,6 +421,19 @@
 
     // Event listener to restore scroll position after page reloads
     window.addEventListener('load', restoreScrollPosition);
+
+    //QAdiv set up
+    function toogleQAdiv(){
+        var QAdiv = document.getElementById('QAdiv')
+        if(QAdiv.style.display !== 'block'){
+            console.log('diplay QAdiv')
+            QAdiv.style.display='block';
+        }
+        else{
+            console.log('hide QAdiv')
+            QAdiv.style.display = 'none'
+        }
+    }
 
 </script>
 

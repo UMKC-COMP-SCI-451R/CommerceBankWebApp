@@ -71,3 +71,16 @@
     opacity: 0; /* Initially set opacity to 0 */
     transition: opacity 0.3s ease /* Add transition effect for opacity */
 }
+
+#QAButton{
+    position: absolute;
+    bottom: 5%;
+    right: 5%;
+}
+
+#QAdiv{
+    display: none;
+    position: absolute;
+    bottom: 50%;
+    right: 5%;
+}
