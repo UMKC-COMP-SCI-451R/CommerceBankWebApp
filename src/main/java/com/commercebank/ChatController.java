@@ -27,17 +27,17 @@ public class ChatController {
         if(OPENAI_API_KEY == null){
             return "No API KEY found";
         }else{
-            System.out.println(question);
+            //System.out.println(question);
             String requestBody = "{\"model\":\"gpt-3.5-turbo-0125\",\"messages\":[{\"role\":\"user\",\"content\":\"" + question + "\"}]}";
 
             HttpHeaders headers = new HttpHeaders();
             headers.set("Content-Type", "application/json");
             headers.set("Authorization", "Bearer " + OPENAI_API_KEY);
             HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
-            System.out.println(entity);
+            //System.out.println(entity);
             ResponseEntity<String> response = restTemplate.postForEntity(OPENAI_API_URL, entity, String.class);
             String responseStr = response.getBody();
-            System.out.println(responseStr);
+            //System.out.println(responseStr);
             JSONObject obj = new JSONObject(responseStr);
             JSONArray choices = obj.getJSONArray("choices");
             if (!choices.isEmpty()) {
