@@ -181,15 +181,25 @@
             </div>
         </div>
     </div>
-    <button class="btn btn-success" id="QAButton" onclick="toogleQAdiv()">Q/A</button>
+    <div id="QAButtonContainer">
+        <button class="btn btn-success" id="QAButton" onclick="toggleQAdiv()">Ask Question?</button>
+        <p class="buttonDescription">Powered by OpenAI</p>
+    </div>
     <div id="QAdiv">
-        <form id="promptForm">
-            <input type="text" id="promptInput" name="prompt" />
-            <button type="submit">Generate Text</button>
+        <button class="close-button" onclick="toggleQAdiv()">&times;</button>
+        <form id="questionForm">
+            <div class="row align-items-end">
+                <div class="col-9">
+                    <textarea class="form-control" id="question" rows="3" placeholder="Enter your question:"></textarea>
+                </div>
+                <div class="col-2">
+                    <button class="btn btn-success" type="submit">Ask</button>
+                </div>
+            </div>
         </form>
-        <div id="output">
-            <div id="loadingSymbol" style="display: none;">Loading...</div>
-            <div id="generatedText"></div>
+        <div class="mt-2" id="responseDiv" style="display: none">
+            <img id="loadingGif" src="images/loading-symbol.gif" alt="Loading..." width="80px" height="80px" />
+            <textarea class="form-control" id="response" rows="7"></textarea>
         </div>
     </div>
 </div>
@@ -423,16 +433,41 @@
     window.addEventListener('load', restoreScrollPosition);
 
     //QAdiv set up
-    function toogleQAdiv(){
+    function toggleQAdiv(){
         var QAdiv = document.getElementById('QAdiv')
+        var QAButtonContainer = document.getElementById('QAButtonContainer')
         if(QAdiv.style.display !== 'block'){
-            console.log('diplay QAdiv')
             QAdiv.style.display='block';
+            QAButtonContainer.style.display='none';
         }
         else{
-            console.log('hide QAdiv')
-            QAdiv.style.display = 'none'
+            QAdiv.style.display = 'none';
+            QAButtonContainer.style.display='block';
         }
+    }
+
+    document.getElementById('questionForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var question = document.getElementById('question').value;
+        document.getElementById('responseDiv').style.display = 'block'
+        document.getElementById('response').value = "Generating answer..."
+        document.getElementById('loadingGif').style.display ='block';
+        askQuestion(question);
+    });
+
+    function askQuestion(question) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/ask', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                document.getElementById('response').value = xhr.responseText;
+            }
+            else document.getElementById('response').value = "Fail to generate response";
+            document.getElementById('loadingGif').style.display ='none';
+        };
+        //var data = JSON.stringify({question: question});
+        xhr.send(question);
     }
 
 </script>
