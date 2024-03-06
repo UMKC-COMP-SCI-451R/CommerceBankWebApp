@@ -48,29 +48,35 @@ public class ChatController {
     @PostMapping("/ask")
     public String askQuestion(@RequestBody String question) {
         if(OPENAI_API_KEY == null){
-            return "No API KEY found";
+            return "No OpenAI api key found.";
         }else{
-            String cleanedQuestion = (teach_model_about_the_web_app + question).replaceAll("[\\n\\t\\f\\r]", " ");
-            //System.out.println(question);
-            String requestBody = "{\"model\":\"gpt-3.5-turbo-0125\",\"messages\":[{\"role\":\"user\",\"content\":\"" + cleanedQuestion + "\"}]}";
+            try{
+                String cleanedQuestion = (teach_model_about_the_web_app + question).replaceAll("[\\n\\t\\f\\r]", " ");
+                //System.out.println(question);
+                String requestBody = "{\"model\":\"gpt-3.5-turbo-0125\",\"messages\":[{\"role\":\"user\",\"content\":\"" + cleanedQuestion + "\"}]}";
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Content-Type", "application/json");
-            headers.set("Authorization", "Bearer " + OPENAI_API_KEY);
-            HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
-            //System.out.println(entity);
-            ResponseEntity<String> response = restTemplate.postForEntity(OPENAI_API_URL, entity, String.class);
-            String responseStr = response.getBody();
-            //System.out.println(responseStr);
-            JSONObject obj = new JSONObject(responseStr);
-            JSONArray choices = obj.getJSONArray("choices");
-            if (!choices.isEmpty()) {
-                JSONObject firstChoice = choices.getJSONObject(0);
-                JSONObject message = firstChoice.getJSONObject("message");
-                return message.getString("content");
-            }else{
-                return "No reponse";
+                HttpHeaders headers = new HttpHeaders();
+                headers.set("Content-Type", "application/json");
+                headers.set("Authorization", "Bearer " + OPENAI_API_KEY);
+                HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
+                //System.out.println(entity);
+                ResponseEntity<String> response = restTemplate.postForEntity(OPENAI_API_URL, entity, String.class);
+                String responseStr = response.getBody();
+                //System.out.println(responseStr);
+                JSONObject obj = new JSONObject(responseStr);
+                JSONArray choices = obj.getJSONArray("choices");
+                if (!choices.isEmpty()) {
+                    JSONObject firstChoice = choices.getJSONObject(0);
+                    JSONObject message = firstChoice.getJSONObject("message");
+                    return message.getString("content");
+                }else{
+                    return "No reponse";
+                }
+            }catch(Exception e){
+                System.out.println(e);
+                return "Something go wrong. Can't generate answer.";
             }
+
 
         }
     }
