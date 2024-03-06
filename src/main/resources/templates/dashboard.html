@@ -193,7 +193,7 @@
                     <textarea class="form-control" id="question" rows="3" placeholder="Enter your question:"></textarea>
                 </div>
                 <div class="col-2">
-                    <button class="btn btn-success" type="submit">Ask</button>
+                    <button class="btn btn-success" type="submit" id="submitQuestionButton">Ask</button>
                 </div>
             </div>
         </form>
@@ -455,19 +455,43 @@
         askQuestion(question);
     });
 
+    document.getElementById('question').addEventListener('keydown', function(event) {
+        // Check if Enter is pressed without the Shift key
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault(); // Prevent the default behavior (inserting a newline)
+            document.getElementById("submitQuestionButton").click(); // Submit the form
+        }
+    });
+
+
     function askQuestion(question) {
+        document.getElementById('response').value = "";
+        var response = "";
+        var index = 0
         var xhr = new XMLHttpRequest();
         xhr.open('POST', '/ask', true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
-                document.getElementById('response').value = xhr.responseText;
+                //document.getElementById('response').value = xhr.responseText;
+                response = xhr.responseText;
+                appendLetterByLetter(response,index);
             }
-            else document.getElementById('response').value = "Fail to generate response";
+            // else {
+            //     console.log("fail to generate")
+            //     document.getElementById('response').value = "Fail to generate response";
+            // }
             document.getElementById('loadingGif').style.display ='none';
         };
         //var data = JSON.stringify({question: question});
         xhr.send(question);
+    }
+
+    function appendLetterByLetter(response, index){
+        if (index < response.length) {
+            document.getElementById('response').value += response.charAt(index); // Append current letter
+            setTimeout(() => appendLetterByLetter(response, index + 1), 10); // Wait 10ms then append next letter
+        }
     }
 
 </script>
