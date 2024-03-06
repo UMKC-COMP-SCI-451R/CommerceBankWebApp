@@ -181,6 +181,27 @@
             </div>
         </div>
     </div>
+    <div id="QAButtonContainer">
+        <button class="btn btn-success" id="QAButton" onclick="toggleQAdiv()">Ask Question?</button>
+        <p class="buttonDescription">Powered by OpenAI</p>
+    </div>
+    <div id="QAdiv">
+        <button class="close-button" onclick="toggleQAdiv()">&times;</button>
+        <form id="questionForm">
+            <div class="row align-items-end">
+                <div class="col-9">
+                    <textarea class="form-control" id="question" rows="3" placeholder="Enter your question:"></textarea>
+                </div>
+                <div class="col-2">
+                    <button class="btn btn-success" type="submit" id="submitQuestionButton">Send</button>
+                </div>
+            </div>
+        </form>
+        <div class="mt-2" id="responseDiv" style="display: none">
+            <img id="loadingGif" src="images/loading-symbol.gif" alt="Loading..." width="80px" height="80px" />
+            <textarea class="form-control" id="response" rows="7"></textarea>
+        </div>
+    </div>
 </div>
 
 
@@ -410,6 +431,68 @@
 
     // Event listener to restore scroll position after page reloads
     window.addEventListener('load', restoreScrollPosition);
+
+    //QAdiv set up
+    function toggleQAdiv(){
+        var QAdiv = document.getElementById('QAdiv')
+        var QAButtonContainer = document.getElementById('QAButtonContainer')
+        if(QAdiv.style.display !== 'block'){
+            QAdiv.style.display='block';
+            QAButtonContainer.style.display='none';
+        }
+        else{
+            QAdiv.style.display = 'none';
+            QAButtonContainer.style.display='block';
+        }
+    }
+
+    document.getElementById('questionForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var question = document.getElementById('question').value;
+        document.getElementById('responseDiv').style.display = 'block'
+        document.getElementById('response').value = "Generating answer..."
+        document.getElementById('loadingGif').style.display ='block';
+        askQuestion(question);
+    });
+
+    document.getElementById('question').addEventListener('keydown', function(event) {
+        // Check if Enter is pressed without the Shift key
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault(); // Prevent the default behavior (inserting a newline)
+            document.getElementById("submitQuestionButton").click(); // Submit the form
+        }
+    });
+
+
+    function askQuestion(question) {
+        document.getElementById('response').value = "";
+        var response = "";
+        var index = 0
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/ask', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                //document.getElementById('response').value = xhr.responseText;
+                response = xhr.responseText;
+                appendLetterByLetter(response,index);
+            }
+            // else {
+            //     console.log("fail to generate")
+            //     document.getElementById('response').value = "Fail to generate response";
+            // }
+            document.getElementById('loadingGif').style.display ='none';
+        };
+        //var data = JSON.stringify({question: question});
+        xhr.send(question);
+    }
+
+    function appendLetterByLetter(response, index){
+        if (index < response.length) {
+            document.getElementById('response').value += response.charAt(index); // Append current letter
+            setTimeout(() => appendLetterByLetter(response, index + 1), 10); // Wait 10ms then append next letter
+        }
+    }
 
 </script>
 
