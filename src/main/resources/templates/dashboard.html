@@ -188,15 +188,22 @@
     <div id="QAdiv">
         <button class="close-button" onclick="toggleQAdiv()">&times;</button>
         <form id="questionForm">
-            <div class="row align-items-end">
+            <div class="row">
                 <div class="col-9">
                     <textarea class="form-control" id="question" rows="3" placeholder="Enter your question:"></textarea>
                 </div>
                 <div class="col-2">
-<!--                    <button class="btn btn-success" type="submit" id="submitQuestionButton" style="border-radius: 50px; width: 50px; height: 50px; margin-top: 0px;"><img src="images/openai-icon.png" height="27px" width="27px" alt="openaiiconpng"></button>-->
-<!--                    <button class="btn btn-success" type="submit" id="submitQuestionButton" style="border:none; background: transparent"><img src="images/openai-icon.png" height="50px" width="50px" alt="openaiiconpng"></button>-->
-                    <button class="btn btn-success" type="submit" id="submitQuestionButton" style="background-image: url('/images/openai-icon.png'); height: 50px; width: 50px; border-radius: 50px; background-size: 90%; background-position: center; background-repeat: no-repeat"></button>
-<!--                    <button class="btn btn-success" type="submit" id="submitQuestionButton" style="background-image: url('/images/openai-icon.png'); background-size: 90%; background-position: left; background-repeat: no-repeat">......Send</button>-->
+                    <div class="row mb-2">
+                        <img src="images/open-ai-logo.png" height="40px" width="40px" alt="openailogo">
+                    </div>
+                    <div class="row">
+                        <button class="btn btn-success" type="submit" id="submitQuestionButton">Send</button>
+                    </div>
+
+<!--                    <button class="btn btn-success" type="submit" id="submitQuestionButton" style="border-radius: 50px; width: 50px; height: 50px; margin-top: 0px;"><img src="images/open-ai-logo.png" height="27px" width="27px" alt="openaiiconpng"></button>-->
+<!--                    <button class="btn btn-success" type="submit" id="submitQuestionButton" style="border:none; background: transparent"><img src="images/open-ai-logo.png" height="50px" width="50px" alt="openaiiconpng"></button>-->
+<!--                    <button class="btn btn-success" type="submit" id="submitQuestionButton" style="background-image: url('/images/open-ai-logo.png'); height: 50px; width: 50px; border-radius: 50px; background-size: 90%; background-position: center; background-repeat: no-repeat"></button>-->
+<!--                    <button class="btn btn-success" type="submit" id="submitQuestionButton" style="background-image: url('/images/open-ai-logo.png'); background-size: 90%; background-position: left; background-repeat: no-repeat">......Send</button>-->
                 </div>
             </div>
         </form>
@@ -206,147 +213,6 @@
         </div>
     </div>
 </div>
-
-
-
-
-<!--<div class="container">-->
-<!--    <div class="row justify-content-center">-->
-<!--        <div class="col-md-3"> &lt;!&ndash; Adjust the column size as needed &ndash;&gt;-->
-<!--            <div class="card" id="accountInfoCard" >-->
-<!--                <div class="card-header bg-success text-white" style="font-weight: bold; text-align: center">-->
-<!--                    <h5>Account Information</h5>-->
-<!--                </div>-->
-<!--                <div class="card-body" style="margin-left: 7%">-->
-<!--                    <p th:text="'Customer: '+${session.account.getFirstName()}+' '+ ${session.account.getLastName()}+',' "></p>-->
-<!--                    <p th:text="'Account ID: '+${session.account.getAccID()}"></p>-->
-<!--                    <p>Routing number: 101000019</p>-->
-<!--&lt;!&ndash;                    <p>Account type: <em>mySpending Card</em></p>&ndash;&gt;-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="col-md-3"> &lt;!&ndash; Adjust the column size as needed &ndash;&gt;-->
-<!--            <div class="card" id="balanceCard" style="text-align: center;">-->
-<!--                <div class="card-header bg-success text-white" style="font-weight: bold;">-->
-<!--                    <h5>Current Balance</h5>-->
-<!--                </div>-->
-<!--                <div class="card-body" style="display: flex; flex-direction: column; justify-content: center;">-->
-<!--                    <p th:text="${#numbers.formatCurrency(session.account.getBalance())}" style="font-weight: bold; font-style: italic; font-size: 50px "></p>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-
-<!--${#numbers.formatCurrency()-->
-
-<!--<div class="text-center">-->
-<!--    <form action="/filterTransactions" method="post">-->
-<!--        <label for="fromDate">From:</label>-->
-<!--        <input type="date" id="fromDate" name="fromDate" onchange="setToDateMin()">-->
-
-<!--        <label for="toDate">To:</label>-->
-<!--        <input type="date" id="toDate" name="toDate">-->
-
-<!--        <button class="btn btn-success " type="submit" id="filterApplyBtn">Apply</button>-->
-<!--        <button class="btn btn-secondary" type="button" onclick="clearFilter()">Clear Filter</button>-->
-<!--    </form>-->
-<!--</div>-->
-
-
-<!--<div class="transaction-card card">-->
-<!--    <th:block-->
-<!--            th:if="${session.filteredTransactions != null and not #lists.isEmpty(session.filteredTransactions)}">-->
-<!--        <div class="card-title">-->
-<!--            <h5 class="card-header bg-success text-white" th:text="'Filtered transactions: '+${session.dateRange}"></h5>-->
-<!--        </div>-->
-<!--        <div class="card-body">-->
-
-<!--            &lt;!&ndash; Calculate the total number of pages &ndash;&gt;-->
-<!--            <th:block th:with="totalPages=${T(java.lang.Math).ceil(session.filteredTransactions.size / 5.0)}">-->
-
-<!--                &lt;!&ndash; Display the transactions for the current page &ndash;&gt;-->
-<!--                <th:block-->
-<!--                        th:each="trans : ${session.filteredTransactions.subList(5 * (session.currentPage - 1), (5 * session.currentPage > session.filteredTransactions.size) ? session.filteredTransactions.size : 5 * session.currentPage)}">-->
-<!--                    <div class="container mb-3 transaction">-->
-<!--                        <div class="row">-->
-<!--                            <div class="col-2" style="margin-left: 5%;">-->
-<!--                                <div><em>ID:</em> <span th:text="${trans.transactionId}"></span></div>-->
-<!--                            </div>-->
-<!--                            <div class="col-2 text-md-end transaction-source">-->
-<!--                                <span th:text="${trans.source}"></span>-->
-<!--                            </div>-->
-<!--                            <div class="col-1 text-center">-->
-<!--                                <span><em>To</em></span>-->
-<!--                            </div>-->
-<!--                            <div class="col-2 transaction-destination">-->
-<!--                                <span th:text="${trans.destination}"></span>-->
-<!--                            </div>-->
-<!--                            <div class="col-2 text-center transaction-amount">-->
-<!--                                <span th:text="${#numbers.formatCurrency(trans.amount)}"></span>-->
-<!--                            </div>-->
-<!--                            <div class="col-2">-->
-<!--                                <span><em>Date:</em></span> <span th:text="${trans.date}"></span>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <hr>-->
-<!--                </th:block>-->
-
-<!--                &lt;!&ndash; Add the "Next" and "Previous" buttons &ndash;&gt;-->
-<!--                <div style="margin-left: 70%; margin-bottom: 20px">-->
-<!--                    <th:block th:if="${session.currentPage > 1}">-->
-<!--                        <form th:action="@{/previous}" method="post" style="display: inline-block">-->
-<!--                            <button class="btn btn-success " type="submit">Previous</button>-->
-<!--                        </form>-->
-<!--                    </th:block>-->
-<!--                    <th:block th:if="${session.currentPage < totalPages}">-->
-<!--                        <form th:action="@{/next}" method="post" style="display: inline-block">-->
-<!--                            <button class="btn btn-success " type="submit">Next</button>-->
-<!--                        </form>-->
-<!--                    </th:block>-->
-<!--                </div>-->
-
-<!--            </th:block>-->
-<!--        </div>-->
-<!--    </th:block>-->
-
-<!--    <th:block-->
-<!--            th:unless="${session.filteredTransactions != null and not #lists.isEmpty(session.filteredTransactions)}">-->
-<!--        <div class="card-title">-->
-<!--            <h5 class="card-header bg-success text-white">Recent transactions:</h5>-->
-<!--        </div>-->
-<!--        <div class="card-body">-->
-<!--            <th:block th:each="trans, transStatus : ${session.account.transactionsList}"-->
-<!--                      th:if="${transStatus.index >= transStatus.size-5}">-->
-<!--                <div class="container mb-3 transaction">-->
-<!--                    <div class="row">-->
-<!--                        <div class="col-2" style="margin-left: 5%">-->
-<!--                            <div><em>ID:</em> <span th:text="${trans.transactionId}"></span></div>-->
-<!--                        </div>-->
-<!--                        <div class="col-2 text-md-end transaction-source">-->
-<!--                            <span th:text="${trans.source}"></span>-->
-<!--                        </div>-->
-<!--                        <div class="col-1 text-center">-->
-<!--                            <span><em>To</em></span>-->
-<!--                        </div>-->
-<!--                        <div class="col-2 transaction-destination">-->
-<!--                            <span th:text="${trans.destination}"></span>-->
-<!--                        </div>-->
-<!--                        <div class="col-2 text-center transaction-amount">-->
-<!--                            <span th:text="${#numbers.formatCurrency(trans.amount)}"></span>-->
-<!--                        </div>-->
-<!--                        <div class="col-2">-->
-<!--                            <span><em>Date:</em></span> <span th:text="${trans.date}"></span>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <hr>-->
-<!--            </th:block>-->
-<!--        </div>-->
-<!--    </th:block>-->
-<!--</div>-->
-
 
 <script>
     // Get all elements with the class 'transaction-source'
