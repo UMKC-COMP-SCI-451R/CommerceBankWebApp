@@ -109,7 +109,7 @@
 #loadingGif {
     position: absolute; /* Position the image absolutely */
     top: 30%; /* Place the image 50% down from the top of the container */
-    left: 40%; /* Place the image 50% across from the left of the container */
+    left: 30%; /* Place the image 50% across from the left of the container */
     z-index: 1; /* Ensure the image stays in front of other content */
     display: none;
 }
