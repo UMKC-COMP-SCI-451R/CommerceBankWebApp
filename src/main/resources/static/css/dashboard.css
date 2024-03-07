@@ -92,13 +92,14 @@
 
 .close-button {
     position: absolute;
-    top: 5px;
-    right: 5px;
+    top: 0;
+    right: 0;
     background: none;
     border: none;
-    font-size: 20px;
+    font-size: 30px;
     cursor: pointer;
     color: #165816;
+
 }
 
 /*.conversationDiv{*/
