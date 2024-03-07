@@ -28,14 +28,16 @@ public class ChatController {
     }
 
     @PostMapping("/ask")
-    public String askQuestion(@RequestBody String question) {
+    public String askQuestion(@RequestBody String conversation) {
         if(OPENAI_API_KEY == null){
             return "No OpenAI api key found.";
         }else{
             try{
-                String cleanedQuestion = (teach_model_about_the_web_app + question).replaceAll("[\\n\\t\\f\\r]", " ");
-                //System.out.println(question);
-                String requestBody = "{\"model\":\"gpt-3.5-turbo-0125\",\"messages\":[{\"role\":\"user\",\"content\":\"" + cleanedQuestion + "\"}]}";
+                conversation = conversation.replaceAll("You: ","/ User said: ").replaceAll("AI: ","/ You said: ").replaceAll("\"", "'");
+                //System.out.println(conversation);
+                String cleanedConversation = (teach_model_about_the_web_app + conversation).replaceAll("[\\n\\t\\f\\r]", " ");
+                //System.out.println(cleanedConversation);
+                String requestBody = "{\"model\":\"gpt-3.5-turbo-0125\",\"messages\":[{\"role\":\"user\",\"content\":\"" + cleanedConversation + "\"}]}";
 
                 HttpHeaders headers = new HttpHeaders();
                 headers.set("Content-Type", "application/json");
