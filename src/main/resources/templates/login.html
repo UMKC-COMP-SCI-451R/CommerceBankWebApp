@@ -42,15 +42,15 @@
 <div class="loginform">
     <form method="post">
         <div class="container-fluid text-center">
-            <label for="email"><b>Email</b></label>
-            <input type="email" placeholder="Enter Email" name="email" id="email" th:value="${useremail}" required>
+            <div><label for="email"><b class="logindetails">Email</b></label>
+            <input type="email" placeholder="Enter Email" name="email" id="email" class="loginfield" th:value="${useremail}" required></div>
             <br><br>
-            <label for="password"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password" name="password" id="password" required>
+            <div><label for="password"><b class="logindetails">Password</b></label>
+            <input type="password" placeholder="Enter Password" name="password" id="password" class="loginfield" required></div>
             <br><br>
-            <button type="submit" align="center">Login</button>
+            <button type="submit" align="center" class="btn btn-success">Login</button>
             <br><br>
-            <label for="checkbox">Remember me</label>
+            <label for="checkbox" class="logindetails">Remember me</label>
             <input type="checkbox" value=true name="checkBoxRememberUser" id="checkbox" th:checked="${isChecked}">
             <br><br>
             <a th:href="@{/register}">Register</a>
