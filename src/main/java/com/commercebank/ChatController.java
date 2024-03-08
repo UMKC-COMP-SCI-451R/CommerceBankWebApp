@@ -14,6 +14,8 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 @RestController
 public class ChatController {
@@ -22,21 +24,33 @@ public class ChatController {
 
     private final RestTemplate restTemplate;
 
-    private final String teach_model_about_the_web_app = read_file("src/main/resources/static/AI_model_initial_instruction.txt");
+    private final String teach_model_about_the_web_app = read_file("src/main/resources/static/AI_model_initial_instruction.txt").replaceAll("\"", "'").replaceAll("[\\n\\t\\f\\r]", " ").trim();
     public ChatController(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
     @PostMapping("/ask")
-    public String askQuestion(@RequestBody String question) {
+    public String askQuestion(@RequestBody String conversation) {
         if(OPENAI_API_KEY == null){
             return "No OpenAI api key found.";
         }else{
             try{
-                String cleanedQuestion = (teach_model_about_the_web_app + question).replaceAll("[\\n\\t\\f\\r]", " ");
-                //System.out.println(question);
-                String requestBody = "{\"model\":\"gpt-3.5-turbo-0125\",\"messages\":[{\"role\":\"user\",\"content\":\"" + cleanedQuestion + "\"}]}";
-
+                conversation = conversation.replaceAll("\"", "'").replaceAll("[\\n\\t\\f\\r]", " ").trim();
+                //System.out.println(conversation);
+                String regex = "You: |AI: ";
+                String[] messageArray = conversation.split(regex); //this array have "" at index 0
+                ArrayList<String> formatMessageArray = new ArrayList<>();
+                formatMessageArray.add(message("user",teach_model_about_the_web_app));
+                for(int i = 1; i <messageArray.length; i++) // i=1 to avoid the empty string at index 0
+                {
+                    if(i % 2 == 1){
+                        formatMessageArray.add(message("user",messageArray[i].trim()));
+                    }else formatMessageArray.add(message("assistant",messageArray[i].trim()));
+                }
+                String cleanedConversation = (teach_model_about_the_web_app + conversation).replaceAll("[\\n\\t\\f\\r]", " ");
+                //System.out.println(cleanedConversation);
+                String requestBody = "{\"model\":\"gpt-3.5-turbo-0125\",\"messages\":["+String.join(",",formatMessageArray)+"]}";
+                System.out.println(requestBody);
                 HttpHeaders headers = new HttpHeaders();
                 headers.set("Content-Type", "application/json");
                 headers.set("Authorization", "Bearer " + OPENAI_API_KEY);
@@ -54,6 +68,7 @@ public class ChatController {
                 }else{
                     return "No reponse";
                 }
+
             }catch(Exception e){
                 System.out.println(e);
                 return "Something go wrong. Can't generate answer.";
@@ -70,6 +85,10 @@ public class ChatController {
             System.err.println("An error occurred while reading the file: " + e.getMessage());
             return "";
         }
+    }
+
+    public String message(String role, String content){
+        return String.format("{ \"role\": \"%s\", \"content\": \"%s\"}",role,content);
     }
 
 }

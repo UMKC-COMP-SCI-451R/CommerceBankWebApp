@@ -92,23 +92,24 @@
 
 .close-button {
     position: absolute;
-    top: 5px;
-    right: 5px;
+    top: 0;
+    right: 0;
     background: none;
     border: none;
-    font-size: 20px;
+    font-size: 30px;
     cursor: pointer;
     color: #165816;
+
 }
 
-.responseDiv{
-    position: relative;
-}
+/*.conversationDiv{*/
+/*    position: relative;*/
+/*}*/
 
 #loadingGif {
     position: absolute; /* Position the image absolutely */
-    top: 50%; /* Place the image 50% down from the top of the container */
-    left: 40%; /* Place the image 50% across from the left of the container */
+    top: 30%; /* Place the image 50% down from the top of the container */
+    left: 30%; /* Place the image 50% across from the left of the container */
     z-index: 1; /* Ensure the image stays in front of other content */
     display: none;
 }

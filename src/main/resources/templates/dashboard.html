@@ -103,20 +103,6 @@
                                 <hr>
                             </th:block>
 
-<!--                            &lt;!&ndash; Add the "Next" and "Previous" buttons &ndash;&gt;-->
-<!--                            <div style="margin-left: 70%;">-->
-<!--                                <th:block th:if="${session.currentPage > 1}">-->
-<!--                                    <form th:action="@{/previous}" method="post" style="display: inline-block">-->
-<!--                                        <button class="btn btn-success " type="submit">Previous</button>-->
-<!--                                    </form>-->
-<!--                                </th:block>-->
-<!--                                <th:block th:if="${session.currentPage < totalPages}">-->
-<!--                                    <form th:action="@{/next}" method="post" style="display: inline-block">-->
-<!--                                        <button class="btn btn-success " type="submit">Next</button>-->
-<!--                                    </form>-->
-<!--                                </th:block>-->
-<!--                            </div>-->
-
                             <div style="text-align: right; margin-right: 7%">
                                 <th:block th:if="${totalPages > 1}">
                                     <div th:each="pageNumber : ${#numbers.sequence(1, totalPages)}" style="display: inline-block">
@@ -181,35 +167,31 @@
             </div>
         </div>
     </div>
-    <div id="QAButtonContainer">
-        <button class="btn btn-success" id="QAButton" onclick="toggleQAdiv()">Ask Question?</button>
-        <p class="buttonDescription">Powered by OpenAI</p>
+    <div id="QAButtonContainer" style="text-align: center">
+        <button class="btn btn-success" id="QAButton" onclick="toggleQAdiv()">Need help?</button><br>
+        <span><b>Virtual Assistant</b></span><br>
+        <span><i>Powered by OpenAI</i></span>
     </div>
     <div id="QAdiv">
         <button class="close-button" onclick="toggleQAdiv()">&times;</button>
-        <form id="questionForm">
-            <div class="row">
-                <div class="col-9">
-                    <textarea class="form-control" id="question" rows="3" placeholder="Enter your question:"></textarea>
+<!--        <form id="conversationForm">-->
+            <div class="mb-3" id="conversationDiv" style="display: none; width: 96%">
+                <img id="loadingGif" src="images/loading-symbol.gif" alt="Loading..." width="120px" height="120px" />
+                <textarea class="form-control" id="conversation" rows="11" readonly></textarea>
+            </div>
+<!--        </form>-->
+        <div class="row">
+            <div class="col-9">
+                <textarea class="form-control" id="question" rows="3" placeholder="Enter your question:"></textarea>
+            </div>
+            <div class="col-2">
+                <div class="row mb-2">
+                    <img src="images/open-ai-logo.png" height="40px" width="40px" alt="openailogo">
                 </div>
-                <div class="col-2">
-                    <div class="row mb-2">
-                        <img src="images/open-ai-logo.png" height="40px" width="40px" alt="openailogo">
-                    </div>
-                    <div class="row">
-                        <button class="btn btn-success" type="submit" id="submitQuestionButton">Send</button>
-                    </div>
-
-<!--                    <button class="btn btn-success" type="submit" id="submitQuestionButton" style="border-radius: 50px; width: 50px; height: 50px; margin-top: 0px;"><img src="images/open-ai-logo.png" height="27px" width="27px" alt="openaiiconpng"></button>-->
-<!--                    <button class="btn btn-success" type="submit" id="submitQuestionButton" style="border:none; background: transparent"><img src="images/open-ai-logo.png" height="50px" width="50px" alt="openaiiconpng"></button>-->
-<!--                    <button class="btn btn-success" type="submit" id="submitQuestionButton" style="background-image: url('/images/open-ai-logo.png'); height: 50px; width: 50px; border-radius: 50px; background-size: 90%; background-position: center; background-repeat: no-repeat"></button>-->
-<!--                    <button class="btn btn-success" type="submit" id="submitQuestionButton" style="background-image: url('/images/open-ai-logo.png'); background-size: 90%; background-position: left; background-repeat: no-repeat">......Send</button>-->
+                <div class="row">
+                    <button class="btn btn-success" type="button" id="submitQuestionButton" onclick="writeAndSubmit()">Send</button>
                 </div>
             </div>
-        </form>
-        <div class="mt-2" id="responseDiv" style="display: none">
-            <img id="loadingGif" src="images/loading-symbol.gif" alt="Loading..." width="80px" height="80px" />
-            <textarea class="form-control" id="response" rows="7"></textarea>
         </div>
     </div>
 </div>
@@ -248,10 +230,6 @@
 
 
     window.addEventListener('load', function() {
-        // var accountInfoCard = document.getElementById('accountInfoCard');
-        // var balanceCard = document.getElementById('balanceCard');
-        // var firstCardHeight = accountInfoCard.offsetHeight;
-        // balanceCard.style.height = firstCardHeight + 'px';
         document.getElementById('dashboard').style.opacity = 1
     });
 
@@ -315,51 +293,46 @@
         }
     }
 
-    document.getElementById('questionForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-        var question = document.getElementById('question').value;
-        document.getElementById('responseDiv').style.display = 'block'
-        document.getElementById('response').value = "Generating answer..."
-        document.getElementById('loadingGif').style.display ='block';
-        askQuestion(question);
-    });
 
     document.getElementById('question').addEventListener('keydown', function(event) {
         // Check if Enter is pressed without the Shift key
         if (event.key === 'Enter' && !event.shiftKey) {
             event.preventDefault(); // Prevent the default behavior (inserting a newline)
-            document.getElementById("submitQuestionButton").click(); // Submit the form
+            writeAndSubmit(); // Submit the form
         }
     });
 
+    function writeAndSubmit(){
+        document.getElementById('conversation').value += 'You: ' + document.getElementById('question').value;
+        document.getElementById('conversationDiv').style.display = 'block';
+        document.getElementById('loadingGif').style.display ='block';
+        askQuestion(document.getElementById('conversation').value);
+        document.getElementById('question').value = "";
+    }
 
-    function askQuestion(question) {
-        document.getElementById('response').value = "";
-        var response = "";
-        var index = 0
+    function askQuestion(conversation) {
+        var index = 0;
         var xhr = new XMLHttpRequest();
         xhr.open('POST', '/ask', true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
-                //document.getElementById('response').value = xhr.responseText;
-                response = xhr.responseText;
+                var response = xhr.responseText;
+                document.getElementById('conversation').value += '\n\nAI: ';
                 appendLetterByLetter(response,index);
             }
-            // else {
-            //     console.log("fail to generate")
-            //     document.getElementById('response').value = "Fail to generate response";
-            // }
             document.getElementById('loadingGif').style.display ='none';
         };
-        //var data = JSON.stringify({question: question});
-        xhr.send(question);
+        xhr.send(conversation);
     }
 
     function appendLetterByLetter(response, index){
         if (index < response.length) {
-            document.getElementById('response').value += response.charAt(index); // Append current letter
+            document.getElementById('conversation').value += response.charAt(index); // Append current letter
             setTimeout(() => appendLetterByLetter(response, index + 1), 10); // Wait 10ms then append next letter
+            if(index === response.length -1){
+                document.getElementById('conversation').value += '\n\n';
+            }
         }
     }
 
