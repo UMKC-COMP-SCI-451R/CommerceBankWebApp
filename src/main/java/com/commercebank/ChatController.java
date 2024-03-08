@@ -30,24 +30,26 @@ public class ChatController {
     }
 
     @PostMapping("/ask")
-    public String askQuestion(@RequestBody String conversation) {
+    public String askQuestion(@RequestBody String[] messages) {
         if(OPENAI_API_KEY == null){
             return "No OpenAI api key found.";
         }else{
             try{
-                conversation = conversation.replaceAll("\"", "'").replaceAll("[\\n\\t\\f\\r]", " ").trim();
-                //System.out.println(conversation);
-                String regex = "You: |AI: ";
-                String[] messageArray = conversation.split(regex); //this array have "" at index 0
                 ArrayList<String> formatMessageArray = new ArrayList<>();
                 formatMessageArray.add(message("user",teach_model_about_the_web_app));
-                for(int i = 1; i <messageArray.length; i++) // i=1 to avoid the empty string at index 0
+                for(int i = 0; i <messages.length; i++)
                 {
-                    if(i % 2 == 1){
-                        formatMessageArray.add(message("user",messageArray[i].trim()));
-                    }else formatMessageArray.add(message("assistant",messageArray[i].trim()));
+                    String cleanedMessage = messages[i].replaceAll("\"", "'").replaceAll("[\\n\\t\\f\\r]", " ").trim();
+                    if(i % 2 == 0){
+                        formatMessageArray.add(message("user",cleanedMessage));
+                    }else formatMessageArray.add(message("assistant",cleanedMessage));
                 }
-                String cleanedConversation = (teach_model_about_the_web_app + conversation).replaceAll("[\\n\\t\\f\\r]", " ");
+
+//                for(String m : formatMessageArray)
+//                {
+//                    System.out.println(m);
+//                }
+
                 //System.out.println(cleanedConversation);
                 String requestBody = "{\"model\":\"gpt-3.5-turbo-0125\",\"messages\":["+String.join(",",formatMessageArray)+"]}";
                 System.out.println(requestBody);
@@ -68,7 +70,6 @@ public class ChatController {
                 }else{
                     return "No reponse";
                 }
-
             }catch(Exception e){
                 System.out.println(e);
                 return "Something go wrong. Can't generate answer.";
