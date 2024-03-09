@@ -115,6 +115,11 @@
     display: none;
 }
 
+.messageContainerDiv{
+    opacity: 0;
+    transition: opacity ease 1s;
+}
+
 .messageLogoDiv {
     display: inline-block;
     vertical-align: top;
