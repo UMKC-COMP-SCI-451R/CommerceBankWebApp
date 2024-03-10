@@ -32,6 +32,9 @@ function writeAndSubmit(){
     conversation.push(newMessage);
     conversationDiv.style.display = 'block';
     document.getElementById('loadingGif').style.display ='block';
+    setTimeout(() => {
+        document.getElementById('loadingGif').style.opacity = '1';
+    }, 10);
     document.getElementById('question').value = "";
     const div = document.createElement("div");
     div.classList.add('messageContainerDiv');
@@ -91,7 +94,13 @@ function askQuestion(messages) {
             }, 10);
             appendLetterByLetter(messageDiv,response,index);
         }
-        document.getElementById('loadingGif').style.display ='none';
+        setTimeout(() => {
+            document.getElementById('loadingGif').style.opacity = 0;
+        }, 500);
+        setTimeout(() => {
+            document.getElementById('loadingGif').style.display ='none';
+        }, 1000);
+
     };
     console.log(messages)
     xhr.send(JSON.stringify(messages));
