@@ -70,7 +70,7 @@
 .dashboard{
     opacity: 0; /* Initially set opacity to 0 */
     transition: opacity 0.3s ease; /* Add transition effect for opacity */
-    margin-left: 5%;
+
 }
 
 

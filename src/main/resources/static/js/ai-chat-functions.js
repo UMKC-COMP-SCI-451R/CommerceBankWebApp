@@ -6,14 +6,14 @@ function toggleQAdiv(){
         setTimeout(() => {
             QAdiv.style.opacity = '1';
         }, 10);
-        QAButtonContainer.style.display='none';
+        QAButtonContainer.style.visibility='hidden';
     }
     else{
         QAdiv.style.opacity = '0';
         setTimeout(() => {
             QAdiv.style.display = 'none';
         }, 1000);
-        QAButtonContainer.style.display='block';
+        QAButtonContainer.style.visibility='visible';
     }
 }
 
