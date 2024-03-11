@@ -52,7 +52,7 @@ public class ChatController {
 
                 //System.out.println(cleanedConversation);
                 String requestBody = "{\"model\":\"gpt-3.5-turbo-0125\",\"messages\":["+String.join(",",formatMessageArray)+"]}";
-                System.out.println(requestBody);
+                //System.out.println(requestBody);
                 HttpHeaders headers = new HttpHeaders();
                 headers.set("Content-Type", "application/json");
                 headers.set("Authorization", "Bearer " + OPENAI_API_KEY);
