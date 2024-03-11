@@ -94,12 +94,6 @@ function askQuestion(messages) {
             }, 10);
             appendLetterByLetter(messageDiv,response,index);
         }
-        setTimeout(() => {
-            document.getElementById('loadingGif').style.opacity = 0;
-        }, 500);
-        setTimeout(() => {
-            document.getElementById('loadingGif').style.display ='none';
-        }, 1000);
 
     };
     console.log(messages)
@@ -112,5 +106,12 @@ function appendLetterByLetter(messageDiv,response, index){
         messageDiv.textContent += response.charAt(index); // Append current letter
         document.getElementById('conversationDiv').scrollTop = document.getElementById('conversationDiv').scrollHeight;
         setTimeout(() => appendLetterByLetter(messageDiv,response, index + 1), 10); // Wait 10ms then append next letter
+    }else{
+        setTimeout(() => {
+            document.getElementById('loadingGif').style.opacity = 0;
+        }, 500);
+        setTimeout(() => {
+            document.getElementById('loadingGif').style.display ='none';
+        }, 1000);
     }
 }
