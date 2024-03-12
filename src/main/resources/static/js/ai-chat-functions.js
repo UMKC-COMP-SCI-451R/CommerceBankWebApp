@@ -1,3 +1,21 @@
+let conversation = [];
+function getConversation(){
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/getConversation', true); // Change to GET and the endpoint to '/fetch'
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            // Handle response here (success)
+            var data = JSON.parse(xhr.responseText); // data is a list of string
+            console.log(data)
+        } else if (xhr.readyState === 4) {
+            // Handle error here
+            console.error(xhr.statusText);
+        }
+    };
+
+    xhr.send();
+}
 function toggleQAdiv(){
     var QAdiv = document.getElementById('QAdiv')
     var QAButtonContainer = document.getElementById('QAButtonContainer')
@@ -7,6 +25,9 @@ function toggleQAdiv(){
             QAdiv.style.opacity = '1';
         }, 10);
         QAButtonContainer.style.visibility='hidden';
+        if(conversation.length === 0){
+            getConversation();
+        }
     }
     else{
         QAdiv.style.opacity = '0';
@@ -96,7 +117,6 @@ function askQuestion(messages) {
         }
 
     };
-    console.log(messages)
     xhr.send(JSON.stringify(messages));
 }
 

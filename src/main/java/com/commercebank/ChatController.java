@@ -6,9 +6,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -16,7 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-
+@SessionAttributes("conversation")
 @RestController
 public class ChatController {
     private final String OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
@@ -45,11 +43,6 @@ public class ChatController {
                     }else formatMessageArray.add(message("assistant",cleanedMessage));
                 }
 
-//                for(String m : formatMessageArray)
-//                {
-//                    System.out.println(m);
-//                }
-
                 //System.out.println(cleanedConversation);
                 String requestBody = "{\"model\":\"gpt-3.5-turbo-0125\",\"messages\":["+String.join(",",formatMessageArray)+"]}";
                 //System.out.println(requestBody);
@@ -77,6 +70,12 @@ public class ChatController {
 
 
         }
+    }
+
+    @GetMapping("/getConversation")
+    public ArrayList<String> fetchData() {
+        // Creating an example ArrayList
+        return new ArrayList<>(Arrays.asList("Item 1", "Item 2", "Item 3")); // Spring automatically converts this list to JSON
     }
 
     public String read_file(String filePath){
