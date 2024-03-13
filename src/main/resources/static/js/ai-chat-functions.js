@@ -6,8 +6,10 @@ function getConversation(){
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             // Handle response here (success)
-            var data = JSON.parse(xhr.responseText); // data is a list of string
-            console.log(data)
+            if(xhr.responseText != null){
+                var data = JSON.parse(xhr.responseText); // data is a list of string
+                console.log(data)
+            }
         } else if (xhr.readyState === 4) {
             // Handle error here
             console.error(xhr.statusText);

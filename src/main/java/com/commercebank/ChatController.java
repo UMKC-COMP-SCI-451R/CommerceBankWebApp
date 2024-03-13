@@ -1,4 +1,5 @@
 package com.commercebank;
+import jakarta.servlet.http.HttpSession;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +25,13 @@ public class ChatController {
 
     private final String teach_model_about_the_web_app = read_file("src/main/resources/static/AI_model_initial_instruction.txt").replaceAll("\"", "'").replaceAll("[\\n\\t\\f\\r]", " ").trim();
     public ChatController(RestTemplate restTemplate) {
+
         this.restTemplate = restTemplate;
+
     }
 
     @PostMapping("/ask")
-    public String askQuestion(@RequestBody String[] messages) {
+    public String askQuestion(@RequestBody String[] messages, HttpSession session) {
         if(OPENAI_API_KEY == null){
             return "No OpenAI api key found.";
         }else{
@@ -59,7 +62,9 @@ public class ChatController {
                 if (!choices.isEmpty()) {
                     JSONObject firstChoice = choices.getJSONObject(0);
                     JSONObject message = firstChoice.getJSONObject("message");
-                    return message.getString("content");
+                    String lastResponse = message.getString("content");
+                    updateConversation(lastResponse,session,messages);
+                    return lastResponse;
                 }else{
                     return "No reponse";
                 }
@@ -73,9 +78,21 @@ public class ChatController {
     }
 
     @GetMapping("/getConversation")
-    public ArrayList<String> fetchData() {
+    public ArrayList<String> fetchData(HttpSession session) {
         // Creating an example ArrayList
-        return new ArrayList<>(Arrays.asList("Item 1", "Item 2", "Item 3")); // Spring automatically converts this list to JSON
+        if(session.getAttribute("conversation") != null)
+            return (ArrayList<String>) session.getAttribute("conversation"); // Spring automatically converts this list to JSON
+        else return null;
+    }
+
+    public void updateConversation(String lastResponse, HttpSession session, String[] messages){
+        ArrayList<String> conversation = new ArrayList<>();
+        if(session.getAttribute("conversation") != null)
+            conversation = (ArrayList<String>) session.getAttribute("conversation");
+        conversation.add(messages[messages.length-1]);
+        conversation.add(lastResponse);
+        session.setAttribute("conversation", conversation);
+        System.out.println(session.getAttribute("conversation"));
     }
 
     public String read_file(String filePath){
