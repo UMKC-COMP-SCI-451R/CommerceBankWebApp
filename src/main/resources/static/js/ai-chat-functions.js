@@ -1,14 +1,32 @@
 let conversation = [];
 function getConversation(){
+    var conversationDiv = document.getElementById('conversationDiv');
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/getConversation', true); // Change to GET and the endpoint to '/fetch'
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            // Handle response here (success)
-            if(xhr.responseText != null){
-                var data = JSON.parse(xhr.responseText); // data is a list of string
-                console.log(data)
+            var data = JSON.parse(xhr.responseText); // data is a list of string
+            //console.log(data)
+            if(data.length!==0){
+                conversationDiv.style.display = 'block';
+                if(!conversationDiv.style.height){
+                    setTimeout(() => {
+                        conversationDiv.style.height='350px';
+                    }, 10);
+                }
+                data.forEach(function(e,i){
+                    conversation.push(e)
+                    var div;
+                    if(i % 2 === 0){
+                        div = appendMessageDiv(e,"user");
+                    }else div = appendMessageDiv(e,"assistant");
+                    conversationDiv.appendChild(div);
+                    setTimeout(() => {
+                        div.style.opacity = '1';
+                    }, 10);
+                });
+                conversationDiv.scrollTop = conversationDiv.scrollHeight;
             }
         } else if (xhr.readyState === 4) {
             // Handle error here
@@ -35,7 +53,7 @@ function toggleQAdiv(){
         QAdiv.style.opacity = '0';
         setTimeout(() => {
             QAdiv.style.display = 'none';
-        }, 1000);
+        }, 500);
         QAButtonContainer.style.visibility='visible';
     }
 }
@@ -59,21 +77,7 @@ function writeAndSubmit(){
         document.getElementById('loadingGif').style.opacity = '1';
     }, 10);
     document.getElementById('question').value = "";
-    const div = document.createElement("div");
-    div.classList.add('messageContainerDiv');
-    const messageDiv = document.createElement("div");
-    const messageLogoDiv = document.createElement("div");
-    messageDiv.classList.add('messageDiv')
-    messageDiv.textContent = newMessage;
-    const img = document.createElement("img");
-    img.style.width = "30px"; // Example width
-    img.style.height = "30px"; // Example height
-    messageLogoDiv.classList.add('messageLogoDiv')
-    img.src = "images/user-icon.png";
-    messageLogoDiv.appendChild(img)
-    div.appendChild(messageLogoDiv);
-    div.appendChild(messageDiv);
-    div.style.marginBottom = "10px";
+    const div = appendMessageDiv(newMessage,"user");
     if(!conversationDiv.style.height){
         setTimeout(() => {
             conversationDiv.style.height='350px';
@@ -85,6 +89,7 @@ function writeAndSubmit(){
     }, 10);
 
     conversationDiv.scrollTop = conversationDiv.scrollHeight;
+
     askQuestion(conversation);
 }
 
@@ -97,29 +102,44 @@ function askQuestion(messages) {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var response = xhr.responseText;
             conversation.push(response);
-            const div = document.createElement("div");
-            const messageDiv = document.createElement("div");
-            const messageLogoDiv = document.createElement("div");
-            div.classList.add('messageContainerDiv');
-            messageDiv.classList.add('messageDiv')
-            const img = document.createElement("img");
-            img.style.width = "30px"; // Example width
-            img.style.height = "30px"; // Example height
-            messageLogoDiv.classList.add('messageLogoDiv')
-            img.src = "images/open-ai-logo.png";
-            messageLogoDiv.appendChild(img)
-            div.appendChild(messageDiv);
-            div.appendChild(messageLogoDiv);
-            div.style.marginBottom = "10px";
+            const div = appendMessageDiv("","assistant")
             document.getElementById('conversationDiv').appendChild(div);
             setTimeout(() => {
                 div.style.opacity = '1';
             }, 10);
-            appendLetterByLetter(messageDiv,response,index);
+            appendLetterByLetter(div.getElementsByClassName("messageDiv").item(0),response,index);
         }
 
     };
     xhr.send(JSON.stringify(messages));
+}
+
+function appendMessageDiv(newMessage, role){
+    var conversationDiv = document.getElementById('conversationDiv');
+    const div = document.createElement("div");
+    div.classList.add('messageContainerDiv');
+    const messageDiv = document.createElement("div");
+    const messageLogoDiv = document.createElement("div");
+    messageDiv.classList.add('messageDiv')
+    messageDiv.textContent = newMessage;
+    const img = document.createElement("img");
+    img.style.width = "30px"; // Example width
+    img.style.height = "30px"; // Example height
+    messageLogoDiv.classList.add('messageLogoDiv')
+    if(role == "user"){
+        img.src = "images/user-icon.png";
+        messageLogoDiv.appendChild(img)
+        div.appendChild(messageLogoDiv);
+        div.appendChild(messageDiv);
+    }else{
+        img.src = "images/open-ai-logo.png";
+        messageLogoDiv.appendChild(img)
+        div.appendChild(messageDiv);
+        div.appendChild(messageLogoDiv);
+    }
+
+    div.style.marginBottom = "10px";
+    return div
 }
 
 

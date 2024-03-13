@@ -82,7 +82,7 @@ public class ChatController {
         // Creating an example ArrayList
         if(session.getAttribute("conversation") != null)
             return (ArrayList<String>) session.getAttribute("conversation"); // Spring automatically converts this list to JSON
-        else return null;
+        else return new ArrayList<>();
     }
 
     public void updateConversation(String lastResponse, HttpSession session, String[] messages){
@@ -92,7 +92,7 @@ public class ChatController {
         conversation.add(messages[messages.length-1]);
         conversation.add(lastResponse);
         session.setAttribute("conversation", conversation);
-        System.out.println(session.getAttribute("conversation"));
+       // System.out.println(session.getAttribute("conversation"));
     }
 
     public String read_file(String filePath){
