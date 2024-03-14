@@ -1,4 +1,5 @@
 package com.commercebank;
+import jakarta.servlet.http.HttpSession;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,9 +7,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -16,7 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-
+@SessionAttributes("conversation")
 @RestController
 public class ChatController {
     private final String OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
@@ -26,31 +25,30 @@ public class ChatController {
 
     private final String teach_model_about_the_web_app = read_file("src/main/resources/static/AI_model_initial_instruction.txt").replaceAll("\"", "'").replaceAll("[\\n\\t\\f\\r]", " ").trim();
     public ChatController(RestTemplate restTemplate) {
+
         this.restTemplate = restTemplate;
+
     }
 
     @PostMapping("/ask")
-    public String askQuestion(@RequestBody String conversation) {
+    public String askQuestion(@RequestBody String[] messages, HttpSession session) {
         if(OPENAI_API_KEY == null){
             return "No OpenAI api key found.";
         }else{
             try{
-                conversation = conversation.replaceAll("\"", "'").replaceAll("[\\n\\t\\f\\r]", " ").trim();
-                //System.out.println(conversation);
-                String regex = "You: |AI: ";
-                String[] messageArray = conversation.split(regex); //this array have "" at index 0
                 ArrayList<String> formatMessageArray = new ArrayList<>();
                 formatMessageArray.add(message("user",teach_model_about_the_web_app));
-                for(int i = 1; i <messageArray.length; i++) // i=1 to avoid the empty string at index 0
+                for(int i = 0; i <messages.length; i++)
                 {
-                    if(i % 2 == 1){
-                        formatMessageArray.add(message("user",messageArray[i].trim()));
-                    }else formatMessageArray.add(message("assistant",messageArray[i].trim()));
+                    String cleanedMessage = messages[i].replaceAll("\"", "'").replaceAll("[\\n\\t\\f\\r]", " ").trim();
+                    if(i % 2 == 0){
+                        formatMessageArray.add(message("user",cleanedMessage));
+                    }else formatMessageArray.add(message("assistant",cleanedMessage));
                 }
-                String cleanedConversation = (teach_model_about_the_web_app + conversation).replaceAll("[\\n\\t\\f\\r]", " ");
+
                 //System.out.println(cleanedConversation);
                 String requestBody = "{\"model\":\"gpt-3.5-turbo-0125\",\"messages\":["+String.join(",",formatMessageArray)+"]}";
-                System.out.println(requestBody);
+                //System.out.println(requestBody);
                 HttpHeaders headers = new HttpHeaders();
                 headers.set("Content-Type", "application/json");
                 headers.set("Authorization", "Bearer " + OPENAI_API_KEY);
@@ -64,11 +62,12 @@ public class ChatController {
                 if (!choices.isEmpty()) {
                     JSONObject firstChoice = choices.getJSONObject(0);
                     JSONObject message = firstChoice.getJSONObject("message");
-                    return message.getString("content");
+                    String lastResponse = message.getString("content");
+                    updateConversation(lastResponse,session,messages);
+                    return lastResponse;
                 }else{
                     return "No reponse";
                 }
-
             }catch(Exception e){
                 System.out.println(e);
                 return "Something go wrong. Can't generate answer.";
@@ -76,6 +75,24 @@ public class ChatController {
 
 
         }
+    }
+
+    @GetMapping("/getConversation")
+    public ArrayList<String> fetchData(HttpSession session) {
+        // Creating an example ArrayList
+        if(session.getAttribute("conversation") != null)
+            return (ArrayList<String>) session.getAttribute("conversation"); // Spring automatically converts this list to JSON
+        else return new ArrayList<>();
+    }
+
+    public void updateConversation(String lastResponse, HttpSession session, String[] messages){
+        ArrayList<String> conversation = new ArrayList<>();
+        if(session.getAttribute("conversation") != null)
+            conversation = (ArrayList<String>) session.getAttribute("conversation");
+        conversation.add(messages[messages.length-1]);
+        conversation.add(lastResponse);
+        session.setAttribute("conversation", conversation);
+       // System.out.println(session.getAttribute("conversation"));
     }
 
     public String read_file(String filePath){

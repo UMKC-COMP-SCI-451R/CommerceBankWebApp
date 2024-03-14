@@ -13,7 +13,7 @@ button {
     transition: transform 0.5s ease, visibility 0.5s ease, opacity 0.5s ease; /* Transition opacity and transform */
     visibility: hidden; /* Initially hide cards */
     opacity: 0;
-    transform: translateX(100%); /* Move cards to the right initially */
+    transform: translateX(30%); /* Move cards to the right initially */
     margin-left: 20%;
     margin-right: 20%;
     margin-bottom: 20px;
@@ -31,15 +31,14 @@ button {
 .card.left {
     visibility: hidden;
     opacity: 0;
-    transform: translateX(-100%);
+    transform: translateX(-30%);
 }
 
 .card:hover {
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
 
-
-img:not(#logo) {
+.image{
     width: 200px;
     height: 200px;
 }
@@ -64,10 +63,10 @@ ul:not(.navbar-nav) {
     background-color: rgb(176, 230, 176);
 }
 
-.container {
-    display: flex;
-    justify-content: space-around;
-}
+/*.container {*/
+/*    display: flex;*/
+/*    justify-content: space-around;*/
+/*}*/
 
 .card-inline {
     display: inline-block;

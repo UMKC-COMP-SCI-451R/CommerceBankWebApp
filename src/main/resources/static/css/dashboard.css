@@ -69,47 +69,9 @@
 
 .dashboard{
     opacity: 0; /* Initially set opacity to 0 */
-    transition: opacity 0.3s ease /* Add transition effect for opacity */
-}
-
-#QAButtonContainer{
-    position: absolute;
-    bottom: 5%;
-    right: 5%;
-}
-
-#QAdiv{
-    display: none;
-    position: absolute;
-    bottom: 5%;
-    right: 5%;
-    border: 2px solid #4CAF50; /* Solid border with color */
-    border-radius: 15px; /* Rounded corners */
-    padding: 20px; /* Some padding inside the div */
-    background-color: #f2f2f2; /* Light grey background */
-    width: 400px;
-}
-
-.close-button {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background: none;
-    border: none;
-    font-size: 30px;
-    cursor: pointer;
-    color: #165816;
+    transition: opacity 0.3s ease; /* Add transition effect for opacity */
 
 }
 
-/*.conversationDiv{*/
-/*    position: relative;*/
-/*}*/
 
-#loadingGif {
-    position: absolute; /* Position the image absolutely */
-    top: 30%; /* Place the image 50% down from the top of the container */
-    left: 30%; /* Place the image 50% across from the left of the container */
-    z-index: 1; /* Ensure the image stays in front of other content */
-    display: none;
-}
+

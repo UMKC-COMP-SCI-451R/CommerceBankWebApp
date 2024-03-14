@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" href="/css/commercestyle.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">
+        <img src="images/CommerceBankLogo.png" alt="Logo" width="165" height="40" class="d-inline-block align-text-top">
+    </a>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/login" style="text-decoration: underline; font-weight: bold;">Home</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div style="text-align: center">
+    <img src="images/404-image.jpg" alt="error-image" width="700px">
+    <h1>Some thing went wrong!</h1>
+    <h3>You might have typed in an invalid URL or your session is expired.</h3>
+    <button class="btn btn-success" onclick="window.location.href = 'http://localhost:8080/';">Go To Home</button>
+    <h4 id="redirectMessage" style="color: forestgreen"></h4>
+</div>
+
+<div class="bg-success mt-3">
+    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-auto px-5 border-top">
+        <div class="col-md-4 d-flex align-items-center">
+            <span class="mb-3 mb-md-0 text-white">© 2024 Commerce Bank, Inc</span>
+        </div>
+
+        <ul class="nav col-md-4 justify-content-end list-unstyled d-flex ">
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-white">Features</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-white">About</a></li>
+        </ul>
+    </footer>
+</div>
+<script>
+    var redirectMessage = document.getElementById("redirectMessage");
+    function runLoop(iterations) {
+        let count = 0;
+        function loop() {
+            if (count < iterations) {
+                redirectMessage.textContent = "You will be redirected to Home in... "+(10-count) + " seconds"
+                count++;
+                setTimeout(loop, 1000); // 1000 milliseconds = 1 second
+            }
+        }
+        loop();
+    }
+    // Call the function to start the loop with 5 iterations
+    runLoop(10);
+    setTimeout(()=>{
+        window.location.href = 'http://localhost:8080/login';
+    },10000)
+</script>
+</body>
+</html>

@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
     <link rel="stylesheet" type="text/css" href="/css/commercestyle.css">
     <link rel="stylesheet" type="text/css" href="/css/dashboard.css">
+    <link rel="stylesheet" type="text/css" href="/css/ai-chat.css">
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -167,19 +168,21 @@
             </div>
         </div>
     </div>
-    <div id="QAButtonContainer" style="text-align: center">
-        <button class="btn btn-success" id="QAButton" onclick="toggleQAdiv()">Need help?</button><br>
-        <span><b>Virtual Assistant</b></span><br>
-        <span><i>Powered by OpenAI</i></span>
+    <div id="QAButtonContainer">
+        <div style="text-align: center; width: fit-content">
+            <button class="btn bg-white border-success border-3" id="QAButton" onclick="toggleQAdiv()">Need help?</button><br>
+            <span><b>Virtual Assistant</b></span><br>
+            <span><i>Powered by OpenAI</i></span>
+        </div>
     </div>
     <div id="QAdiv">
         <button class="close-button" onclick="toggleQAdiv()">&times;</button>
-<!--        <form id="conversationForm">-->
-            <div class="mb-3" id="conversationDiv" style="display: none; width: 96%">
-                <img id="loadingGif" src="images/loading-symbol.gif" alt="Loading..." width="120px" height="120px" />
-                <textarea class="form-control" id="conversation" rows="11" readonly></textarea>
-            </div>
-<!--        </form>-->
+
+        <div class="mb-3" id="conversationDiv">
+<!--            <img id="loadingGif" src="images/loading-symbol.gif" alt="Loading..." width="120px" height="120px"/>-->
+            <img id="loadingGif" src="images/chatbot-thinking-bg-removed.gif" alt="Loading..." width="120px" height="120px"/>
+        </div>
+
         <div class="row">
             <div class="col-9">
                 <textarea class="form-control" id="question" rows="3" placeholder="Enter your question:"></textarea>
@@ -195,6 +198,19 @@
         </div>
     </div>
 </div>
+<div class="bg-success mt-3">
+    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-auto px-5 border-top">
+        <div class="col-md-4 d-flex align-items-center">
+            <span class="mb-3 mb-md-0 text-white">© 2024 Commerce Bank, Inc</span>
+        </div>
+
+        <ul class="nav col-md-4 justify-content-end list-unstyled d-flex ">
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-white">Features</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-white">About</a></li>
+        </ul>
+    </footer>
+</div>
+
 
 <script>
     // Get all elements with the class 'transaction-source'
@@ -279,64 +295,9 @@
     // Event listener to restore scroll position after page reloads
     window.addEventListener('load', restoreScrollPosition);
 
-    //QAdiv set up
-    function toggleQAdiv(){
-        var QAdiv = document.getElementById('QAdiv')
-        var QAButtonContainer = document.getElementById('QAButtonContainer')
-        if(QAdiv.style.display !== 'block'){
-            QAdiv.style.display='block';
-            QAButtonContainer.style.display='none';
-        }
-        else{
-            QAdiv.style.display = 'none';
-            QAButtonContainer.style.display='block';
-        }
-    }
-
-
-    document.getElementById('question').addEventListener('keydown', function(event) {
-        // Check if Enter is pressed without the Shift key
-        if (event.key === 'Enter' && !event.shiftKey) {
-            event.preventDefault(); // Prevent the default behavior (inserting a newline)
-            writeAndSubmit(); // Submit the form
-        }
-    });
-
-    function writeAndSubmit(){
-        document.getElementById('conversation').value += 'You: ' + document.getElementById('question').value;
-        document.getElementById('conversationDiv').style.display = 'block';
-        document.getElementById('loadingGif').style.display ='block';
-        askQuestion(document.getElementById('conversation').value);
-        document.getElementById('question').value = "";
-    }
-
-    function askQuestion(conversation) {
-        var index = 0;
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/ask', true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                var response = xhr.responseText;
-                document.getElementById('conversation').value += '\n\nAI: ';
-                appendLetterByLetter(response,index);
-            }
-            document.getElementById('loadingGif').style.display ='none';
-        };
-        xhr.send(conversation);
-    }
-
-    function appendLetterByLetter(response, index){
-        if (index < response.length) {
-            document.getElementById('conversation').value += response.charAt(index); // Append current letter
-            setTimeout(() => appendLetterByLetter(response, index + 1), 10); // Wait 10ms then append next letter
-            if(index === response.length -1){
-                document.getElementById('conversation').value += '\n\n';
-            }
-        }
-    }
 
 </script>
+<script src="js/ai-chat-functions.js"></script>
 
 </body>
 </html>
