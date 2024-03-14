@@ -24,6 +24,7 @@
     <h1>Some thing went wrong!</h1>
     <h3>You might have typed in an invalid URL or your session is expired.</h3>
     <button class="btn btn-success" onclick="window.location.href = 'http://localhost:8080/';">Go To Home</button>
+    <h4 id="redirectMessage" style="color: forestgreen"></h4>
 </div>
 
 <div class="bg-success mt-3">
@@ -38,5 +39,24 @@
         </ul>
     </footer>
 </div>
+<script>
+    var redirectMessage = document.getElementById("redirectMessage");
+    function runLoop(iterations) {
+        let count = 0;
+        function loop() {
+            if (count < iterations) {
+                redirectMessage.textContent = "You will be redirected to Home in... "+(10-count) + " seconds"
+                count++;
+                setTimeout(loop, 1000); // 1000 milliseconds = 1 second
+            }
+        }
+        loop();
+    }
+    // Call the function to start the loop with 5 iterations
+    runLoop(10);
+    setTimeout(()=>{
+        window.location.href = 'http://localhost:8080/login';
+    },10000)
+</script>
 </body>
 </html>
