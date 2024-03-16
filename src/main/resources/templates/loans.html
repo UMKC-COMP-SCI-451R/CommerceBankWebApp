@@ -32,7 +32,7 @@
         <button class="btn btn-outline-success mx-3 my-0" type="submit">Logout</button>
     </form>
 </nav>
-<div class="loanPage" id="loanPage">
+<div class="loanPage" id="loanPage" style="flex:1">
     <div class="container">
         <div class="card-inline">
             <h2>Credit Card</h2>
@@ -211,9 +211,12 @@
             <span class="mb-3 mb-md-0 text-white">© 2024 Commerce Bank, Inc</span>
         </div>
 
-        <ul class="nav col-md-4 justify-content-end list-unstyled d-flex ">
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-white">Features</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-white">About</a></li>
+        <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+            <li class="nav-item">
+                <a href="/features" class="nav-link px-2 text-white"
+                   onmouseover="this.style.textDecoration='underline'"
+                   onmouseleave="this.style.textDecoration='none'">Pages & Functionalities</a>
+            </li>
         </ul>
     </footer>
 </div>

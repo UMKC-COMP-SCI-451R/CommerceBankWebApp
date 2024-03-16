@@ -37,7 +37,7 @@
     [[${message}]]
 </div>
 
-<div class="container dashboard" id="dashboard">
+<div class="container dashboard" id="dashboard" style="flex:1">
     <div class="row justify-content-center">
         <div class="col-md-3"> <!-- Adjust the column size as needed -->
             <div class="card" id="accountInfoCard" >
@@ -195,18 +195,19 @@
     </div>
 </div>
 <div class="bg-success mt-3">
-    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-auto px-5 border-top">
+    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-auto px-5">
         <div class="col-md-4 d-flex align-items-center">
             <span class="mb-3 mb-md-0 text-white">© 2024 Commerce Bank, Inc</span>
         </div>
-
-        <ul class="nav col-md-4 justify-content-end list-unstyled d-flex ">
-            <li class="nav-item"><a href="/features" class="nav-link px-2 text-white">Pages & Functionalities</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-white">About</a></li>
+        <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+            <li class="nav-item">
+                <a href="/features" class="nav-link px-2 text-white"
+                   onmouseover="this.style.textDecoration='underline'"
+                   onmouseleave="this.style.textDecoration='none'">Pages & Functionalities</a>
+            </li>
         </ul>
     </footer>
 </div>
-
 
 <script>
     // Get all elements with the class 'transaction-source'

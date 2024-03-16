@@ -44,4 +44,10 @@
     background-color: rgb(176, 230, 176);
 }
 
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
 /*test login branch*/
