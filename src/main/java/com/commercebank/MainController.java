@@ -17,6 +17,11 @@ public class MainController {
             return "redirect:/login";
     }
 
+    @GetMapping("/features")
+    public String getFeaturesPage(){
+        return "features";
+    }
+
 //    @GetMapping("/login")
 //    public String showLoginPage(Model model, HttpSession session, HttpServletRequest request){
 //        boolean isChecked;

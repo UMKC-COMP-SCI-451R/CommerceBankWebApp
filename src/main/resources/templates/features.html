@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pages & Features</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" href="/css/commercestyle.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Flex container */
+        .card-container {
+            width: 1110px;
+            display: flex;
+            flex-wrap: wrap;
+            padding: 0 15px; /* Optional: adjust for spacing */
+        }
+
+        /* Card style */
+        .card {
+            width: 300px; /* Adjust as needed */
+            margin: 20px; /* Adjust as needed */
+            border: 1px solid #ccc; /* Optional: add borders */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            padding-left: 20px;
+            padding-bottom: 20px;
+            padding-right: 20px;
+            border-radius: 10px;
+        }
+
+        .card-title{
+            text-align: center;
+            margin-top: 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #358f50; /* Change color as needed */
+        }
+
+        .custom-icon{
+            font-size:60px;
+            color:rgb(56, 136, 80);
+            margin-top: 5px;
+
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">
+        <img src="images/CommerceBankLogo.png" alt="Logo" width="165" height="40" class="d-inline-block align-text-top">
+    </a>
+    <button class="btn btn-outline-success" style="margin-left: 80%" onclick="window.history.back()">Go Back</button>
+</nav>
+<div class="container  d-flex justify-content-center ">
+    <div class="card-container">
+        <div class="card">
+            <div style="text-align: center;">
+                <i class='fas fa-home custom-icon'></i>
+            </div>
+            <h1 class="card-title">Home</h1>
+            <div class="card-body">
+                <ul>
+                    <li> Register</li>
+                    <li> Login</li>
+                    <li> Remember me</li>
+                    <li> Forgot Password</li>
+                    <li> AI Chat</li>
+                </ul>
+            </div>
+        </div>
+        <div class="card">
+            <div style="text-align: center;">
+                <i class='far fa-list-alt custom-icon'></i>
+            </div>
+            <h1 class="card-title">Summary</h1>
+            <div class="card-body">
+                <ul>
+                    <li> View account Info</li>
+                    <li> View balance</li>
+                    <li> View recent transactions</li>
+                    <li> Filter transactions</li>
+                    <li> AI Chat</li>
+                </ul>
+            </div>
+        </div>
+        <div class="card">
+            <div style="text-align: center;">
+                <i class='fas fa-donate custom-icon'></i>
+            </div>
+            <h1 class="card-title">Transfer</h1>
+            <div class="card-body">
+                <ul>
+                    <li> Make transfer</li>
+                    <li> Add external account</li>
+                    <li> Verify external account</li>
+                    <li> AI Chat</li>
+                </ul>
+            </div>
+        </div>
+        <div class="card">
+            <div style="text-align: center;">
+                <i class='fas fa-money-bill-wave custom-icon'></i>
+            </div>
+            <h1 class="card-title">Loans</h1>
+            <div class="card-body">
+                <ul>
+                    <li> View Loans</li>
+                    <li> Apply Loan</li>
+                    <li> AI Chat</li>
+                </ul>
+            </div>
+        </div>
+        <div class="card">
+            <div style="text-align: center;">
+                <i class='far fa-address-card custom-icon'></i>
+            </div>
+            <h1 class="card-title">Profile</h1>
+            <div class="card-body">
+                <ul>
+                    <li> View Personal Info</li>
+                    <li> Modify Personal Info</li>
+                    <li> Reset Password</li>
+                    <li> Enable Multi-factor Authentication</li>
+                    <li> Update Settings</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="text-align: center; margin-bottom: 20px">
+    <button class="btn btn-success" onclick="window.history.back()">Go Back</button>
+</div>
+
+</body>
+</html>
