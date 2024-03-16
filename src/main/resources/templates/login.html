@@ -43,26 +43,33 @@
     <form method="post">
         <div class="container-fluid text-center">
             <div><label for="email"><b class="logindetails">Email</b></label>
-            <input type="email" placeholder="Enter Email" name="email" id="email" class="loginfield" th:value="${useremail}" required></div>
+                <input type="email" placeholder="Enter Email" name="email" id="email" class="loginfield" th:value="${useremail}" required></div>
             <br><br>
             <div><label for="password"><b class="logindetails">Password</b></label>
-            <input type="password" placeholder="Enter Password" name="password" id="password" class="loginfield" required></div>
+                <input type="password" placeholder="Enter Password" name="password" id="password" class="loginfield" required></div>
             <br><br>
             <button type="submit" align="center" class="btn btn-success">Login</button>
             <br><br>
             <label for="checkbox" class="logindetails">Remember me</label>
             <input type="checkbox" value=true name="checkBoxRememberUser" id="checkbox" th:checked="${isChecked}">
             <br><br>
-            <a th:href="@{/register}">Register</a>
         </div>
     </form>
-
     <form id="forgotPasswordForm" method="post" th:action="@{/resetpassword}">
         <div class="container-fluid text-center">
             <input type="hidden" name="emailToReset" id="emailToReset">
-            <a href="#" onclick="submitForgotPasswordForm()">Forgot Password</a>
+            <a href="#" onclick="submitForgotPasswordForm()">Forgot Password?</a>
         </div>
     </form>
+</div>
+
+<div class="registerbtn">
+    <b class="logindetails">New to Commerce Bank?</b>
+    <a th:href="@{/register}"><button type="submit" align="center" class="btn btn-success">Register Now!</button></a>
+</div>
+
+<div>
+    <img src="images\onlinebankingimg.png" alt="onlinebanking" width="950px" height="665px">
 </div>
 
 <script type="text/javascript">
