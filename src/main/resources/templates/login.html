@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="/css/commercestyle.css">
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
     <link rel="stylesheet" type="text/css" href="/css/ai-chat.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
         label{
             color: white;
@@ -82,7 +83,7 @@
     <div>
         <img src="images\onlinebankingimg.png" alt="onlinebanking" width="950px" height="665px">
     </div>
-    <div id="QAButtonContainer" style="padding-right: 10%">
+    <div id="QAButtonContainer" style="padding-right: 5%">
         <div style="text-align: center; width: fit-content">
             <button class="btn bg-white border-success border-3" id="QAButton" onclick="toggleQAdiv()">Need help?</button><br>
             <span><b>Virtual Assistant</b></span><br>
@@ -90,24 +91,45 @@
         </div>
     </div>
     <div id="QAdiv">
-        <button class="close-button" onclick="toggleQAdiv()">&times;</button>
-
-        <div class="mb-3" id="conversationDiv">
-            <!--            <img id="loadingGif" src="images/loading-symbol.gif" alt="Loading..." width="120px" height="120px"/>-->
-            <img id="loadingGif" src="images/chatbot-thinking-bg-removed.gif" alt="Loading..." width="120px" height="120px"/>
+        <button class="close-button" onclick="showEndingMessage()" id="closeChatBtn">&#128473;&#xFE0E;</button>
+        <button class="minimize-button" onclick="toggleQAdiv()">&#128469;&#xFE0E;</button>
+        <div id="closingMessage">
+            <p>End this chat?</p>
+            <button class="btn btn-success" onclick="showRatingMessage()">Yes</button>
+            <button class="btn btn-secondary" onclick="cancelEndChat()">No</button>
         </div>
-
-        <div class="row">
+        <div id="thankYouMessage">
+            <p>Thank you for using Virtual Assistant!</p>
+            <p>This chat box will be automatically closed.</p>
+            <img src="images/chatbot-thinking-bg-removed.gif" alt="Loading..." width="120px" height="120px"/>
+        </div>
+        <div id="ratingMessage">
+            <p>How would you rate your experience?</p>
+            <div class="bg-success rounded-2">
+                <i class='fa fa-star-o custom-icon' onclick="rate(1)" id="star1"></i>
+                <i class='fa fa-star-o custom-icon' onclick="rate(2)" id="star2"></i>
+                <i class='fa fa-star-o custom-icon' onclick="rate(3)" id="star3"></i>
+                <i class='fa fa-star-o custom-icon' onclick="rate(4)" id="star4"></i>
+                <i class='fa fa-star-o custom-icon' onclick="rate(5)" id="star5"></i>
+            </div>
+            <br>
+            <button class="btn btn-success" onclick="endChat()">Submit</button>
+            <button class="btn btn-secondary" onclick="endChat()">Skip</button>
+        </div>
+        <img id="loadingGif" src="images/chatbot-thinking-bg-removed.gif" alt="Loading..." width="120px" height="120px"/>
+        <div class="mb-3" id="conversationDiv">
+        </div>
+        <div class="row align-items-end">
             <div class="col-9">
                 <textarea class="form-control" id="question" rows="3" placeholder="Enter your question:"></textarea>
             </div>
             <div class="col-2">
-                <div class="row mb-2">
-                    <img src="images/open-ai-logo.png" height="40px" width="40px" alt="openailogo">
-                </div>
-                <div class="row">
-                    <button class="btn btn-success" type="button" id="submitQuestionButton" onclick="writeAndSubmit()">Send</button>
-                </div>
+                <!--                <div class="row mb-2">-->
+                <!--                    <img src="images/open-ai-logo.png" height="40px" width="40px" alt="openailogo">-->
+                <!--                </div>-->
+                <!--                <div class="row">-->
+                <button class="btn btn-success" type="button" id="submitQuestionButton" onclick="writeAndSubmit()">Send</button>
+                <!--                </div>-->
             </div>
         </div>
     </div>
