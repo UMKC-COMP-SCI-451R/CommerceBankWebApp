@@ -7,8 +7,9 @@ function getConversation(){
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var data = JSON.parse(xhr.responseText); // data is a list of string
-            //console.log(data)
+            console.log(data)
             if(data.length!==0){
+                document.getElementById("closeChatBtn").style.display='block';
                 conversationDiv.style.display = 'block';
                 if(!conversationDiv.style.height){
                     setTimeout(() => {
@@ -82,6 +83,7 @@ function writeAndSubmit(){
         setTimeout(() => {
             conversationDiv.style.height='350px';
         }, 10);
+        document.getElementById("closeChatBtn").style.display='block';
     }
     conversationDiv.appendChild(div);
     setTimeout(() => {
@@ -155,5 +157,83 @@ function appendLetterByLetter(messageDiv,response, index){
         setTimeout(() => {
             document.getElementById('loadingGif').style.display ='none';
         }, 1000);
+    }
+}
+
+function showEndingMessage(){
+    document.getElementById("closingMessage").style.display = 'block'
+    setTimeout(() => {
+        document.getElementById('closingMessage').style.opacity = 1;
+    }, 10);
+}
+
+function cancelEndChat(){
+    document.getElementById('closingMessage').style.opacity = 0;
+    setTimeout(() => {
+        document.getElementById("closingMessage").style.display = 'none'
+    }, 10);
+}
+
+function endChat(){
+    var thankYouMessage = document.getElementById("thankYouMessage");
+    var conversationDiv = document.getElementById('conversationDiv');
+    var ratingMessage = document.getElementById("ratingMessage");
+    ratingMessage.style.display ='none'
+    ratingMessage.style.opacity = 0;
+    resetRating();
+    thankYouMessage.style.display = 'block'
+    setTimeout(() => {
+        thankYouMessage.style.opacity = 1;
+    }, 10);
+    setTimeout(() => {
+        toggleQAdiv();
+        thankYouMessage.style.display = 'none'
+        thankYouMessage.style.opacity = 0;
+        conversationDiv.style.display = 'none';
+        conversationDiv.style.height='';
+        document.getElementById("closeChatBtn").style.display='none';
+        conversationDiv.innerHTML='';
+    }, 3000);
+    conversation = []
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/closeConversation', true); // Change to GET and the endpoint to '/fetch'
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var data = xhr.responseText; // data is a list of string
+            console.log(data)
+        } else if (xhr.readyState === 4) {
+            // Handle error here
+            console.error(xhr.statusText);
+        }
+    }
+    xhr.send();
+
+}
+
+function showRatingMessage(){
+    var closingMessage =  document.getElementById("closingMessage");
+    closingMessage.style.display = 'none'
+    closingMessage.style.opacity = 0;
+    document.getElementById("ratingMessage").style.display = 'block';
+    setTimeout(() => {
+        document.getElementById("ratingMessage").style.opacity = 1;
+    }, 10);
+}
+
+function rate(num){
+    resetRating();
+    for (let i = 1; i <= num; i++) {
+        var star = document.getElementById("star"+i);
+        if(star.classList.contains("fa-star-o"))
+            star.classList.remove("fa-star-o");
+        if(!star.classList.contains("fa-star"))
+            star.classList.add("fa-star");
+    }
+}
+
+function resetRating(){
+    for (let i = 1; i <= 5; i++) {
+        document.getElementById("star"+i).classList.add("fa-star-o");
+        document.getElementById("star"+i).classList.remove("fa-star");
     }
 }

@@ -15,6 +15,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
+
 @SessionAttributes("conversation")
 @RestController
 public class ChatController {
@@ -32,6 +34,7 @@ public class ChatController {
 
     @PostMapping("/ask")
     public String askQuestion(@RequestBody String[] messages, HttpSession session) {
+        System.out.println(teach_model_about_the_web_app);
         if(OPENAI_API_KEY == null){
             return "No OpenAI api key found.";
         }else{
@@ -79,10 +82,23 @@ public class ChatController {
 
     @GetMapping("/getConversation")
     public ArrayList<String> fetchData(HttpSession session) {
-        // Creating an example ArrayList
+//        Enumeration<String> attributeNames = session.getAttributeNames();
+//        while (attributeNames.hasMoreElements()) {
+//            String attributeName = attributeNames.nextElement();
+//            Object attributeValue = session.getAttribute(attributeName);
+//            System.out.println(attributeName + ": " + attributeValue);
+//        }
         if(session.getAttribute("conversation") != null)
             return (ArrayList<String>) session.getAttribute("conversation"); // Spring automatically converts this list to JSON
         else return new ArrayList<>();
+    }
+
+    @GetMapping("/closeConversation")
+    public String closeConversation(HttpSession session) {
+        ArrayList<String> conver = (ArrayList<String>) session.getAttribute("conversation");
+        conver.removeAll(conver);
+        session.setAttribute("conversation",conver);
+       return "conversation closed";
     }
 
     public void updateConversation(String lastResponse, HttpSession session, String[] messages){
@@ -92,7 +108,7 @@ public class ChatController {
         conversation.add(messages[messages.length-1]);
         conversation.add(lastResponse);
         session.setAttribute("conversation", conversation);
-       // System.out.println(session.getAttribute("conversation"));
+        //System.out.println(session.getAttribute("conversation"));
     }
 
     public String read_file(String filePath){
