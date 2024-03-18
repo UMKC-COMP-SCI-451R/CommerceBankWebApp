@@ -4,7 +4,7 @@
 }
 
 #QAButton:hover{
-    background-color: #2a672a !important;
+    background-color: rgb(25, 135, 84) !important;
     color: white;
 }
 
@@ -14,12 +14,12 @@
     position: fixed;
     bottom: 5%;
     right: 5%;
-    border: 2px solid #4CAF50; /* Solid border with color */
     border-radius: 15px; /* Rounded corners */
     /*padding: 0 20px 20px 20px; !* Some padding inside the div *!*/
     background-color: #f2f2f2; /* Light grey background */
     width: 400px;
     transition: opacity ease 0.5s;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
 
 #QAdiv-header{
