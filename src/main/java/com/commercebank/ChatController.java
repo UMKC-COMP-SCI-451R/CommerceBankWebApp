@@ -34,13 +34,12 @@ public class ChatController {
 
     @PostMapping("/ask")
     public String askQuestion(@RequestBody String[] messages, HttpSession session) {
-        System.out.println(teach_model_about_the_web_app);
         if(OPENAI_API_KEY == null){
             return "No OpenAI api key found.";
         }else{
             try{
                 ArrayList<String> formatMessageArray = new ArrayList<>();
-                formatMessageArray.add(message("user",teach_model_about_the_web_app));
+                formatMessageArray.add(message("system",teach_model_about_the_web_app));
                 for(int i = 0; i <messages.length; i++)
                 {
                     String cleanedMessage = messages[i].replaceAll("\"", "'").replaceAll("[\\n\\t\\f\\r]", " ").trim();

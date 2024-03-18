@@ -16,10 +16,20 @@
     right: 5%;
     border: 2px solid #4CAF50; /* Solid border with color */
     border-radius: 15px; /* Rounded corners */
-    padding: 20px; /* Some padding inside the div */
+    /*padding: 0 20px 20px 20px; !* Some padding inside the div *!*/
     background-color: #f2f2f2; /* Light grey background */
     width: 400px;
     transition: opacity ease 0.5s;
+}
+
+#QAdiv-header{
+    display: flex;
+    align-items: center;
+    height: 40px;
+    padding-left: 20px;
+    border-radius: 10px 10px 0 0;
+    color: white;
+    font-size: large;
 }
 
 .close-button {
@@ -59,7 +69,8 @@
 .messageContainerDiv{
     opacity: 0;
     transition: opacity ease 1s;
-
+    display: flex;
+    justify-content: center;
 }
 
 .messageLogoDiv {
@@ -88,6 +99,7 @@
     height: 0;
     overflow-y: auto;
     transition: height ease 0.5s;
+    padding: 10px;
 }
 
 #closingMessage{
@@ -111,6 +123,7 @@
     opacity: 0;
     position: absolute;
     bottom: 30%;
+    left: 6%;
     border: 2px solid #4CAF50; /* Solid border with color */
     border-radius: 15px; /* Rounded corners */
     padding: 20px; /* Some padding inside the div */
