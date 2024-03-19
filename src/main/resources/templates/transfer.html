@@ -224,9 +224,7 @@
             </div>
         </div>
     </div>
-<!--    <div style="display: flex; justify-content: center">-->
-<!--        <img src="images/transfer/transfer-image.jpg" alt="saving account advert" style="height: 220px; width: auto" >-->
-<!--    </div>-->
+
     <!-- Modal -->
     <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -239,10 +237,19 @@
                     <p><span style="font-style: italic">To:</span> <span style="font-weight: bold" id="toSpan"></span></p>
                     <p><span style="font-style: italic">Transfer Amount:</span> <span style="font-weight: bold" id="amountSpan"></span></p>
                     <p><span style="font-style: italic">Transfer Date:</span> <span style="font-weight: bold" id="dateSpan"></span></p>
+                    <div>
+                        <input type="checkbox" id="confirmCheckbox" onchange="confirmed()" style="transform: scale(1.5); margin-right: 5px">
+                        <label for="confirmCheckbox">I confirmed that all details in this transfer is correct.</label>
+                    </div>
+                    <div id="oneTimeCodeVerificationDiv">
+                        <span>We need to verify if it was you who making this transfer. Please click "send code" to receive a one-time code.</span>
+                        <a href="#" onclick="sendCode()">Send code</a>
+                    </div>
+                    <img id="transferLoadingGif" src="images/loading-symbol.gif" alt="Loading..." width="80px" height="80px"/>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-success" id="modalConfirmButton" data-dismiss="modal">Confirm</button>
+                    <button type="button" class="btn btn-success" id="modalConfirmButton" data-dismiss="modal" onclick="submitTransferForm()" disabled>Send</button>
                 </div>
             </div>
         </div>
@@ -291,9 +298,29 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script type="text/javascript">
-    document.getElementById('modalConfirmButton').addEventListener('click',function(){
+    function sendCode(){
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/sendTransferCode', true); // Change to GET and the endpoint to '/fetch'
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var data = xhr.responseText; // data is a list of string
+                document.getElementById("transferLoadingGif").style.display='none';
+                console.log(data)
+            } else if (xhr.readyState === 4) {
+                // Handle error here
+                console.error(xhr.statusText);
+            }
+        }
+        document.getElementById("transferLoadingGif").style.display='block';
+        xhr.send();
+    }
+    function confirmed(){
+        document.getElementById('modalConfirmButton').disabled = false;
+    }
+
+    function submitTransferForm(){
         document.getElementById('transferForm').submit();
-    })
+    }
 
     function activeTab(event,divid) {
         // Prevent the default behavior of the link
