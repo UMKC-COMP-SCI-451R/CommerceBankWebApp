@@ -82,10 +82,6 @@
                                         th:text="${exAcc.getAccountNumber()}+' (' +${exAcc.getBankName()}+')'"></option>
                             </select>
                         </div>
-                        <!--                <div class="form-group my-2">-->
-                        <!--                    <label for="amount"><b>Amount:</b></label>-->
-                        <!--                    <input class="form-control" type="number" name="amount" id="amount" min="0" step="any" required>-->
-                        <!--                </div>-->
                         <div>
                             <label for="amount"><b>Amount:</b></label>
                         </div>
@@ -224,9 +220,7 @@
             </div>
         </div>
     </div>
-<!--    <div style="display: flex; justify-content: center">-->
-<!--        <img src="images/transfer/transfer-image.jpg" alt="saving account advert" style="height: 220px; width: auto" >-->
-<!--    </div>-->
+
     <!-- Modal -->
     <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -234,15 +228,51 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Transfer Fund Confirmation</h5>
                 </div>
-                <div class="modal-body align-content-center">
-                    <p><span style="font-style: italic">From:</span> <span style="font-weight: bold" id="fromSpan"></span></p>
-                    <p><span style="font-style: italic">To:</span> <span style="font-weight: bold" id="toSpan"></span></p>
-                    <p><span style="font-style: italic">Transfer Amount:</span> <span style="font-weight: bold" id="amountSpan"></span></p>
-                    <p><span style="font-style: italic">Transfer Date:</span> <span style="font-weight: bold" id="dateSpan"></span></p>
+                <div class="modal-body">
+                    <p class="ms-5"><span style="font-style: italic">From:</span> <span style="font-weight: bold" id="fromSpan"></span></p>
+                    <p class="ms-5"><span style="font-style: italic">To:</span> <span style="font-weight: bold" id="toSpan"></span></p>
+                    <p class="ms-5"><span style="font-style: italic">Transfer Amount:</span> <span style="font-weight: bold" id="amountSpan"></span></p>
+                    <p class="ms-5"><span style="font-style: italic">Transfer Date:</span> <span style="font-weight: bold" id="dateSpan"></span></p>
+                    <div class="text-center">
+                        <input type="checkbox" id="confirmCheckbox" style="transform: scale(1.5); margin-right: 5px">
+                        <label for="confirmCheckbox">I confirmed that all details in this transfer is correct.</label>
+                    </div>
+                    <div id="verificationRequestDiv">
+                        <hr>
+                        <span>We need to verify if it was you who making this transfer. Please click "send code" to receive a one-time code.</span>
+                        <a href="#" onclick="sendCode()">Send code</a>
+                    </div>
+                    <div id="oneTimeCodeVerificationDiv">
+                        <div id="codeSentMessage" class="mt-3 ">
+                            <hr>
+                            <span>An email have been sent to you with a one-time code. Please enter the code and click Verify</span>
+                        </div>
+                        <div class="row mt-3 align-content-end mb-3">
+                            <div class="col-2"></div>
+                            <div class="col-6">
+                                <div class="form-floating">
+                                    <input type="number" class="form-control" name="enteredTransferCode" id="enteredTransferCode" required>
+                                    <label for="enteredTransferCode">Enter one-time code: </label>
+                                </div>
+                            </div>
+                            <div class="col-1">
+                                <button type="button" class="btn btn-success" onclick="verifyTransferCode()" id="transferCodeVerifyButton" disabled>Verify</button>
+                            </div>
+                        </div>
+                        <div id="verifySucessDiv">
+                            <img id="checkmarkGIf" src="images/transfer/checkmark.gif" alt="Loading..." width="80px" height="80px"/>
+                            <span>Verify sucessfully. Ready to transfer.</span>
+                        </div>
+                        <div id="verifyFailedDiv">
+                            <img id="xmarkGIf" src="images/transfer/X-mark.gif" alt="Loading..." width="80px" height="80px"/>
+                            <span>One-code does not match. Aborting transfer...</span>
+                        </div>
+                    </div>
+                    <img id="transferLoadingGif" src="images/loading-symbol.gif" alt="Loading..." width="80px" height="80px"/>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-success" id="modalConfirmButton" data-dismiss="modal">Confirm</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="modalCancelButton" onclick="resetConfirmationModal()">Cancel</button>
+                    <button type="button" class="btn btn-success" id="modalConfirmButton" data-dismiss="modal" onclick="submitTransferForm()" disabled>Send</button>
                 </div>
             </div>
         </div>
@@ -291,9 +321,89 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script type="text/javascript">
-    document.getElementById('modalConfirmButton').addEventListener('click',function(){
-        document.getElementById('transferForm').submit();
+    document.getElementById("enteredTransferCode").addEventListener('input', function(event) {
+        // Get the value of the input
+        var inputValue = event.target.value;
+
+        // Check if the input value is not empty or null
+        if (inputValue.trim() !== '') {
+            document.getElementById("transferCodeVerifyButton").disabled = false
+        } else {
+            document.getElementById("transferCodeVerifyButton").disabled = true
+        }
+    });
+    var confirmCheckbox = document.getElementById("confirmCheckbox");
+    confirmCheckbox.addEventListener('change',function(event){
+        if(confirmCheckbox.checked == true){
+            document.getElementById("verificationRequestDiv").style.display = 'block'
+        }else{
+            document.getElementById("verificationRequestDiv").style.display = 'none'
+        }
     })
+
+
+    // Add event listener for keypress inside the form
+    document.getElementById('transferForm').addEventListener('keypress', function(event) {
+        // Check if the key pressed is Enter (key code 13)
+        if (event.key === 'Enter') {
+            // Prevent the default form submission
+            event.preventDefault();
+            showConfirmModal();
+        }
+    });
+
+    function verifyTransferCode(){
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/verifyTransferCode', true); // Change to GET and the endpoint to '/fetch'
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        var enteredCode = document.getElementById('enteredTransferCode').value
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var data = xhr.responseText; // data is a list of string
+                document.getElementById("transferLoadingGif").style.display='none';
+                console.log(data)
+                if(data==="verified"){
+                    document.getElementById('modalConfirmButton').disabled = false;
+                    document.getElementById('verifySucessDiv').style.display = 'block';
+                }
+                else{
+                    document.getElementById('verifyFailedDiv').style.display = 'block';
+                    setTimeout(() => {document.getElementById('modalCancelButton').click()},3000)
+                }
+
+
+            } else if (xhr.readyState === 4) {
+                // Handle error here
+                console.error(xhr.statusText);
+            }
+        }
+        document.getElementById("transferLoadingGif").style.display='block';
+        xhr.send(enteredCode);
+    }
+
+    function sendCode(){
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/sendTransferCode', true); // Change to GET and the endpoint to '/fetch'
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var data = xhr.responseText; // data is a list of string
+                document.getElementById("transferLoadingGif").style.display='none';
+                document.getElementById("oneTimeCodeVerificationDiv").style.display = 'block'
+                document.getElementById("enteredTransferCode").disabled = false;
+                console.log(data)
+            } else if (xhr.readyState === 4) {
+                // Handle error here
+                console.error(xhr.statusText);
+            }
+        }
+        document.getElementById("transferLoadingGif").style.display='block';
+        xhr.send();
+    }
+
+
+    function submitTransferForm(){
+        document.getElementById('transferForm').submit();
+    }
 
     function activeTab(event,divid) {
         // Prevent the default behavior of the link
@@ -349,6 +459,16 @@
             // Show the modal
             $('#confirmModal').modal('show');
         }
+    }
+
+    function resetConfirmationModal(){
+        confirmCheckbox.checked = false;
+        document.getElementById("verificationRequestDiv").style.display = 'none'
+        document.getElementById("oneTimeCodeVerificationDiv").style.display ='none'
+        document.getElementById("enteredTransferCode").value=''
+        document.getElementById("transferCodeVerifyButton").disabled=true
+        document.getElementById("verifySucessDiv").style.display ='none'
+        document.getElementById("verifyFailedDiv").style.display ='none'
     }
 
     function showSendDepositsModal(){

@@ -35,7 +35,7 @@
 }
 .modal-dialog {
     margin: auto;
-    top: 20%;
+    top: 2%;
 }
 
 .message{
@@ -52,4 +52,33 @@
 .tranferPage{
     opacity: 0; /* Initially set opacity to 0 */
     transition: opacity 0.3s ease /* Add transition effect for opacity */
+}
+
+#oneTimeCodeVerificationDiv{
+    margin: 10px;
+}
+
+#transferLoadingGif{
+    display: none;
+    position: absolute;
+    bottom: 20%;
+    left: 40%;
+}
+
+#verificationRequestDiv{
+    text-align: center;
+    display: none;
+}
+
+#oneTimeCodeVerificationDiv{
+    text-align: center;
+    display: none;
+}
+
+#verifySucessDiv{
+    display: none;
+}
+
+#verifyFailedDiv{
+    display:none;
 }

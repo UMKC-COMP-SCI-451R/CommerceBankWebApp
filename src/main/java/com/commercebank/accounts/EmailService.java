@@ -24,7 +24,18 @@ public class EmailService {
         message.setTo(to);
         message.setSubject("One-time reset-password code");
         message.setText("We've received a request to reset your account's password! If you did not request a new password," +
-                " please contact our customer service to take immediate action to protect your acount. \n Otherwise, here is your code: " + code
+                " please contact our customer service to take immediate action to protect your account. \n Otherwise, here is your code: " + code
+                + "\n Please keep in mind that this code will expire after 5 minutes");
+        mailSender.send(message);
+    }
+
+    public void sendTransferCodeEmail(String to, int code) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        //message.setFrom("commercebank@mail.com");
+        message.setTo(to);
+        message.setSubject("One-time transfer code");
+        message.setText("We've received a request to make a transfer! If it wasn't you," +
+                " please contact our customer service to take immediate action to protect your account. \n Otherwise, here is your code: " + code
                 + "\n Please keep in mind that this code will expire after 5 minutes");
         mailSender.send(message);
     }
