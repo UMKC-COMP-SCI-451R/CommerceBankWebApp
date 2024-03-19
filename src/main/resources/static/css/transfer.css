@@ -35,7 +35,7 @@
 }
 .modal-dialog {
     margin: auto;
-    top: 20%;
+    top: 2%;
 }
 
 .message{
@@ -63,4 +63,22 @@
     position: absolute;
     bottom: 20%;
     left: 40%;
+}
+
+#verificationRequestDiv{
+    text-align: center;
+    display: none;
+}
+
+#oneTimeCodeVerificationDiv{
+    text-align: center;
+    display: none;
+}
+
+#verifySucessDiv{
+    display: none;
+}
+
+#verifyFailedDiv{
+    display:none;
 }

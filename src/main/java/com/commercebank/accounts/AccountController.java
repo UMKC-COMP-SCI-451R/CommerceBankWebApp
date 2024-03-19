@@ -7,10 +7,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
@@ -327,6 +324,23 @@ public class AccountController {
         }).start();
         emailService.sendTransferCodeEmail(email,code);
         return "code sent is " + code;
+    }
+
+    @PostMapping("/verifyTransferCode")
+    @ResponseBody
+    public String verifyTransferCode(@RequestBody String enteredCode, HttpSession session){
+        String email = ((Accounts) session.getAttribute("account")).getEmail();
+        if(!codeHM.containsKey(email))
+        {
+            return "verificationFailed";
+        }
+        if(Integer.parseInt(enteredCode) == codeHM.get(email)){
+            codeHM.remove(email); // remove email and code pair after successful verification
+            return "verified";
+        }
+        else{
+            return "verificationFailed";
+        }
     }
 
 
