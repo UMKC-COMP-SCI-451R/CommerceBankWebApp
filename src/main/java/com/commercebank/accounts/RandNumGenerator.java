@@ -1,7 +1,7 @@
 package com.commercebank.accounts;
 
 import java.util.Random;
-
+import java.security.SecureRandom;
 public class RandNumGenerator {
     public static long generateRandom16DigitNumber() {
         // Generate a random 16-digit number
@@ -15,7 +15,7 @@ public class RandNumGenerator {
     public static int generateRandom4DigitCode(){
         int min = 1000;
         int max = 9999;
-        Random random = new Random();
+        SecureRandom random = new SecureRandom();
         return min + ((int) (random.nextDouble() * (max - min + 1)));
     }
 }
