@@ -52,7 +52,7 @@
 </div>
 <div style="flex:1">
     <div class="loginform">
-        <form method="post">
+        <form method="post" onsubmit="showLoadingDiv()">
             <div class="container-fluid text-center">
                 <div><label for="email"><b class="logindetails">Email</b></label>
                     <input type="email" placeholder="Enter Email" name="email" id="email" class="loginfield" th:value="${useremail}" required></div>
@@ -132,6 +132,10 @@
         </div>
     </div>
 </div>
+<div id="processingDiv">
+    <h5>Processing...</h5>
+    <img id="loginLoadingGif" src="images/loading-symbol.gif" alt="Loading..." width="80px" height="80px"/>
+</div>
 <div class="bg-success mt-3">
     <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-auto px-5">
         <div class="col-md-4 d-flex align-items-center">
@@ -160,8 +164,11 @@
     }
 
     function submitForgotPasswordForm(){
-        if(requireEmailInput())
+        if(requireEmailInput()){
+            showLoadingDiv();
             document.getElementById("forgotPasswordForm").submit();
+        }
+
     }
 
     //set time out for message div
@@ -171,6 +178,10 @@
     setTimeout(function() {
         document.getElementById('errorDiv').style.display = 'none';
     }, 5000);
+
+    function showLoadingDiv(){
+        document.getElementById('processingDiv').style.display='flex';
+    }
 </script>
 <script src="js/ai-chat-functions.js"></script>
 </body>

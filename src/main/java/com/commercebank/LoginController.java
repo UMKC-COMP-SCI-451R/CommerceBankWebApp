@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +28,8 @@ public class LoginController {
     //private int code;
     private HashMap<String, Integer> codeHM = new HashMap<>();
 
+    @Autowired
+    private BCryptPasswordEncoder bEncoder;
     @GetMapping("/login")
     public String showLoginPage(Model model, HttpSession session, HttpServletRequest request){
         boolean isChecked;
@@ -66,7 +69,7 @@ public class LoginController {
             response.addCookie(cookie);
         }
 
-        if(account.isPresent() && account.get().getPassword().equals(password)){
+        if(account.isPresent() && bEncoder.matches(password,account.get().getPassword())){
             Accounts acc = account.get();
             if(acc.isMultifactorAuth())
             {

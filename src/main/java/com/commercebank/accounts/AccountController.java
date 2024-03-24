@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ import java.util.*;
 public class AccountController {
     @Autowired private AccountService accountService;
     @Autowired private EmailService emailService;
+    @Autowired private BCryptPasswordEncoder bEncoder;
     //private int code;
     private HashMap<String, Integer> codeHM = new HashMap<>();
     @GetMapping("/register")
@@ -42,6 +44,8 @@ public class AccountController {
             cardNumber = RandNumGenerator.generateRandom16DigitNumber();
             acc = accountService.getAccountByCardNumber(cardNumber);
         }
+        String rawPassword = account.getPassword();
+        account.setPassword(bEncoder.encode(rawPassword));
         account.setCardNumber(cardNumber);
         account.setTextAlert(false);
         account.setMultifactorAuth(false);
@@ -97,7 +101,7 @@ public class AccountController {
             codeHM.remove(email); // remove email and code pair after successful verification
             Optional<Accounts> account = accountService.getAccountByEmail(email);
             Accounts acc = account.get();
-            acc.setPassword(newPassword);
+            acc.setPassword(bEncoder.encode(newPassword));
             accountService.save(acc);
             ra.addFlashAttribute("message","Password reset successfully");
             return "redirect:/login";
