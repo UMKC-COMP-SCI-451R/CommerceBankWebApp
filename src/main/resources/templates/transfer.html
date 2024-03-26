@@ -64,22 +64,24 @@
                             <label for="source"><b>Source: </b></label>
                             <select class="form-select" name="source" id="source" required>
                                 <option value="Select">Select</option>
-                                <option value="My Account">My Account (Commerce Bank)</option>
+                                <option th:value="'My Account - ' + ${#strings.substring(session.account.getAccID().toString(), session.account.getAccID().toString().length() - 4)}"
+                                        th:text="'My Account - ' + ${#strings.substring(session.account.getAccID().toString(), session.account.getAccID().toString().length() - 4)}"></option>
                                 <option th:each="exAcc : ${session.account.getExternalAccountsList()}"
                                         th:if="${exAcc.isActive()}"
-                                        th:value="${exAcc.getBankName()}"
-                                        th:text="${exAcc.getAccountNumber()}+' (' +${exAcc.getBankName()}+')'"></option>
+                                        th:value="${exAcc.getBankName() +' - '+ #strings.substring(exAcc.getAccountNumber().toString(), exAcc.getAccountNumber().toString().length() - 4)}"
+                                        th:text="${exAcc.getBankName() +' - ' + #strings.substring(exAcc.getAccountNumber().toString(), exAcc.getAccountNumber().toString().length() - 4)}"></option>
                             </select>
                         </div>
                         <div class="form-group my-2">
                             <label for="destination"><b>Destination: </b></label>
                             <select class="form-select" name="destination" id="destination" required>
                                 <option value="Select">Select</option>
-                                <option value="My Account">My Account (Commerce Bank)</option>
+                                <option th:value="'My Account - ' + ${#strings.substring(session.account.getAccID().toString(), session.account.getAccID().toString().length() - 4)}"
+                                        th:text="'My Account - ' + ${#strings.substring(session.account.getAccID().toString(), session.account.getAccID().toString().length() - 4)}"></option>
                                 <option th:each="exAcc : ${session.account.getExternalAccountsList()}"
                                         th:if="${exAcc.isActive()}"
-                                        th:value="${exAcc.getBankName()}"
-                                        th:text="${exAcc.getAccountNumber()}+' (' +${exAcc.getBankName()}+')'"></option>
+                                        th:value="${exAcc.getBankName() +' - '+ #strings.substring(exAcc.getAccountNumber().toString(), exAcc.getAccountNumber().toString().length() - 4)}"
+                                        th:text="${exAcc.getBankName() +' - '+ #strings.substring(exAcc.getAccountNumber().toString(), exAcc.getAccountNumber().toString().length() - 4)}"></option>
                             </select>
                         </div>
                         <div>
@@ -489,7 +491,7 @@
         var transferForm = document.getElementById("transferForm");
         var source = document.getElementById("source").value;
         var destination = document.getElementById("destination").value;
-        if(source==="Select" || destination==="Select" || (source !== "My Account" && destination !== "My Account")
+        if(source==="Select" || destination==="Select" || (!source.includes("My Account") && !destination.includes("My Account"))
             || source === destination){
             alert("Please select appropriate Destination and Source accounts and try again.")
             return false;

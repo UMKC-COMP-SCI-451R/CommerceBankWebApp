@@ -244,7 +244,7 @@ public class AccountController {
         Accounts account;
         if(acc.isPresent()){
             account = acc.get();
-            if((source.equals("My Account") && account.getBalance()-amount>=0.0) || destination.equals("My Account"))
+            if((source.contains("My Account") && account.getBalance()-amount>=0.0) || destination.contains("My Account"))
             {
                 Transactions tran = new Transactions();
                 tran.setAccount(account);
@@ -253,7 +253,7 @@ public class AccountController {
                 tran.setDestination(destination);
                 tran.setAmount(amount);
                 account.getTransactionsList().add(tran);
-                account.setBalance(account.getBalance() - (source.equals("My Account")? amount : -amount));
+                account.setBalance(account.getBalance() - (source.contains("My Account")? amount : -amount));
                 accountService.save(account); //update account object after adding transaction
                 ra.addFlashAttribute("message","Transfer is made successfully!"); //RedirectAttributes is something to send to the page at return statement
                 session.setAttribute("account",account);

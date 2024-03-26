@@ -61,7 +61,19 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-9">
+        <div class="col-md-6">
+            <div class="text-center mt-3">
+                <form action="/filterTransactions" method="post">
+                    <label for="fromDate">From:</label>
+                    <input type="date" id="fromDate" name="fromDate" onchange="setToDateMin()">
+
+                    <label for="toDate">To:</label>
+                    <input type="date" id="toDate" name="toDate">
+
+                    <button class="btn btn-success " type="submit" id="filterApplyBtn">Apply</button>
+                    <button class="btn btn-secondary" type="button" onclick="clearFilter()">Clear Filter</button>
+                </form>
+            </div>
             <div class="transaction-card card">
                 <th:block
                         th:if="${session.filteredTransactions != null and not #lists.isEmpty(session.filteredTransactions)}">
@@ -76,25 +88,66 @@
                             <!-- Display the transactions for the current page -->
                             <th:block
                                     th:each="trans : ${session.filteredTransactions.subList(7 * (session.currentPage - 1), (7 * session.currentPage > session.filteredTransactions.size) ? session.filteredTransactions.size : 7 * session.currentPage)}">
+<!--                                <div class="container mb-3 transaction">-->
+<!--                                    <div class="row">-->
+<!--                                        <div class="col-2" style="margin-left: 3%;">-->
+<!--                                            <div><em>ID:</em> <span th:text="${trans.transactionId}"></span></div>-->
+<!--                                        </div>-->
+<!--                                        <div class="col-2 text-md-end transaction-source">-->
+<!--                                            <span th:text="${trans.source}"></span>-->
+<!--                                        </div>-->
+<!--                                        <div class="col-1 text-center">-->
+<!--                                            <span><em>To</em></span>-->
+<!--                                        </div>-->
+<!--                                        <div class="col-2 transaction-destination">-->
+<!--                                            <span th:text="${trans.destination}"></span>-->
+<!--                                        </div>-->
+<!--                                        <div class="col-2 text-center transaction-amount">-->
+<!--                                            <span th:text="${#numbers.formatCurrency(trans.amount)}"></span>-->
+<!--                                        </div>-->
+<!--                                        <div class="col-2">-->
+<!--                                            <span><em>Date:</em></span> <span th:text="${trans.date}"></span>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
                                 <div class="container mb-3 transaction">
                                     <div class="row">
-                                        <div class="col-2" style="margin-left: 3%;">
-                                            <div><em>ID:</em> <span th:text="${trans.transactionId}"></span></div>
-                                        </div>
-                                        <div class="col-2 text-md-end transaction-source">
-                                            <span th:text="${trans.source}"></span>
-                                        </div>
-                                        <div class="col-1 text-center">
-                                            <span><em>To</em></span>
-                                        </div>
-                                        <div class="col-2 transaction-destination">
-                                            <span th:text="${trans.destination}"></span>
-                                        </div>
-                                        <div class="col-2 text-center transaction-amount">
-                                            <span th:text="${#numbers.formatCurrency(trans.amount)}"></span>
-                                        </div>
-                                        <div class="col-2">
+                                        <div class="col-4 text-center">
                                             <span><em>Date:</em></span> <span th:text="${trans.date}"></span>
+                                        </div>
+                                        <div class="col-3 text-center">
+                                            <span><em>Status:</em></span> <span class="transaction-status">Posted</span>
+                                        </div>
+                                        <div class="col-4 text-center">
+                                            <span class="transaction-amount" th:text="${#numbers.formatCurrency(trans.amount)}"></span>
+                                        </div>
+                                        <div class="col-1 text-end">
+                                            <i class="fa fa-angle-down text-success expand-button" onclick="toggleShowTransactionDetails(this)"></i>
+                                        </div>
+                                    </div>
+                                    <div class="hidden-transaction-details" style="margin: 0 50px 0 50px">
+                                        <hr>
+                                        <div class="text-center"><em>Details</em></div>
+                                        <div class="row"><div><em>ID:</em> <span th:text="${trans.transactionId}"></span></div></div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <span><em>Type:</em></span> <span class="transaction-type">Inbound</span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <span><em>Source:</em></span> <span th:text="${trans.source}" class="transaction-source"></span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <span><em>Destination:</em></span> <span th:text="${trans.destination}" class="transaction-destination"></span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <span><em>Note:</em></span> <span>Testing description</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -126,23 +179,42 @@
                                   th:if="${transStatus.index >= transStatus.size-5}">
                             <div class="container mb-3 transaction">
                                 <div class="row">
-                                    <div class="col-2" style="margin-left: 3%">
-                                        <div><em>ID:</em> <span th:text="${trans.transactionId}"></span></div>
-                                    </div>
-                                    <div class="col-2 text-md-end transaction-source">
-                                        <span th:text="${trans.source}"></span>
-                                    </div>
-                                    <div class="col-1 text-center">
-                                        <span><em>To</em></span>
-                                    </div>
-                                    <div class="col-2 transaction-destination">
-                                        <span th:text="${trans.destination}"></span>
-                                    </div>
-                                    <div class="col-2 text-center transaction-amount">
-                                        <span th:text="${#numbers.formatCurrency(trans.amount)}"></span>
-                                    </div>
-                                    <div class="col-2">
+                                    <div class="col-4 text-center">
                                         <span><em>Date:</em></span> <span th:text="${trans.date}"></span>
+                                    </div>
+                                    <div class="col-3 text-center">
+                                        <span><em>Status:</em></span> <span class="transaction-status">Posted</span>
+                                    </div>
+                                    <div class="col-4 text-center">
+                                        <span class="transaction-amount" th:text="${#numbers.formatCurrency(trans.amount)}"></span>
+                                    </div>
+                                    <div class="col-1 text-end">
+                                        <i class="fa fa-angle-down text-success expand-button" onclick="toggleShowTransactionDetails(this)"></i>
+                                    </div>
+                                </div>
+                                <div class="hidden-transaction-details" style="margin: 0 50px 0 50px">
+                                    <hr>
+                                    <div class="text-center"><em>Details</em></div>
+                                    <div class="row"><div><em>ID:</em> <span th:text="${trans.transactionId}"></span></div></div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <span><em>Type:</em></span> <span class="transaction-type">Inbound</span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <span><em>Source:</em></span> <span th:text="${trans.source}" class="transaction-source"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <span><em>Destination:</em></span> <span th:text="${trans.destination}" class="transaction-destination"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <span><em>Note:</em></span> <span>Testing description</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -151,18 +223,18 @@
                     </div>
                 </th:block>
             </div>
-            <div class="text-center">
-                <form action="/filterTransactions" method="post">
-                    <label for="fromDate">From:</label>
-                    <input type="date" id="fromDate" name="fromDate" onchange="setToDateMin()">
+<!--            <div class="text-center">-->
+<!--                <form action="/filterTransactions" method="post">-->
+<!--                    <label for="fromDate">From:</label>-->
+<!--                    <input type="date" id="fromDate" name="fromDate" onchange="setToDateMin()">-->
 
-                    <label for="toDate">To:</label>
-                    <input type="date" id="toDate" name="toDate">
+<!--                    <label for="toDate">To:</label>-->
+<!--                    <input type="date" id="toDate" name="toDate">-->
 
-                    <button class="btn btn-success " type="submit" id="filterApplyBtn">Apply</button>
-                    <button class="btn btn-secondary" type="button" onclick="clearFilter()">Clear Filter</button>
-                </form>
-            </div>
+<!--                    <button class="btn btn-success " type="submit" id="filterApplyBtn">Apply</button>-->
+<!--                    <button class="btn btn-secondary" type="button" onclick="clearFilter()">Clear Filter</button>-->
+<!--                </form>-->
+<!--            </div>-->
         </div>
     </div>
     <div id="QAButtonContainer">
@@ -230,36 +302,60 @@
 </div>
 
 <script>
-    // Get all elements with the class 'transaction-source'
-    var transactionSources = document.querySelectorAll('.transaction-source');
-    var transactionDestinations = document.querySelectorAll('.transaction-destination');
-
+    const transaction = document.querySelectorAll('.transaction');
     // Iterate through each element
-    transactionSources.forEach(function (element) {
-        var transaction = element.parentNode;
-        var amountElement = transaction.querySelector('.transaction-amount');
-        if (element.querySelector('span').textContent === 'My Account') {
+    transaction.forEach(function (element) {
+        const amountElement = element.querySelector('.transaction-amount');
+        const transactionSource = element.querySelector('.transaction-source');
+        const transactionType = element.querySelector('.transaction-type');
+        const transactionDestination = element.querySelector('.transaction-destination')
+        if (element.querySelector('.transaction-source').textContent.includes('My Account')) {
             // Modify the style of the element
-            element.style.color = 'blue';
+            transactionSource.style.color = 'green';
+            transactionDestination.style.color ='grey';
             amountElement.style.color = 'red'
             amountElement.textContent = '- ' + amountElement.textContent
+            transactionType.textContent = 'Outbound';
         } else {
-            // Reset the style if the condition is not met
-            element.style.color = 'grey';
+            transactionSource.style.color = 'grey';
+            transactionDestination.style.color ='green';
             amountElement.textContent = '+ ' + amountElement.textContent
             amountElement.style.color = 'green'
+            transactionType.textContent = 'Inbound';
         }
     });
 
-    transactionDestinations.forEach(function (element) {
-        if (element.querySelector('span').textContent === 'My Account') {
-            // Modify the style of the element
-            element.style.color = 'blue';
-        } else {
-            // Reset the style if the condition is not met
-            element.style.color = 'grey';
+
+    function toggleShowTransactionDetails(iconElement){
+
+        const transaction = iconElement.parentElement.parentElement.parentElement;
+        const transDetails = transaction.getElementsByClassName('hidden-transaction-details')[0]
+        if(transDetails.style.display=='block') {
+            iconElement.classList.remove('fa-angle-up')
+            iconElement.classList.add('fa-angle-down')
+            transaction.style.height = '27px';
+            transDetails.style.opacity = '0';
+            setTimeout(() => {
+                transDetails.style.display = 'none';
+            }, 500);
+
+            //console.log(transactionHeight)
+        }else{
+            iconElement.classList.remove('fa-angle-down')
+            iconElement.classList.add('fa-angle-up')
+            transDetails.style.display = 'block';
+            setTimeout(() => {
+                transDetails.style.opacity = '1';
+            }, 10);
+
+            // setTimeout(() => {
+            //
+            // }, 500);
+            // let transactionHeight = transaction.clientHeight + transDetails.clientHeight;
+            transaction.style.height = '210px';
+           // console.log(transactionHeight)
         }
-    })
+    }
 
 
     window.addEventListener('load', function() {
