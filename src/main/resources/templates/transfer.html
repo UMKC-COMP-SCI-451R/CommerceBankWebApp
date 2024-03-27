@@ -251,14 +251,28 @@
                     <div id="oneTimeCodeVerificationDiv">
                         <div id="codeSentMessage" class="mt-3 ">
                             <hr>
-                            <span>An email have been sent to you with a one-time code. Please enter the code and click Verify</span>
+                            <span>An email have been sent to you with a 4-digit code. Please enter the code and click Verify</span>
                         </div>
                         <div class="row mt-3 align-content-end mb-3">
                             <div class="col-2"></div>
                             <div class="col-6">
-                                <div class="form-floating">
-                                    <input type="number" class="form-control" name="enteredTransferCode" id="enteredTransferCode" required>
-                                    <label for="enteredTransferCode">Enter one-time code: </label>
+<!--                                <div class="form-floating">-->
+<!--                                    <input type="number" class="form-control" name="enteredTransferCode" id="enteredTransferCode" required>-->
+<!--                                    <label for="enteredTransferCode">Enter one-time code: </label>-->
+<!--                                </div>-->
+                                <div class="row">
+                                    <div class="col">
+                                        <input type="number" maxlength="1" class="form-control transfer-code-input" id="digit1" name="digit1" oninput="checkTransferCodeInput()" onkeyup="moveToNext(this, 'digit2')">
+                                    </div>
+                                    <div class="col">
+                                        <input type="number" maxlength="1" class="form-control transfer-code-input" id="digit2" name="digit2" oninput="checkTransferCodeInput()" onkeyup="moveToNext(this, 'digit3')">
+                                    </div>
+                                    <div class="col">
+                                        <input type="number" maxlength="1" class="form-control transfer-code-input" id="digit3" name="digit3" oninput="checkTransferCodeInput()" onkeyup="moveToNext(this, 'digit4')">
+                                    </div>
+                                    <div class="col">
+                                        <input type="number" maxlength="1" class="form-control transfer-code-input" id="digit4" name="digit4" oninput="checkTransferCodeInput()" >
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-1">
@@ -327,17 +341,45 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script type="text/javascript">
-    document.getElementById("enteredTransferCode").addEventListener('input', function(event) {
-        // Get the value of the input
-        var inputValue = event.target.value;
+    var enteredTransferCode = ""
+    // const digit1 = document.getElementById("digit1")
+    // const digit2 = document.getElementById("digit2")
+    // const digit3 = document.getElementById("digit3")
+    // const digit4 = document.getElementById("digit4")
 
-        // Check if the input value is not empty or null
-        if (inputValue.trim() !== '') {
+    function moveToNext(currentInput, nextInputID) {
+        var maxLength = parseInt(currentInput.getAttribute('maxlength'));
+        var currentLength = currentInput.value.length;
+
+        if (currentLength >= maxLength) {
+            document.getElementById(nextInputID).focus();
+        }
+    }
+
+    function checkTransferCodeInput(){
+        // Get all input elements
+        var inputs = document.querySelectorAll('.transfer-code-input');
+        var allFilled = true;
+
+        // Check each input
+        inputs.forEach(function(input) {
+            if (input.value === '') {
+                allFilled = false;
+            }
+        });
+
+        // If all inputs are filled
+        if (allFilled) {
+            enteredTransferCode =""
             document.getElementById("transferCodeVerifyButton").disabled = false
-        } else {
+            inputs.forEach(function(input) {
+                enteredTransferCode += input.value.toString();
+            });
+        }else {
             document.getElementById("transferCodeVerifyButton").disabled = true
         }
-    });
+    }
+
     var confirmCheckbox = document.getElementById("confirmCheckbox");
     confirmCheckbox.addEventListener('change',function(event){
         if(confirmCheckbox.checked == true){
@@ -362,7 +404,6 @@
         var xhr = new XMLHttpRequest();
         xhr.open('POST', '/verifyTransferCode', true); // Change to GET and the endpoint to '/fetch'
         xhr.setRequestHeader('Content-Type', 'application/json');
-        var enteredCode = document.getElementById('enteredTransferCode').value
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 var data = xhr.responseText; // data is a list of string
@@ -384,7 +425,7 @@
             }
         }
         document.getElementById("transferLoadingGif").style.display='block';
-        xhr.send(enteredCode);
+        xhr.send(enteredTransferCode);
     }
 
     function sendCode(){
@@ -395,7 +436,6 @@
                 var data = xhr.responseText; // data is a list of string
                 document.getElementById("transferLoadingGif").style.display='none';
                 document.getElementById("oneTimeCodeVerificationDiv").style.display = 'block'
-                document.getElementById("enteredTransferCode").disabled = false;
                 console.log(data)
             } else if (xhr.readyState === 4) {
                 // Handle error here
@@ -471,10 +511,13 @@
         confirmCheckbox.checked = false;
         document.getElementById("verificationRequestDiv").style.display = 'none'
         document.getElementById("oneTimeCodeVerificationDiv").style.display ='none'
-        document.getElementById("enteredTransferCode").value=''
         document.getElementById("transferCodeVerifyButton").disabled=true
         document.getElementById("verifySucessDiv").style.display ='none'
         document.getElementById("verifyFailedDiv").style.display ='none'
+        var inputs = document.querySelectorAll('.transfer-code-input');
+        inputs.forEach(function(input) {
+            input.value = ''
+        });
     }
 
     function showSendDepositsModal(){

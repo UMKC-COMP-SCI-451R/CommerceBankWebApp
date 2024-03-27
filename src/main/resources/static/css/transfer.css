@@ -82,3 +82,12 @@
 #verifyFailedDiv{
     display:none;
 }
+
+.transfer-code-input{
+    text-align: center;
+}
+
+.transfer-code-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}

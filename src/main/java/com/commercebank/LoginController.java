@@ -103,12 +103,14 @@ public class LoginController {
         return "multifactorauth";
     }
     @PostMapping("/multifactorauth")
-    public String multifactorVerification(int enteredCode, String email, RedirectAttributes ra, HttpSession session){
+    public String multifactorVerification(int digit1, int digit2, int digit3, int digit4, String email, RedirectAttributes ra, HttpSession session){
         if(!codeHM.containsKey(email))
         {
             ra.addFlashAttribute("error","Code expired or invalid.");
             return "redirect:/login";
         }
+        int enteredCode = Integer.parseInt(String.format("%d%d%d%d",digit1,digit2,digit3,digit4));
+        System.out.println(enteredCode);
         if(enteredCode == codeHM.get(email)){
             codeHM.remove(email); // remove email and code pair after successful verification
             Optional<Accounts> account = accountService.getAccountByEmail(email);

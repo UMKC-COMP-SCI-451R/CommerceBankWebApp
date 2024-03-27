@@ -10,6 +10,10 @@
         border-radius: 15px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
+    .code-input{
+        font-size: 50px;
+        text-align: center;
+    }
 </style>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -24,19 +28,61 @@
     <div class="card-body">
         <form th:action="@{/multifactorauth}" method="post">
             <div class="container-fluid text-center">
-                <div class="form-floating mb-3">
-                    <input type="number" class="form-control" name="enteredCode" id="enteredCode" required>
-                    <label for="enteredCode">One-time code:</label>
+                <div class="mb-3">
+<!--                    <input type="number" class="form-control" name="enteredCode" id="enteredCode" required>-->
+<!--                    <label for="enteredCode">One-time code:</label>-->
+                    <p>One-time code:</p>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-3">
+                        <input type="text" maxlength="1" class="form-control code-input" id="digit1" name="digit1" oninput="checkCodeInput()" onkeyup="moveToNext(this, 'digit2')">
+                    </div>
+                    <div class="col-3">
+                        <input type="text" maxlength="1" class="form-control code-input" id="digit2" name="digit2" oninput="checkCodeInput()" onkeyup="moveToNext(this, 'digit3')">
+                    </div>
+                    <div class="col-3">
+                        <input type="text" maxlength="1" class="form-control code-input" id="digit3" name="digit3" oninput="checkCodeInput()" onkeyup="moveToNext(this, 'digit4')">
+                    </div>
+                    <div class="col-3">
+                        <input type="text" maxlength="1" class="form-control code-input" id="digit4" name="digit4" oninput="checkCodeInput()" >
+                    </div>
                 </div>
                 <input type="hidden" name="email" th:value="${email}">
-                <button class="btn btn-success" type="submit">Verify</button>
+                <button class="btn btn-success" type="submit" id="verifyButton" disabled>Verify</button>
             </div>
         </form>
     </div>
 </div>
 <p class="text-center mt-3">***An email has been sent to you with a one-time code***</p>
 <script type="text/javascript">
+    function moveToNext(currentInput, nextInputID) {
+        var maxLength = parseInt(currentInput.getAttribute('maxlength'));
+        var currentLength = currentInput.value.length;
 
+        if (currentLength >= maxLength) {
+            document.getElementById(nextInputID).focus();
+        }
+    }
+
+    function checkCodeInput(){
+        // Get all input elements
+        var inputs = document.querySelectorAll('.code-input');
+        var allFilled = true;
+
+        // Check each input
+        inputs.forEach(function(input) {
+            if (input.value === '') {
+                allFilled = false;
+            }
+        });
+
+        // If all inputs are filled
+        if (allFilled) {
+            document.getElementById("verifyButton").disabled = false
+        }else {
+            document.getElementById("verifyButton").disabled = true
+        }
+    }
 </script>
 
 </body>

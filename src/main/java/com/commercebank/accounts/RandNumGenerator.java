@@ -16,6 +16,7 @@ public class RandNumGenerator {
         int min = 1000;
         int max = 9999;
         SecureRandom random = new SecureRandom();
+//        Random random = new Random(); // use this for better performance
         return min + ((int) (random.nextDouble() * (max - min + 1)));
     }
 }
