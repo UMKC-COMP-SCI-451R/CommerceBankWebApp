@@ -238,7 +238,7 @@ public class AccountController {
 
 
     @PostMapping("/makeTransaction")
-    public String processTransaction(String source, String destination, double amount, RedirectAttributes ra, HttpSession session){
+    public String processTransaction(String source, String destination, double amount, String memo, RedirectAttributes ra, HttpSession session){
         String email = ((Accounts)session.getAttribute("account")).getEmail();
         Optional<Accounts> acc = accountService.getAccountByEmail(email);
         Accounts account;
@@ -252,6 +252,7 @@ public class AccountController {
                 tran.setSource(source);
                 tran.setDestination(destination);
                 tran.setAmount(amount);
+                tran.setMemo(memo);
                 account.getTransactionsList().add(tran);
                 account.setBalance(account.getBalance() - (source.contains("My Account")? amount : -amount));
                 accountService.save(account); //update account object after adding transaction

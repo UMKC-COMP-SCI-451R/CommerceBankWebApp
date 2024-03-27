@@ -148,7 +148,7 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-12">
-                                                        <span><em>Note:</em></span> <span>Testing description</span>
+                                                        <span><em>Memo:</em></span> <span th:text="${trans.memo}" style="font-weight: bold"></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -190,7 +190,7 @@
                                     <div th:each="pageNumber : ${#numbers.sequence(1, totalPages)}" style="display: inline-block">
                                         <form th:action="@{/setCurrentPage}" method="post">
                                             <input type="hidden" name="pageNumber" th:value="${pageNumber}" />
-                                            <button class="btn btn-success" type="submit" th:text="${pageNumber}"></button>
+                                            <button th:class="${session.currentPage == pageNumber} ? 'btn btn-success' : 'btn btn-secondary'" type="submit" th:text="${pageNumber}"></button>
                                         </form>
                                     </div>
                                 </th:block>
@@ -246,7 +246,7 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-12">
-                                                    <span><em>Note:</em></span> <span>Testing description </span>
+                                                    <span><em>Memo:</em></span> <span th:text="${trans.memo}" style="font-weight: bold"> </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -400,13 +400,7 @@
                 const transHeight = transaction.clientHeight
                 const newHeight = transDetailsHeight + transHeight + 20;
                 transaction.style.height = newHeight + 'px';
-                // console.log(transaction.style.height)
             }, 10);
-            // transaction.style.height = '210px';
-            // setTimeout(() => {
-            //     transaction.style.height = newHeight + 'px';
-            //     console.log(transaction.style.height)
-            // }, 10);
         }
     }
 

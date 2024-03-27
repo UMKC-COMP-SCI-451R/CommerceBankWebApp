@@ -31,6 +31,9 @@ public class Transactions {
     @Temporal(TemporalType.DATE) // Specifies that this is a date without time
     private Date date;
 
+    @Column()
+    private String memo;
+
     @PrePersist
     protected void onCreate() {
         date = new Date(); // Set the current date when persisting new entity
@@ -86,6 +89,14 @@ public class Transactions {
 
     public void setAccount(Accounts account) {
         this.account = account;
+    }
+
+    public String getMemo() {
+        return memo;
+    }
+
+    public void setMemo(String memo) {
+        this.memo = memo;
     }
 
     @Override
