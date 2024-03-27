@@ -97,5 +97,18 @@
 
 }
 
+.reportResponseMessageDiv{
+    display: none;
+    border: darkgreen solid 1px;
+    border-radius: 10px;
+    padding: 5px;
+    font-size: 15px;
+    text-align: center;
+}
+
+.reportTextAreaDiv{
+    display:none;
+}
+
 
 

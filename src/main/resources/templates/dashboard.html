@@ -128,25 +128,56 @@
                                     <div class="hidden-transaction-details" style="margin: 0 50px 0 50px">
                                         <hr>
                                         <div class="text-center"><em>Details</em></div>
-                                        <div class="row"><div><em>ID:</em> <span th:text="${trans.transactionId}"></span></div></div>
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <span><em>Type:</em></span> <span class="transaction-type">Inbound</span>
+                                        <div class="row align-items-center">
+                                            <div class="col-6">
+                                                <div class="row"><div><em>ID:</em> <span th:text="${trans.transactionId}"></span></div></div>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <span><em>Type:</em></span> <span class="transaction-type">Inbound</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <span><em>Source:</em></span> <span th:text="${trans.source}" class="transaction-source"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <span><em>Destination:</em></span> <span th:text="${trans.destination}" class="transaction-destination"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <span><em>Note:</em></span> <span>Testing description</span>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <span><em>Source:</em></span> <span th:text="${trans.source}" class="transaction-source"></span>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <span><em>Destination:</em></span> <span th:text="${trans.destination}" class="transaction-destination"></span>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <span><em>Note:</em></span> <span>Testing description</span>
+                                            <div class="col-6">
+                                                <div class="reportButtonDiv">
+                                                    <div class="row text-end">
+                                                        <span>Doesn't look right?</span>
+                                                    </div>
+                                                    <div class="row justify-content-end">
+                                                        <div class="col-5">
+                                                            <button class="btn btn-warning">Report</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="reportTextAreaDiv">
+                                                    <div class="row">
+                                                    <textarea class="form-control" rows="3"
+                                                              placeholder="What seems to be the problem?"></textarea>
+                                                    </div>
+                                                    <div class="row justify-content-end mt-2">
+                                                        <div class="col-5">
+                                                            <button class="btn btn-warning">Submit</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="reportResponseMessageDiv">
+                                                    <i class="fa fa-info-circle text-success" style="font-size:24px"></i>
+                                                    <span>A team member has been notified and will investigate this soon. Check your email for further coorespondance.</span>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -195,25 +226,56 @@
                                 <div class="hidden-transaction-details" style="margin: 0 50px 0 50px">
                                     <hr>
                                     <div class="text-center"><em>Details</em></div>
-                                    <div class="row"><div><em>ID:</em> <span th:text="${trans.transactionId}"></span></div></div>
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <span><em>Type:</em></span> <span class="transaction-type">Inbound</span>
+                                    <div class="row align-items-center">
+                                        <div class="col-6">
+                                            <div class="row"><div><em>ID:</em> <span th:text="${trans.transactionId}"></span></div></div>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <span><em>Type:</em></span> <span class="transaction-type">Inbound</span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <span><em>Source:</em></span> <span th:text="${trans.source}" class="transaction-source"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <span><em>Destination:</em></span> <span th:text="${trans.destination}" class="transaction-destination"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <span><em>Note:</em></span> <span>Testing description</span>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <span><em>Source:</em></span> <span th:text="${trans.source}" class="transaction-source"></span>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <span><em>Destination:</em></span> <span th:text="${trans.destination}" class="transaction-destination"></span>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <span><em>Note:</em></span> <span>Testing description</span>
+                                        <div class="col-6">
+                                            <div class="reportButtonDiv">
+                                                <div class="row text-end">
+                                                    <span>Doesn't look right?</span>
+                                                </div>
+                                                <div class="row justify-content-end">
+                                                    <div class="col-5">
+                                                        <button class="btn btn-warning">Report</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="reportTextAreaDiv">
+                                                <div class="row">
+                                                    <textarea class="form-control" rows="3"
+                                                              placeholder="What seems to be the problem?"></textarea>
+                                                </div>
+                                                <div class="row justify-content-end mt-2">
+                                                    <div class="col-5">
+                                                        <button class="btn btn-warning">Submit</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="reportResponseMessageDiv">
+                                                <i class="fa fa-info-circle text-success" style="font-size:24px"></i>
+                                                <span>A team member has been notified and will investigate this soon. Check your email for further coorespondance.</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -223,18 +285,6 @@
                     </div>
                 </th:block>
             </div>
-<!--            <div class="text-center">-->
-<!--                <form action="/filterTransactions" method="post">-->
-<!--                    <label for="fromDate">From:</label>-->
-<!--                    <input type="date" id="fromDate" name="fromDate" onchange="setToDateMin()">-->
-
-<!--                    <label for="toDate">To:</label>-->
-<!--                    <input type="date" id="toDate" name="toDate">-->
-
-<!--                    <button class="btn btn-success " type="submit" id="filterApplyBtn">Apply</button>-->
-<!--                    <button class="btn btn-secondary" type="button" onclick="clearFilter()">Clear Filter</button>-->
-<!--                </form>-->
-<!--            </div>-->
         </div>
     </div>
     <div id="QAButtonContainer">
