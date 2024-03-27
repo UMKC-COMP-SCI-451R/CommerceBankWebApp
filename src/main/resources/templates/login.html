@@ -52,19 +52,33 @@
 </div>
 <div style="flex:1">
     <div class="loginform">
+        <div class="text-success" style="margin-left: 0;">
+            <h1><img src="images/commerce-bank-logo-earth.png" height="80px" width="90px">Login</h1>
+        </div>
+        <hr>
+        <br>
         <form method="post" onsubmit="showLoadingDiv()">
-            <div class="container-fluid text-center">
-                <div><label for="email"><b class="logindetails">Email</b></label>
-                    <input type="email" placeholder="Enter Email" name="email" id="email" class="loginfield" th:value="${useremail}" required></div>
-                <br><br>
-                <div><label for="password"><b class="logindetails">Password</b></label>
-                    <input type="password" placeholder="Enter Password" name="password" id="password" class="loginfield" required></div>
-                <br><br>
-                <button type="submit" align="center" class="btn btn-success">Login</button>
-                <br><br>
-                <label for="checkbox" class="logindetails">Remember me</label>
-                <input type="checkbox" value=true name="checkBoxRememberUser" id="checkbox" th:checked="${isChecked}">
-                <br><br>
+            <div>
+                <div class="row">
+                    <label for="email"><b class="logindetails">Email</b></label>
+                    <input type="email" placeholder="Enter Email" name="email" id="email" class="loginfield"
+                           th:value="${useremail}" required>
+                </div>
+                <br>
+                <div class="row">
+                    <label for="password"><b class="logindetails">Password</b></label>
+                    <input type="password" placeholder="Enter Password" name="password" id="password" class="loginfield"
+                           required>
+                </div>
+                <br>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success">Login <i class="fa fa-sign-in"></i></button>
+                </div>
+                <br>
+                <div class="text-center">
+                    <label for="checkbox" class="logindetails">Remember me</label><input type="checkbox" value=true name="checkBoxRememberUser" id="checkbox" th:checked="${isChecked}">
+                </div>
+                <br>
             </div>
         </form>
         <form id="forgotPasswordForm" method="post" th:action="@{/resetpassword}">
