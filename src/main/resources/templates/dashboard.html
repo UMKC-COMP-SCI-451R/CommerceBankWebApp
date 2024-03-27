@@ -125,7 +125,7 @@
                                             <i class="fa fa-angle-down text-success expand-button" onclick="toggleShowTransactionDetails(this)"></i>
                                         </div>
                                     </div>
-                                    <div class="hidden-transaction-details" style="margin: 0 50px 0 50px">
+                                    <div class="hidden-transaction-details">
                                         <hr>
                                         <div class="text-center"><em>Details</em></div>
                                         <div class="row align-items-center">
@@ -155,11 +155,11 @@
                                             <div class="col-6">
                                                 <div class="reportButtonDiv">
                                                     <div class="row text-end">
-                                                        <span>Doesn't look right?</span>
+                                                        <span>Unknown transaction?</span>
                                                     </div>
                                                     <div class="row justify-content-end">
                                                         <div class="col-5">
-                                                            <button class="btn btn-warning">Report</button>
+                                                            <button class="btn btn-warning" onclick="showReportTextArea(this)">Report</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -170,11 +170,11 @@
                                                     </div>
                                                     <div class="row justify-content-end mt-2">
                                                         <div class="col-5">
-                                                            <button class="btn btn-warning">Submit</button>
+                                                            <button class="btn btn-warning" onclick="showAckMessage(this)">Submit</button>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="reportResponseMessageDiv">
+                                                <div class="reportAcknowledgedMessageDiv">
                                                     <i class="fa fa-info-circle text-success" style="font-size:24px"></i>
                                                     <span>A team member has been notified and will investigate this soon. Check your email for further coorespondance.</span>
                                                 </div>
@@ -223,7 +223,7 @@
                                         <i class="fa fa-angle-down text-success expand-button" onclick="toggleShowTransactionDetails(this)"></i>
                                     </div>
                                 </div>
-                                <div class="hidden-transaction-details" style="margin: 0 50px 0 50px">
+                                <div class="hidden-transaction-details">
                                     <hr>
                                     <div class="text-center"><em>Details</em></div>
                                     <div class="row align-items-center">
@@ -246,18 +246,18 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-12">
-                                                    <span><em>Note:</em></span> <span>Testing description</span>
+                                                    <span><em>Note:</em></span> <span>Testing description </span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-6">
                                             <div class="reportButtonDiv">
                                                 <div class="row text-end">
-                                                    <span>Doesn't look right?</span>
+                                                    <span>Unknown transaction?</span>
                                                 </div>
                                                 <div class="row justify-content-end">
                                                     <div class="col-5">
-                                                        <button class="btn btn-warning">Report</button>
+                                                        <button class="btn btn-warning" onclick="showReportTextArea(this)">Report</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -268,11 +268,11 @@
                                                 </div>
                                                 <div class="row justify-content-end mt-2">
                                                     <div class="col-5">
-                                                        <button class="btn btn-warning">Submit</button>
+                                                        <button class="btn btn-warning" onclick="showAckMessage(this)">Submit</button>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="reportResponseMessageDiv">
+                                            <div class="reportAcknowledgedMessageDiv">
                                                 <i class="fa fa-info-circle text-success" style="font-size:24px"></i>
                                                 <span>A team member has been notified and will investigate this soon. Check your email for further coorespondance.</span>
                                             </div>
@@ -379,7 +379,7 @@
     function toggleShowTransactionDetails(iconElement){
 
         const transaction = iconElement.parentElement.parentElement.parentElement;
-        const transDetails = transaction.getElementsByClassName('hidden-transaction-details')[0]
+        const transDetails = transaction.querySelector('.hidden-transaction-details')
         if(transDetails.style.display=='block') {
             iconElement.classList.remove('fa-angle-up')
             iconElement.classList.add('fa-angle-down')
@@ -396,17 +396,31 @@
             transDetails.style.display = 'block';
             setTimeout(() => {
                 transDetails.style.opacity = '1';
+                const transDetailsHeight = transDetails.clientHeight;
+                const transHeight = transaction.clientHeight
+                const newHeight = transDetailsHeight + transHeight + 20;
+                transaction.style.height = newHeight + 'px';
+                // console.log(transaction.style.height)
             }, 10);
-
+            // transaction.style.height = '210px';
             // setTimeout(() => {
-            //
-            // }, 500);
-            // let transactionHeight = transaction.clientHeight + transDetails.clientHeight;
-            transaction.style.height = '210px';
-           // console.log(transactionHeight)
+            //     transaction.style.height = newHeight + 'px';
+            //     console.log(transaction.style.height)
+            // }, 10);
         }
     }
 
+    function showReportTextArea(button){
+        const ancestor = button.parentElement.parentElement.parentElement.parentElement;
+        ancestor.querySelector('.reportButtonDiv').style.display = 'none';
+        ancestor.querySelector('.reportTextAreaDiv').style.display = 'block';
+    }
+
+    function showAckMessage(button){
+        const ancestor = button.parentElement.parentElement.parentElement.parentElement;
+        ancestor.querySelector('.reportTextAreaDiv').style.display = 'none';
+        ancestor.querySelector('.reportAcknowledgedMessageDiv').style.display = 'block';
+    }
 
     window.addEventListener('load', function() {
         document.getElementById('dashboard').style.opacity = 1
