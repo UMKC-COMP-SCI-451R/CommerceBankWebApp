@@ -38,8 +38,8 @@
 }
 
 .transaction{
-    height:27px;
     transition: height ease 0.5s;
+    position: relative;
 }
 
 .hidden-transaction-details{
@@ -113,5 +113,11 @@
     margin: 0 20px 10px 20px;
 }
 
+.reportLoadingGif{
+    display: none;
+    position: absolute;
+    bottom: 20%;
+    left: 40%;
+}
 
 

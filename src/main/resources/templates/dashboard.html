@@ -87,29 +87,7 @@
 
                             <!-- Display the transactions for the current page -->
                             <th:block
-                                    th:each="trans : ${session.filteredTransactions.subList(7 * (session.currentPage - 1), (7 * session.currentPage > session.filteredTransactions.size) ? session.filteredTransactions.size : 7 * session.currentPage)}">
-<!--                                <div class="container mb-3 transaction">-->
-<!--                                    <div class="row">-->
-<!--                                        <div class="col-2" style="margin-left: 3%;">-->
-<!--                                            <div><em>ID:</em> <span th:text="${trans.transactionId}"></span></div>-->
-<!--                                        </div>-->
-<!--                                        <div class="col-2 text-md-end transaction-source">-->
-<!--                                            <span th:text="${trans.source}"></span>-->
-<!--                                        </div>-->
-<!--                                        <div class="col-1 text-center">-->
-<!--                                            <span><em>To</em></span>-->
-<!--                                        </div>-->
-<!--                                        <div class="col-2 transaction-destination">-->
-<!--                                            <span th:text="${trans.destination}"></span>-->
-<!--                                        </div>-->
-<!--                                        <div class="col-2 text-center transaction-amount">-->
-<!--                                            <span th:text="${#numbers.formatCurrency(trans.amount)}"></span>-->
-<!--                                        </div>-->
-<!--                                        <div class="col-2">-->
-<!--                                            <span><em>Date:</em></span> <span th:text="${trans.date}"></span>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </div>-->
+                                    th:each="trans, transStatus : ${session.filteredTransactions.subList(7 * (session.currentPage - 1), (7 * session.currentPage > session.filteredTransactions.size) ? session.filteredTransactions.size : 7 * session.currentPage)}">
                                 <div class="container mb-3 transaction">
                                     <div class="row">
                                         <div class="col-4 text-center">
@@ -122,10 +100,10 @@
                                             <span class="transaction-amount" th:text="${#numbers.formatCurrency(trans.amount)}"></span>
                                         </div>
                                         <div class="col-1 text-end">
-                                            <i class="fa fa-angle-down text-success expand-button" onclick="toggleShowTransactionDetails(this)"></i>
+                                            <i class="fa fa-angle-down text-success expand-button" data-toggle="collapse" th:data-target="${'#hidden-details'+ transStatus.index}" aria-expanded="false" th:aria-controls="${'hidden-details' + transStatus.index}" onclick="toggleUpDown(this)"></i>
                                         </div>
                                     </div>
-                                    <div class="hidden-transaction-details">
+                                    <div class="collapse" th:id="${'hidden-details' + transStatus.index}">
                                         <hr>
                                         <div class="text-center"><em>Details</em></div>
                                         <div class="row align-items-center">
@@ -220,10 +198,10 @@
                                         <span class="transaction-amount" th:text="${#numbers.formatCurrency(trans.amount)}"></span>
                                     </div>
                                     <div class="col-1 text-end">
-                                        <i class="fa fa-angle-down text-success expand-button" onclick="toggleShowTransactionDetails(this)"></i>
+                                        <i class="fa fa-angle-down text-success expand-button" data-toggle="collapse" th:data-target="${'#hidden-details'+ transStatus.index}" aria-expanded="false" th:aria-controls="${'hidden-details' + transStatus.index}" onclick="toggleUpDown(this)"></i>
                                     </div>
                                 </div>
-                                <div class="hidden-transaction-details">
+                                <div class="collapse" th:id="${'hidden-details' + transStatus.index}">
                                     <hr>
                                     <div class="text-center"><em>Details</em></div>
                                     <div class="row align-items-center">
@@ -272,6 +250,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <img class="reportLoadingGif" src="images/loading-symbol.gif" alt="Loading..." width="80px" height="80px"/>
                                             <div class="reportAcknowledgedMessageDiv">
                                                 <i class="fa fa-info-circle text-success" style="font-size:24px"></i>
                                                 <span>A team member has been notified and will investigate this soon. Check your email for further coorespondance.</span>
@@ -375,32 +354,15 @@
         }
     });
 
-
-    function toggleShowTransactionDetails(iconElement){
-
-        const transaction = iconElement.parentElement.parentElement.parentElement;
-        const transDetails = transaction.querySelector('.hidden-transaction-details')
-        if(transDetails.style.display=='block') {
+    function toggleUpDown(iconElement){
+        if(iconElement.classList.contains('fa-angle-up'))
+        {
             iconElement.classList.remove('fa-angle-up')
             iconElement.classList.add('fa-angle-down')
-            transaction.style.height = '27px';
-            transDetails.style.opacity = '0';
-            setTimeout(() => {
-                transDetails.style.display = 'none';
-            }, 500);
-
-            //console.log(transactionHeight)
-        }else{
+        }
+        else{
             iconElement.classList.remove('fa-angle-down')
             iconElement.classList.add('fa-angle-up')
-            transDetails.style.display = 'block';
-            setTimeout(() => {
-                transDetails.style.opacity = '1';
-                const transDetailsHeight = transDetails.clientHeight;
-                const transHeight = transaction.clientHeight
-                const newHeight = transDetailsHeight + transHeight + 20;
-                transaction.style.height = newHeight + 'px';
-            }, 10);
         }
     }
 
@@ -412,8 +374,12 @@
 
     function showAckMessage(button){
         const ancestor = button.parentElement.parentElement.parentElement.parentElement;
-        ancestor.querySelector('.reportTextAreaDiv').style.display = 'none';
-        ancestor.querySelector('.reportAcknowledgedMessageDiv').style.display = 'block';
+        ancestor.querySelector('.reportLoadingGif').style.display='block';
+        setTimeout(function () {
+            ancestor.querySelector('.reportLoadingGif').style.display='none';
+            ancestor.querySelector('.reportTextAreaDiv').style.display = 'none';
+            ancestor.querySelector('.reportAcknowledgedMessageDiv').style.display = 'block';
+        }, 2000);
     }
 
     window.addEventListener('load', function() {
@@ -469,6 +435,8 @@
 
 </script>
 <script src="js/ai-chat-functions.js"></script>
-
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
