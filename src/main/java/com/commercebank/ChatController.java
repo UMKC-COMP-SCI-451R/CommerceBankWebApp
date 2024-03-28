@@ -1,4 +1,5 @@
 package com.commercebank;
+import com.commercebank.accounts.Accounts;
 import jakarta.servlet.http.HttpSession;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 
-@SessionAttributes("conversation")
+@SessionAttributes({"conversation","account"})
 @RestController
 public class ChatController {
     private final String OPENAI_API_URL = "https://api.openai.com/v1/chat/completions";
@@ -40,6 +41,11 @@ public class ChatController {
             try{
                 ArrayList<String> formatMessageArray = new ArrayList<>();
                 formatMessageArray.add(message("system",teach_model_about_the_web_app));
+                Accounts sessionAccount = (Accounts) session.getAttribute("account");
+                if(sessionAccount != null){
+                    formatMessageArray.add(message("system","This user's name is " + sessionAccount.getFirstName()));
+                    System.out.println(sessionAccount.getFirstName());
+                }
                 for(int i = 0; i <messages.length; i++)
                 {
                     String cleanedMessage = messages[i].replaceAll("\"", "'").replaceAll("[\\n\\t\\f\\r]", " ").trim();
