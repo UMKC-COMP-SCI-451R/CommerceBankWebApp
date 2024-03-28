@@ -90,13 +90,14 @@ public class AccountController {
     }
 
     @PostMapping("/newpassword")
-    public String updatePassword(String newPassword, String email, int enteredCode, RedirectAttributes ra)
+    public String updatePassword(String newPassword, String email, int digit1, int digit2, int digit3, int digit4, RedirectAttributes ra)
     {
         if(!codeHM.containsKey(email))
         {
             ra.addFlashAttribute("error","Code expired or invalid.");
             return "redirect:/login";
         }
+        int enteredCode = Integer.parseInt(String.format("%d%d%d%d",digit1,digit2,digit3,digit4));
         if(enteredCode == codeHM.get(email)){
             codeHM.remove(email); // remove email and code pair after successful verification
             Optional<Accounts> account = accountService.getAccountByEmail(email);
