@@ -4,6 +4,7 @@ import com.commercebank.accounts.AccountService;
 import com.commercebank.accounts.Accounts;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -16,7 +17,7 @@ import java.util.Optional;
 public class ProfileController {
     @Autowired
     private AccountService accountService;
-
+    @Autowired private BCryptPasswordEncoder bEncoder;
     @PostMapping("/saveNewAddress")
     public String saveNewAddress(String newAddress, RedirectAttributes ra, HttpSession session){
         String email = ((Accounts)session.getAttribute("account")).getEmail();
@@ -62,7 +63,7 @@ public class ProfileController {
         Accounts account;
         if(acc.isPresent()){
             account = acc.get();
-            account.setPassword(newPassword);
+            account.setPassword(bEncoder.encode(newPassword));
             //System.out.println(account);
             accountService.save(account);
             ra.addFlashAttribute("message","Password reset successfully!");

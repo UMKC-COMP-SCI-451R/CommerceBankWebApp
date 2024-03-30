@@ -34,7 +34,7 @@
     </form>
 </nav>
 <div class="loanPage" id="loanPage" style="flex:1">
-    <div class="container">
+    <div class="container text-center">
         <div class="card-inline">
             <h2>Credit Card</h2>
             <button id="ccbtn" onclick="showccdiv('cccard')" class="btn btn-success">Learn more!</button>
@@ -249,26 +249,21 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script type="text/javascript">
-
+    var currentCardId = '';
     showccdiv('cccard')  // show credit card at the beginning
-    var currentCardId = 'cccard';
+
     //initially
     function showccdiv(divid) {
         if(divid !== currentCardId){
             var cards = document.querySelectorAll('.card');
             cards.forEach(function(card) {
                 if(card.id===currentCardId){
-                    card.classList.add('left');   //move the current card to the left to hide. class list = ['left','show','card']
-                    card.classList.remove('show'); // remove show state so that we add this class later make it show. class list = ['left','card']
+                    card.classList.add('left');
                     setTimeout(() => {
+                        card.classList.remove('left');
                         card.style.display = 'none';
-                    }, 150);
-                }
-                else if(card.classList.contains('left')){
-                    card.classList.remove('left'); // if the card is not the current one then return it to the original position on the right. class list =['card']
-                    setTimeout(() => {
-                        card.style.display = 'none';
-                    }, 150);
+                        card.classList.remove('show');
+                    }, 500);
                 }
             });
             var selectedCard = document.getElementById(divid);

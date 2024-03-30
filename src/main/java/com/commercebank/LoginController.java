@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +28,8 @@ public class LoginController {
     //private int code;
     private HashMap<String, Integer> codeHM = new HashMap<>();
 
+    @Autowired
+    private BCryptPasswordEncoder bEncoder;
     @GetMapping("/login")
     public String showLoginPage(Model model, HttpSession session, HttpServletRequest request){
         boolean isChecked;
@@ -66,7 +69,7 @@ public class LoginController {
             response.addCookie(cookie);
         }
 
-        if(account.isPresent() && account.get().getPassword().equals(password)){
+        if(account.isPresent() && bEncoder.matches(password,account.get().getPassword())){
             Accounts acc = account.get();
             if(acc.isMultifactorAuth())
             {
@@ -100,12 +103,14 @@ public class LoginController {
         return "multifactorauth";
     }
     @PostMapping("/multifactorauth")
-    public String multifactorVerification(int enteredCode, String email, RedirectAttributes ra, HttpSession session){
+    public String multifactorVerification(int digit1, int digit2, int digit3, int digit4, String email, RedirectAttributes ra, HttpSession session){
         if(!codeHM.containsKey(email))
         {
             ra.addFlashAttribute("error","Code expired or invalid.");
             return "redirect:/login";
         }
+        int enteredCode = Integer.parseInt(String.format("%d%d%d%d",digit1,digit2,digit3,digit4));
+        System.out.println(enteredCode);
         if(enteredCode == codeHM.get(email)){
             codeHM.remove(email); // remove email and code pair after successful verification
             Optional<Accounts> account = accountService.getAccountByEmail(email);

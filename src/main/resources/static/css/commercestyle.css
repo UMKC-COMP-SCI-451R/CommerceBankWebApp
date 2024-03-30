@@ -10,13 +10,13 @@
     margin-right: 20%;
     margin-bottom: 20px;
     margin-top: 20px;
-    padding: 20px;
+    padding: 20px 70px 20px 70px;
     background-color: white;
-    height: 325px;
+    /*height: 325px;*/
     position: absolute;
-    top: 50%;
+    top: 45%;
     left: 60%;
-    width: 30%;
+    width: 350px;
     transform: translate(-50%, -50%);
     border-color: green;
     border-style: solid;
@@ -25,7 +25,7 @@
 
 .registerbtn {
     position: absolute;
-    top: 80%;
+    top: 85%;
     left: 70%;
     width: 30%;
 }
@@ -55,6 +55,21 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+}
+
+#processingDiv{
+    width: 300px;
+    height: 200px;
+    display: none;
+    justify-content: center; /* Centers horizontally */
+    align-items: center; /* Centers vertically */
+    border-radius: 20px;
+    border:none;
+    background: linear-gradient(rgba(17, 94, 17, 0.8), rgba(17, 94, 17, 0)) top;
+    position: fixed;
+    left: 40%;
+    top: 30%;
+    color:white
 }
 
 /*test login branch*/

@@ -4,8 +4,8 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Slight shadow for depth */
     /*padding: 20px; !* Space inside the card *!*/
     margin: 20px auto; /* Centered margin with space outside the card */
-    width: 110%; /* Adjust as needed */
-    max-width: 1000px; /* Adjust as needed */
+    width: 100%; /* Adjust as needed */
+    max-width: 600px; /* Adjust as needed */
     display: flex;
     flex-direction: column;
 }
@@ -35,6 +35,17 @@
     margin-bottom: 20px;
     background-color: #fff; /* White background */
     box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Slight shadow for depth */
+}
+
+.transaction{
+    transition: height ease 0.5s;
+    position: relative;
+}
+
+.hidden-transaction-details{
+    display: none;
+    opacity: 0;
+    transition: opacity ease 0.5s;
 }
 
 .transaction-source{
@@ -72,5 +83,41 @@
     transition: opacity 0.3s ease; /* Add transition effect for opacity */
 }
 
+.expand-button{
+    font-size: 28px !important;
+    height: 28px;
+    width: 28px;
+    text-align: center;
+}
+
+.expand-button:hover{
+    background: #165816;
+    border-radius: 30px;
+    color: white !important;
+}
+
+.reportAcknowledgedMessageDiv{
+    display: none;
+    border: darkgreen solid 1px;
+    border-radius: 10px;
+    padding: 5px;
+    font-size: 15px;
+    text-align: center;
+}
+
+.reportTextAreaDiv{
+    display:none;
+}
+
+.hidden-transaction-details{
+    margin: 0 20px 10px 20px;
+}
+
+.reportLoadingGif{
+    display: none;
+    position: absolute;
+    bottom: 20%;
+    left: 40%;
+}
 
 

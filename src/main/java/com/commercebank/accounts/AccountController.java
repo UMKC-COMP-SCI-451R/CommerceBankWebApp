@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ import java.util.*;
 public class AccountController {
     @Autowired private AccountService accountService;
     @Autowired private EmailService emailService;
+    @Autowired private BCryptPasswordEncoder bEncoder;
     //private int code;
     private HashMap<String, Integer> codeHM = new HashMap<>();
     @GetMapping("/register")
@@ -42,6 +44,8 @@ public class AccountController {
             cardNumber = RandNumGenerator.generateRandom16DigitNumber();
             acc = accountService.getAccountByCardNumber(cardNumber);
         }
+        String rawPassword = account.getPassword();
+        account.setPassword(bEncoder.encode(rawPassword));
         account.setCardNumber(cardNumber);
         account.setTextAlert(false);
         account.setMultifactorAuth(false);
@@ -86,18 +90,19 @@ public class AccountController {
     }
 
     @PostMapping("/newpassword")
-    public String updatePassword(String newPassword, String email, int enteredCode, RedirectAttributes ra)
+    public String updatePassword(String newPassword, String email, int digit1, int digit2, int digit3, int digit4, RedirectAttributes ra)
     {
         if(!codeHM.containsKey(email))
         {
             ra.addFlashAttribute("error","Code expired or invalid.");
             return "redirect:/login";
         }
+        int enteredCode = Integer.parseInt(String.format("%d%d%d%d",digit1,digit2,digit3,digit4));
         if(enteredCode == codeHM.get(email)){
             codeHM.remove(email); // remove email and code pair after successful verification
             Optional<Accounts> account = accountService.getAccountByEmail(email);
             Accounts acc = account.get();
-            acc.setPassword(newPassword);
+            acc.setPassword(bEncoder.encode(newPassword));
             accountService.save(acc);
             ra.addFlashAttribute("message","Password reset successfully");
             return "redirect:/login";
@@ -234,13 +239,13 @@ public class AccountController {
 
 
     @PostMapping("/makeTransaction")
-    public String processTransaction(String source, String destination, double amount, RedirectAttributes ra, HttpSession session){
+    public String processTransaction(String source, String destination, double amount, String memo, RedirectAttributes ra, HttpSession session){
         String email = ((Accounts)session.getAttribute("account")).getEmail();
         Optional<Accounts> acc = accountService.getAccountByEmail(email);
         Accounts account;
         if(acc.isPresent()){
             account = acc.get();
-            if((source.equals("My Account") && account.getBalance()-amount>=0.0) || destination.equals("My Account"))
+            if((source.contains("My Account") && account.getBalance()-amount>=0.0) || destination.contains("My Account"))
             {
                 Transactions tran = new Transactions();
                 tran.setAccount(account);
@@ -248,8 +253,9 @@ public class AccountController {
                 tran.setSource(source);
                 tran.setDestination(destination);
                 tran.setAmount(amount);
+                tran.setMemo(memo);
                 account.getTransactionsList().add(tran);
-                account.setBalance(account.getBalance() - (source.equals("My Account")? amount : -amount));
+                account.setBalance(account.getBalance() - (source.contains("My Account")? amount : -amount));
                 accountService.save(account); //update account object after adding transaction
                 ra.addFlashAttribute("message","Transfer is made successfully!"); //RedirectAttributes is something to send to the page at return statement
                 session.setAttribute("account",account);
