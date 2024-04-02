@@ -1,10 +1,13 @@
 Current features:
-- login
+- login with one time code
 - register
 - multi-factor authentication (email)
 - forgot password
 - remember me
 - dashboard/summary
-- transfer
+- make transfer with one time code
 - profile and settings
-- loans
+- apply for loans
+- AI virtual assistant
+demo video: https://drive.google.com/file/d/1OdHzMiJB3KbhpbG4bEX5jmSRj6mz7aFr/view?usp=drive_link
+
