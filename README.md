@@ -9,5 +9,5 @@ Current features:
 - profile and settings
 - apply for loans
 - AI virtual assistant
-\demo video: https://drive.google.com/file/d/1OdHzMiJB3KbhpbG4bEX5jmSRj6mz7aFr/view?usp=drive_link
+- demo video: https://drive.google.com/file/d/1OdHzMiJB3KbhpbG4bEX5jmSRj6mz7aFr/view?usp=drive_link
 
