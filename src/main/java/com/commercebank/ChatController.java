@@ -39,6 +39,7 @@ public class ChatController {
             return "No OpenAI api key found.";
         }else{
             try{
+                //format messages of conversation
                 ArrayList<String> formatMessageArray = new ArrayList<>();
                 formatMessageArray.add(message("system",teach_model_about_the_web_app));
                 Accounts sessionAccount = (Accounts) session.getAttribute("account");
@@ -54,17 +55,16 @@ public class ChatController {
                     }else formatMessageArray.add(message("assistant",cleanedMessage));
                 }
 
-                //System.out.println(cleanedConversation);
+                // send and get response
                 String requestBody = "{\"model\":\"gpt-3.5-turbo-0125\",\"messages\":["+String.join(",",formatMessageArray)+"]}";
-                //System.out.println(requestBody);
                 HttpHeaders headers = new HttpHeaders();
                 headers.set("Content-Type", "application/json");
                 headers.set("Authorization", "Bearer " + OPENAI_API_KEY);
                 HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
-                //System.out.println(entity);
                 ResponseEntity<String> response = restTemplate.postForEntity(OPENAI_API_URL, entity, String.class);
                 String responseStr = response.getBody();
-                //System.out.println(responseStr);
+
+                // extract text content of the response
                 JSONObject obj = new JSONObject(responseStr);
                 JSONArray choices = obj.getJSONArray("choices");
                 if (!choices.isEmpty()) {
